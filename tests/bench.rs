@@ -184,6 +184,35 @@ fn bench_cu_operations() {
         CuLibraryInstruction::CpiAccountInfoArray10Ref,
         CuLibraryInstruction::CpiAccountInfoArray10Clone,
         CuLibraryInstruction::CpiAccountInfoArray10Move,
+        CuLibraryInstruction::CpiArrayvecPushAccountMeta10,
+        CuLibraryInstruction::CpiArrayvecPushAccountInfo10Ref,
+        CuLibraryInstruction::CpiArrayvecPushAccountInfo10Clone,
+        CuLibraryInstruction::CpiArrayvecPushAccountInfo10Move,
+        CuLibraryInstruction::CpiAccountMetaArray10Loop,
+        CuLibraryInstruction::CpiAccountInfoArray10RefLoop,
+        CuLibraryInstruction::CpiAccountInfoArray10CloneLoop,
+        CuLibraryInstruction::CpiAccountInfoArray10MoveLoop,
+        CuLibraryInstruction::PartialEqU8,
+        CuLibraryInstruction::PartialEqU16,
+        CuLibraryInstruction::PartialEqU32,
+        CuLibraryInstruction::PartialEqU64,
+        CuLibraryInstruction::PartialEqU128,
+        CuLibraryInstruction::PartialEqArrayU8_32Ref,
+        CuLibraryInstruction::PartialEqArrayU8_32,
+        CuLibraryInstruction::PartialEqArrayU16_32,
+        CuLibraryInstruction::PartialEqArrayU32_32,
+        CuLibraryInstruction::PartialEqArrayU64_32,
+        CuLibraryInstruction::PartialEqU8Neq,
+        CuLibraryInstruction::PartialEqU16Neq,
+        CuLibraryInstruction::PartialEqU32Neq,
+        CuLibraryInstruction::PartialEqU64Neq,
+        CuLibraryInstruction::PartialEqU128Neq,
+        CuLibraryInstruction::PartialEqArrayU8_32NeqRef,
+        CuLibraryInstruction::PartialEqArrayU8_32Neq,
+        CuLibraryInstruction::PartialEqArrayU8_32NeqDeref,
+        CuLibraryInstruction::PartialEqArrayU16_32Neq,
+        CuLibraryInstruction::PartialEqArrayU32_32Neq,
+        CuLibraryInstruction::PartialEqArrayU64_32Neq,
     ];
 
     for instruction_type in instructions.into_iter() {
@@ -193,6 +222,14 @@ fn bench_cu_operations() {
                 | CuLibraryInstruction::CpiAccountInfoArray10Ref
                 | CuLibraryInstruction::CpiAccountInfoArray10Clone
                 | CuLibraryInstruction::CpiAccountInfoArray10Move
+                | CuLibraryInstruction::CpiArrayvecPushAccountMeta10
+                | CuLibraryInstruction::CpiArrayvecPushAccountInfo10Ref
+                | CuLibraryInstruction::CpiArrayvecPushAccountInfo10Clone
+                | CuLibraryInstruction::CpiArrayvecPushAccountInfo10Move
+                | CuLibraryInstruction::CpiAccountMetaArray10Loop
+                | CuLibraryInstruction::CpiAccountInfoArray10RefLoop
+                | CuLibraryInstruction::CpiAccountInfoArray10CloneLoop
+                | CuLibraryInstruction::CpiAccountInfoArray10MoveLoop
         ) {
             let cpi_pubkeys: Vec<Pubkey> = cpi_accounts.iter().map(|k| k.pubkey()).collect();
             create_instruction_with_10_accounts(

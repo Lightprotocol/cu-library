@@ -112,14 +112,48 @@ Benchmark results for Solana runtime operations:
 | cpi_account_info_array_10_ref               | 6           |
 | cpi_account_info_array_10_clone             | 6           |
 | cpi_account_info_array_10_move              | 6           |
+| cpi_arrayvec_push_account_meta_10           | 181         |
+| cpi_arrayvec_push_account_info_10_ref       | 6           |
+| cpi_arrayvec_push_account_info_10_clone     | 7           |
+| cpi_arrayvec_push_account_info_10_move      | 7           |
+| cpi_account_meta_array_10_loop              | 200         |
+| cpi_account_info_array_10_ref_loop          | 6           |
+| cpi_account_info_array_10_clone_loop        | 7           |
+| cpi_account_info_array_10_move_loop         | 7           |
+
+## Partial
+
+| Function                                    | CU Consumed |
+|---------------------------------------------|-------------|
+| partial_eq_u8                               | 7           |
+| partial_eq_u16                              | 7           |
+| partial_eq_u32                              | 7           |
+| partial_eq_u64                              | 7           |
+| partial_eq_u128                             | 7           |
+| partial_eq_array_u8_32_ref                  | 7           |
+| partial_eq_array_u8_32                      | 6           |
+| partial_eq_array_u16_32                     | 7           |
+| partial_eq_array_u32_32                     | 7           |
+| partial_eq_array_u64_32                     | 7           |
+| partial_eq_u8_neq                           | 9           |
+| partial_eq_u16_neq                          | 9           |
+| partial_eq_u32_neq                          | 10          |
+| partial_eq_u64_neq                          | 10          |
+| partial_eq_u128_neq                         | 13          |
+| partial_eq_array_u8_32_neq_ref              | 35          |
+| partial_eq_array_u8_32_neq                  | 31          |
+| partial_eq_array_u8_32_neq_deref            | 35          |
+| partial_eq_array_u16_32_neq                 | 33          |
+| partial_eq_array_u32_32_neq                 | 34          |
+| partial_eq_array_u64_32_neq                 | 34          |
 
 ## Pinocchio
 
 | Function                                    | CU Consumed |
 |---------------------------------------------|-------------|
 | pinocchio_msg10_chars                       | 110         |
-| pinocchio_sysvar_rent_exemption_165         | 153         |
-| pinocchio_clock_get_slot                    | 170         |
+| pinocchio_sysvar_rent_exemption_165         | 152         |
+| pinocchio_clock_get_slot                    | 171         |
 
 ## Saturating
 
@@ -146,7 +180,7 @@ Benchmark results for Solana runtime operations:
 | Function                                    | CU Consumed |
 |---------------------------------------------|-------------|
 | solana_msg10_chars                          | 110         |
-| solana_msg_program_id                       | 6954        |
+| solana_msg_program_id                       | 6955        |
 | solana_pubkey_new_from_array                | 14          |
 
 ## Std
@@ -203,3 +237,4 @@ Benchmark results for Solana runtime operations:
 | vec_push_10_u8_with_capacity                | 153         |
 | vec_push_10_u64_with_capacity               | 149         |
 | vec_push_10_pubkey_with_capacity            | 217         |
+

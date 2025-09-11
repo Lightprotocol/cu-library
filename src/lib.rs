@@ -45,9 +45,30 @@ use crate::checked_math::checked_mul::{
 use crate::checked_math::checked_sub::{
     checked_sub_u128, checked_sub_u16, checked_sub_u32, checked_sub_u64, checked_sub_u8,
 };
+use crate::cpi::cpi_array_loop::{
+    cpi_account_info_array_10_clone_loop, cpi_account_info_array_10_move_loop,
+    cpi_account_info_array_10_ref_loop, cpi_account_meta_array_10_loop,
+};
 use crate::cpi::cpi_arrays::{
     cpi_account_info_array_10_clone, cpi_account_info_array_10_move, cpi_account_info_array_10_ref,
     cpi_account_meta_array_10,
+};
+use crate::cpi::cpi_arrayvec::{
+    cpi_arrayvec_push_account_info_10_clone, cpi_arrayvec_push_account_info_10_move,
+    cpi_arrayvec_push_account_info_10_ref, cpi_arrayvec_push_account_meta_10,
+};
+use crate::partial_eq::partial_eq_arrays::{
+    partial_eq_array_u16_32, partial_eq_array_u32_32, partial_eq_array_u64_32,
+    partial_eq_array_u8_32, partial_eq_array_u8_32_ref,
+};
+use crate::partial_eq::partial_eq_neq::{
+    partial_eq_array_u16_32_neq, partial_eq_array_u32_32_neq, partial_eq_array_u64_32_neq,
+    partial_eq_array_u8_32_neq, partial_eq_array_u8_32_neq_ref, partial_eq_array_u8_32_neq_deref,
+    partial_eq_u128_neq, partial_eq_u16_neq, partial_eq_u32_neq,
+    partial_eq_u64_neq, partial_eq_u8_neq,
+};
+use crate::partial_eq::partial_eq_primitives::{
+    partial_eq_u128, partial_eq_u16, partial_eq_u32, partial_eq_u64, partial_eq_u8,
 };
 use crate::pinocchio_ops::msg::pinocchio_msg10_chars;
 use crate::pinocchio_ops::sysvar_clock::pinocchio_clock_get_slot;
@@ -92,6 +113,7 @@ pub mod array;
 pub mod arrayvec;
 pub mod checked_math;
 pub mod cpi;
+pub mod partial_eq;
 pub mod pinocchio_ops;
 pub mod saturating_math;
 pub mod solana_ops;
@@ -239,6 +261,35 @@ pub enum CuLibraryInstruction {
     CpiAccountInfoArray10Ref = 132,
     CpiAccountInfoArray10Clone = 133,
     CpiAccountInfoArray10Move = 134,
+    CpiArrayvecPushAccountMeta10 = 135,
+    CpiArrayvecPushAccountInfo10Ref = 136,
+    CpiArrayvecPushAccountInfo10Clone = 137,
+    CpiArrayvecPushAccountInfo10Move = 138,
+    CpiAccountMetaArray10Loop = 139,
+    CpiAccountInfoArray10RefLoop = 140,
+    CpiAccountInfoArray10CloneLoop = 141,
+    CpiAccountInfoArray10MoveLoop = 142,
+    PartialEqU8 = 143,
+    PartialEqU16 = 144,
+    PartialEqU32 = 145,
+    PartialEqU64 = 146,
+    PartialEqU128 = 147,
+    PartialEqArrayU8_32Ref = 148,
+    PartialEqArrayU8_32 = 149,
+    PartialEqArrayU16_32 = 150,
+    PartialEqArrayU32_32 = 151,
+    PartialEqArrayU64_32 = 152,
+    PartialEqU8Neq = 153,
+    PartialEqU16Neq = 154,
+    PartialEqU32Neq = 155,
+    PartialEqU64Neq = 156,
+    PartialEqU128Neq = 157,
+    PartialEqArrayU8_32NeqRef = 158,
+    PartialEqArrayU8_32Neq = 159,
+    PartialEqArrayU8_32NeqDeref = 160,
+    PartialEqArrayU16_32Neq = 161,
+    PartialEqArrayU32_32Neq = 162,
+    PartialEqArrayU64_32Neq = 163,
 }
 
 impl From<CuLibraryInstruction> for Vec<u8> {
@@ -388,6 +439,35 @@ impl TryFrom<&[u8]> for CuLibraryInstruction {
             132 => Ok(CuLibraryInstruction::CpiAccountInfoArray10Ref),
             133 => Ok(CuLibraryInstruction::CpiAccountInfoArray10Clone),
             134 => Ok(CuLibraryInstruction::CpiAccountInfoArray10Move),
+            135 => Ok(CuLibraryInstruction::CpiArrayvecPushAccountMeta10),
+            136 => Ok(CuLibraryInstruction::CpiArrayvecPushAccountInfo10Ref),
+            137 => Ok(CuLibraryInstruction::CpiArrayvecPushAccountInfo10Clone),
+            138 => Ok(CuLibraryInstruction::CpiArrayvecPushAccountInfo10Move),
+            139 => Ok(CuLibraryInstruction::CpiAccountMetaArray10Loop),
+            140 => Ok(CuLibraryInstruction::CpiAccountInfoArray10RefLoop),
+            141 => Ok(CuLibraryInstruction::CpiAccountInfoArray10CloneLoop),
+            142 => Ok(CuLibraryInstruction::CpiAccountInfoArray10MoveLoop),
+            143 => Ok(CuLibraryInstruction::PartialEqU8),
+            144 => Ok(CuLibraryInstruction::PartialEqU16),
+            145 => Ok(CuLibraryInstruction::PartialEqU32),
+            146 => Ok(CuLibraryInstruction::PartialEqU64),
+            147 => Ok(CuLibraryInstruction::PartialEqU128),
+            148 => Ok(CuLibraryInstruction::PartialEqArrayU8_32Ref),
+            149 => Ok(CuLibraryInstruction::PartialEqArrayU8_32),
+            150 => Ok(CuLibraryInstruction::PartialEqArrayU16_32),
+            151 => Ok(CuLibraryInstruction::PartialEqArrayU32_32),
+            152 => Ok(CuLibraryInstruction::PartialEqArrayU64_32),
+            153 => Ok(CuLibraryInstruction::PartialEqU8Neq),
+            154 => Ok(CuLibraryInstruction::PartialEqU16Neq),
+            155 => Ok(CuLibraryInstruction::PartialEqU32Neq),
+            156 => Ok(CuLibraryInstruction::PartialEqU64Neq),
+            157 => Ok(CuLibraryInstruction::PartialEqU128Neq),
+            158 => Ok(CuLibraryInstruction::PartialEqArrayU8_32NeqRef),
+            159 => Ok(CuLibraryInstruction::PartialEqArrayU8_32Neq),
+            160 => Ok(CuLibraryInstruction::PartialEqArrayU8_32NeqDeref),
+            161 => Ok(CuLibraryInstruction::PartialEqArrayU16_32Neq),
+            162 => Ok(CuLibraryInstruction::PartialEqArrayU32_32Neq),
+            163 => Ok(CuLibraryInstruction::PartialEqArrayU64_32Neq),
             _ => Err(ProgramError::InvalidInstructionData),
         }
     }
@@ -1044,6 +1124,338 @@ pub fn process_instruction(
             }
             let moved = cpi_account_info_array_10_move(&accounts[0..10]);
             solana_msg::msg!("moved {} account infos", moved.len());
+        }
+        CuLibraryInstruction::CpiArrayvecPushAccountMeta10 => {
+            if accounts.len() < 10 {
+                return Err(ProgramError::NotEnoughAccountKeys);
+            }
+            let vec = cpi_arrayvec_push_account_meta_10(&accounts[0..10]);
+            // Print first account meta to prevent optimization
+            if let Some(first) = vec.first() {
+                solana_msg::msg!("first meta: {:?}", first.pubkey);
+            }
+        }
+        CuLibraryInstruction::CpiArrayvecPushAccountInfo10Ref => {
+            if accounts.len() < 10 {
+                return Err(ProgramError::NotEnoughAccountKeys);
+            }
+            let vec = cpi_arrayvec_push_account_info_10_ref(&accounts[0..10]);
+            // Print first account ref to prevent optimization
+            if let Some(first) = vec.first() {
+                solana_msg::msg!("first ref: {:?}", first.key());
+            }
+        }
+        CuLibraryInstruction::CpiArrayvecPushAccountInfo10Clone => {
+            if accounts.len() < 10 {
+                return Err(ProgramError::NotEnoughAccountKeys);
+            }
+            let vec = cpi_arrayvec_push_account_info_10_clone(&accounts[0..10]);
+            // Print first cloned account to prevent optimization
+            if let Some(first) = vec.first() {
+                solana_msg::msg!("first clone: {:?}", first.key());
+            }
+        }
+        CuLibraryInstruction::CpiArrayvecPushAccountInfo10Move => {
+            if accounts.len() < 10 {
+                return Err(ProgramError::NotEnoughAccountKeys);
+            }
+            let vec = cpi_arrayvec_push_account_info_10_move(&accounts[0..10]);
+            // Print first moved account to prevent optimization
+            if let Some(first) = vec.first() {
+                solana_msg::msg!("first move: {:?}", first.key());
+            }
+        }
+        CuLibraryInstruction::CpiAccountMetaArray10Loop => {
+            if accounts.len() < 10 {
+                return Err(ProgramError::NotEnoughAccountKeys);
+            }
+            let metas = cpi_account_meta_array_10_loop(&accounts[0..10]);
+            solana_msg::msg!("first loop meta: {:?}", metas[0].pubkey);
+        }
+        CuLibraryInstruction::CpiAccountInfoArray10RefLoop => {
+            if accounts.len() < 10 {
+                return Err(ProgramError::NotEnoughAccountKeys);
+            }
+            let refs = cpi_account_info_array_10_ref_loop(&accounts[0..10]);
+            solana_msg::msg!("first loop ref: {:?}", refs[0].key());
+        }
+        CuLibraryInstruction::CpiAccountInfoArray10CloneLoop => {
+            if accounts.len() < 10 {
+                return Err(ProgramError::NotEnoughAccountKeys);
+            }
+            let clones = cpi_account_info_array_10_clone_loop(&accounts[0..10]);
+            solana_msg::msg!("first loop clone: {:?}", clones[0].key());
+        }
+        CuLibraryInstruction::CpiAccountInfoArray10MoveLoop => {
+            if accounts.len() < 10 {
+                return Err(ProgramError::NotEnoughAccountKeys);
+            }
+            let moved = cpi_account_info_array_10_move_loop(&accounts[0..10]);
+            solana_msg::msg!("first loop move: {:?}", moved[0].key());
+        }
+        CuLibraryInstruction::PartialEqU8 => {
+            let val = program_id[0];
+            let result = partial_eq_u8(val, val);
+            solana_msg::msg!("u8 eq: {}", result);
+        }
+        CuLibraryInstruction::PartialEqU16 => {
+            let val = u16::from_le_bytes([program_id[0], program_id[1]]);
+            let result = partial_eq_u16(val, val);
+            solana_msg::msg!("u16 eq: {}", result);
+        }
+        CuLibraryInstruction::PartialEqU32 => {
+            let val =
+                u32::from_le_bytes([program_id[0], program_id[1], program_id[2], program_id[3]]);
+            let result = partial_eq_u32(val, val);
+            solana_msg::msg!("u32 eq: {}", result);
+        }
+        CuLibraryInstruction::PartialEqU64 => {
+            let val = u64::from_le_bytes([
+                program_id[0],
+                program_id[1],
+                program_id[2],
+                program_id[3],
+                program_id[4],
+                program_id[5],
+                program_id[6],
+                program_id[7],
+            ]);
+            let result = partial_eq_u64(val, val);
+            solana_msg::msg!("u64 eq: {}", result);
+        }
+        CuLibraryInstruction::PartialEqU128 => {
+            let val = u128::from_le_bytes([
+                program_id[0],
+                program_id[1],
+                program_id[2],
+                program_id[3],
+                program_id[4],
+                program_id[5],
+                program_id[6],
+                program_id[7],
+                program_id[8],
+                program_id[9],
+                program_id[10],
+                program_id[11],
+                program_id[12],
+                program_id[13],
+                program_id[14],
+                program_id[15],
+            ]);
+            let result = partial_eq_u128(val, val);
+            solana_msg::msg!("u128 eq: {}", result);
+        }
+        CuLibraryInstruction::PartialEqArrayU8_32Ref => {
+            // Reference version - just pass references
+            let a: &[u8; 32] = program_id;
+            let b: &[u8; 32] = program_id;
+            let result = partial_eq_array_u8_32_ref(a, b);
+            solana_msg::msg!("array u8[32] ref eq: {}", result);
+        }
+        CuLibraryInstruction::PartialEqArrayU8_32 => {
+            // Value version - copy the arrays
+            let a: [u8; 32] = *program_id;
+            let b: [u8; 32] = *program_id;
+            let result = partial_eq_array_u8_32(a, b);
+            solana_msg::msg!("array u8[32] eq: {}", result);
+        }
+        CuLibraryInstruction::PartialEqArrayU16_32 => {
+            // Create arrays outside of profiled function
+            let val = u16::from_le_bytes([program_id[0], program_id[1]]);
+            let a: [u16; 32] = [val; 32];
+            let b: [u16; 32] = [val; 32];
+            let result = partial_eq_array_u16_32(&a, &b);
+            solana_msg::msg!("array u16[32] eq: {}", result);
+        }
+        CuLibraryInstruction::PartialEqArrayU32_32 => {
+            // Create arrays outside of profiled function
+            let val =
+                u32::from_le_bytes([program_id[0], program_id[1], program_id[2], program_id[3]]);
+            let a: [u32; 32] = [val; 32];
+            let b: [u32; 32] = [val; 32];
+            let result = partial_eq_array_u32_32(&a, &b);
+            solana_msg::msg!("array u32[32] eq: {}", result);
+        }
+        CuLibraryInstruction::PartialEqArrayU64_32 => {
+            // Create arrays outside of profiled function
+            let val = u64::from_le_bytes([
+                program_id[0],
+                program_id[1],
+                program_id[2],
+                program_id[3],
+                program_id[4],
+                program_id[5],
+                program_id[6],
+                program_id[7],
+            ]);
+            let a: [u64; 32] = [val; 32];
+            let b: [u64; 32] = [val; 32];
+            let result = partial_eq_array_u64_32(&a, &b);
+            solana_msg::msg!("array u64[32] eq: {}", result);
+        }
+        CuLibraryInstruction::PartialEqU8Neq => {
+            let val1 = program_id[0];
+            let val2 = program_id[1];
+            let result = partial_eq_u8_neq(val1, val2);
+            solana_msg::msg!("u8 neq: {}", result);
+        }
+        CuLibraryInstruction::PartialEqU16Neq => {
+            let val1 = u16::from_le_bytes([program_id[0], program_id[1]]);
+            let val2 = u16::from_le_bytes([program_id[2], program_id[3]]);
+            let result = partial_eq_u16_neq(val1, val2);
+            solana_msg::msg!("u16 neq: {}", result);
+        }
+        CuLibraryInstruction::PartialEqU32Neq => {
+            let val1 =
+                u32::from_le_bytes([program_id[0], program_id[1], program_id[2], program_id[3]]);
+            let val2 =
+                u32::from_le_bytes([program_id[4], program_id[5], program_id[6], program_id[7]]);
+            let result = partial_eq_u32_neq(val1, val2);
+            solana_msg::msg!("u32 neq: {}", result);
+        }
+        CuLibraryInstruction::PartialEqU64Neq => {
+            let val1 = u64::from_le_bytes([
+                program_id[0],
+                program_id[1],
+                program_id[2],
+                program_id[3],
+                program_id[4],
+                program_id[5],
+                program_id[6],
+                program_id[7],
+            ]);
+            let val2 = u64::from_le_bytes([
+                program_id[8],
+                program_id[9],
+                program_id[10],
+                program_id[11],
+                program_id[12],
+                program_id[13],
+                program_id[14],
+                program_id[15],
+            ]);
+            let result = partial_eq_u64_neq(val1, val2);
+            solana_msg::msg!("u64 neq: {}", result);
+        }
+        CuLibraryInstruction::PartialEqU128Neq => {
+            let val1 = u128::from_le_bytes([
+                program_id[0],
+                program_id[1],
+                program_id[2],
+                program_id[3],
+                program_id[4],
+                program_id[5],
+                program_id[6],
+                program_id[7],
+                program_id[8],
+                program_id[9],
+                program_id[10],
+                program_id[11],
+                program_id[12],
+                program_id[13],
+                program_id[14],
+                program_id[15],
+            ]);
+            let val2 = u128::from_le_bytes([
+                program_id[16],
+                program_id[17],
+                program_id[18],
+                program_id[19],
+                program_id[20],
+                program_id[21],
+                program_id[22],
+                program_id[23],
+                program_id[24],
+                program_id[25],
+                program_id[26],
+                program_id[27],
+                program_id[28],
+                program_id[29],
+                program_id[30],
+                program_id[31],
+            ]);
+            let result = partial_eq_u128_neq(val1, val2);
+            solana_msg::msg!("u128 neq: {}", result);
+        }
+        CuLibraryInstruction::PartialEqArrayU8_32NeqRef => {
+            // Reference version - create arrays with different last element outside profiled function
+            let val1 = program_id[0];
+            let val2 = program_id[1];
+            let a: [u8; 32] = [val1; 32];
+            let mut b: [u8; 32] = [val1; 32];
+            b[31] = val2; // Make last element different
+            let result = partial_eq_array_u8_32_neq_ref(&a, &b);
+            solana_msg::msg!("array u8[32] neq ref: {}", result);
+        }
+        CuLibraryInstruction::PartialEqArrayU8_32Neq => {
+            // Value version - create arrays with different last element outside profiled function
+            let val1 = program_id[0];
+            let val2 = program_id[1];
+            let a: [u8; 32] = [val1; 32];
+            let mut b: [u8; 32] = [val1; 32];
+            b[31] = val2; // Make last element different
+            let result = partial_eq_array_u8_32_neq(a, b);
+            solana_msg::msg!("array u8[32] neq: {}", result);
+        }
+        CuLibraryInstruction::PartialEqArrayU8_32NeqDeref => {
+            // Dereference version - dereferences inside profiled function
+            let val1 = program_id[0];
+            let val2 = program_id[1];
+            let a: [u8; 32] = [val1; 32];
+            let mut b: [u8; 32] = [val1; 32];
+            b[31] = val2; // Make last element different
+            let result = partial_eq_array_u8_32_neq_deref(&a, &b);
+            solana_msg::msg!("array u8[32] neq deref: {}", result);
+        }
+        CuLibraryInstruction::PartialEqArrayU16_32Neq => {
+            // Create arrays with different last element outside profiled function
+            let val1 = u16::from_le_bytes([program_id[0], program_id[1]]);
+            let val2 = u16::from_le_bytes([program_id[2], program_id[3]]);
+            let a: [u16; 32] = [val1; 32];
+            let mut b: [u16; 32] = [val1; 32];
+            b[31] = val2; // Make last element different
+            let result = partial_eq_array_u16_32_neq(&a, &b);
+            solana_msg::msg!("array u16[32] neq: {}", result);
+        }
+        CuLibraryInstruction::PartialEqArrayU32_32Neq => {
+            // Create arrays with different last element outside profiled function
+            let val1 =
+                u32::from_le_bytes([program_id[0], program_id[1], program_id[2], program_id[3]]);
+            let val2 =
+                u32::from_le_bytes([program_id[4], program_id[5], program_id[6], program_id[7]]);
+            let a: [u32; 32] = [val1; 32];
+            let mut b: [u32; 32] = [val1; 32];
+            b[31] = val2; // Make last element different
+            let result = partial_eq_array_u32_32_neq(&a, &b);
+            solana_msg::msg!("array u32[32] neq: {}", result);
+        }
+        CuLibraryInstruction::PartialEqArrayU64_32Neq => {
+            // Create arrays with different last element outside profiled function
+            let val1 = u64::from_le_bytes([
+                program_id[0],
+                program_id[1],
+                program_id[2],
+                program_id[3],
+                program_id[4],
+                program_id[5],
+                program_id[6],
+                program_id[7],
+            ]);
+            let val2 = u64::from_le_bytes([
+                program_id[8],
+                program_id[9],
+                program_id[10],
+                program_id[11],
+                program_id[12],
+                program_id[13],
+                program_id[14],
+                program_id[15],
+            ]);
+            let a: [u64; 32] = [val1; 32];
+            let mut b: [u64; 32] = [val1; 32];
+            b[31] = val2; // Make last element different
+            let result = partial_eq_array_u64_32_neq(&a, &b);
+            solana_msg::msg!("array u64[32] neq: {}", result);
         }
     }
     Ok(())
