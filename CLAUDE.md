@@ -51,6 +51,34 @@ pub fn checked_add_u64() -> ProgramResult {
 }
 ```
 
+**IMPORTANT: Preventing Compiler Optimization**
+
+To ensure accurate CU measurements, functions should return actual values (not just `ProgramResult`) and these values must be printed in `lib.rs`:
+
+```rust
+// Return the actual computed value
+#[profile]
+pub fn checked_add_u64() -> u64 {
+    let a: u64 = 1000;
+    let b: u64 = 2000;
+    a.checked_add(b).unwrap_or(0)
+}
+```
+
+Then in `lib.rs`, print the full value:
+
+```rust
+CuLibraryInstruction::CheckedAddU64 => {
+    let res = checked_add_u64();
+    solana_msg::msg!("result: {}", res);  // Print the actual value, not just length
+}
+```
+
+**Note:** If a benchmark shows ≤8 CU, it's likely being optimized away. Ensure you:
+- Return the actual computed value from the function
+- Print the full value (not just `.len()` or similar)
+- Use the value in a way that prevents optimization
+
 2. **Add module declaration** to the directory's `mod.rs`:
 
 ```rust

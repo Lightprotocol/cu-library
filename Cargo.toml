@@ -6,8 +6,7 @@ edition = "2021"
 [features]
 no-entrypoint = []
 profile-program = []
-profile-heap = []
-default = ["profile-program", "profile-heap"]
+default = ["profile-program", "custom-heap"]
 custom-heap = []
 
 [dependencies]
@@ -15,8 +14,7 @@ pinocchio = "0.9.1"
 solana-msg = "2.2.1"
 solana-pubkey = "2.2.1"
 arrayvec = { version = "0.7"}
-light-program-profiler = { git = "https://github.com/Lightprotocol/light-program-profiler", features = ["profile-program", "profile-heap"] }
-light-heap = {path = "../light-protocol2/program-libs/heap"}
+light-program-profiler = { git = "https://github.com/Lightprotocol/light-program-profiler", features = ["profile-program"] }
 
 [dev-dependencies]
 litesvm = "0.6.1"

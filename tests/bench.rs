@@ -26,7 +26,7 @@ fn bench_cu_operations() {
     svm.airdrop(&payer.pubkey(), 10_000_000_000).unwrap();
 
     // Collect benchmark results by category
-    let mut results_by_category: BTreeMap<String, Vec<(String, String, String)>> = BTreeMap::new();
+    let mut results_by_category: BTreeMap<String, Vec<(String, String)>> = BTreeMap::new();
 
     let instructions = vec![
         CuLibraryInstruction::Msg10,
@@ -41,6 +41,18 @@ fn bench_cu_operations() {
         CuLibraryInstruction::ArrayVecPushU8,
         CuLibraryInstruction::ArrayVecWithCapacity10,
         CuLibraryInstruction::ArrayVecWithCapacity100,
+        CuLibraryInstruction::ArrayVecPush10U8,
+        CuLibraryInstruction::ArrayVecPush10U64,
+        CuLibraryInstruction::ArrayVecPush10Pubkey,
+        CuLibraryInstruction::VecNew,
+        CuLibraryInstruction::VecWithCapacity10,
+        CuLibraryInstruction::VecWithCapacity100,
+        CuLibraryInstruction::VecPushU8,
+        CuLibraryInstruction::VecPushU64,
+        CuLibraryInstruction::VecPushPubkey,
+        CuLibraryInstruction::VecPush10U8,
+        CuLibraryInstruction::VecPush10U64,
+        CuLibraryInstruction::VecPush10Pubkey,
     ];
 
     for instruction_type in instructions.into_iter() {
@@ -60,13 +72,13 @@ fn bench_cu_operations() {
         println!("{}", logs);
 
         // Parse benchmark results
-        if let Some((func_name, cu_value, heap_value)) = parse_benchmark_log(&meta.logs) {
+        if let Some((func_name, cu_value)) = parse_benchmark_log(&meta.logs) {
             // Determine category from function name prefix
             let category = func_name.split('_').next().unwrap_or("other").to_string();
             results_by_category
                 .entry(category)
                 .or_insert_with(Vec::new)
-                .push((func_name, cu_value, heap_value));
+                .push((func_name, cu_value));
         }
     }
 
@@ -76,7 +88,7 @@ fn bench_cu_operations() {
     println!("Benchmark results written to README.md");
 }
 
-fn parse_benchmark_log(logs: &[String]) -> Option<(String, String, String)> {
+fn parse_benchmark_log(logs: &[String]) -> Option<(String, String)> {
     // Parse the logs to extract profiler output
     for log in logs {
         // Check if this log contains profiler output
@@ -102,7 +114,6 @@ fn parse_benchmark_log(logs: &[String]) -> Option<(String, String, String)> {
 
                             // Look for the CU consumption line (2 lines down)
                             let mut cu_value = "N/A".to_string();
-                            let mut heap_value = "0".to_string();
 
                             if i + 2 < lines.len() {
                                 if let Some(cu_line) = lines.get(i + 2) {
@@ -118,22 +129,11 @@ fn parse_benchmark_log(logs: &[String]) -> Option<(String, String, String)> {
                                                 cu_value = parts[0].to_string();
                                             }
                                         }
-
-                                        // Look for heap usage in the same line
-                                        if let Some(heap_pos) = cu_line.find("heap") {
-                                            let after_heap = &cu_line[heap_pos + 4..].trim();
-                                            // Extract heap value
-                                            let parts: Vec<&str> =
-                                                after_heap.split_whitespace().collect();
-                                            if !parts.is_empty() {
-                                                heap_value = parts[0].to_string();
-                                            }
-                                        }
                                     }
                                 }
                             }
 
-                            return Some((func_name, cu_value, heap_value));
+                            return Some((func_name, cu_value));
                         }
                     }
                 }
@@ -143,7 +143,7 @@ fn parse_benchmark_log(logs: &[String]) -> Option<(String, String, String)> {
     None
 }
 
-fn write_categorized_readme(results_by_category: BTreeMap<String, Vec<(String, String, String)>>) {
+fn write_categorized_readme(results_by_category: BTreeMap<String, Vec<(String, String)>>) {
     let mut readme = OpenOptions::new()
         .create(true)
         .write(true)
@@ -169,21 +169,21 @@ fn write_categorized_readme(results_by_category: BTreeMap<String, Vec<(String, S
         // Write table header
         writeln!(
             readme,
-            "| Function                                    | CU Consumed | Heap Bytes Used |"
+            "| Function                                    | CU Consumed |"
         )
         .unwrap();
         writeln!(
             readme,
-            "|---------------------------------------------|-------------|-----------------|"
+            "|---------------------------------------------|-------------|"
         )
         .unwrap();
 
         // Write results
-        for (func_name, cu_value, heap_value) in results {
+        for (func_name, cu_value) in results {
             writeln!(
                 readme,
-                "| {:<43} | {:<11} | {:<15} |",
-                func_name, cu_value, heap_value
+                "| {:<43} | {:<11} |",
+                func_name, cu_value
             )
             .unwrap();
         }
