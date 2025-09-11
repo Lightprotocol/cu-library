@@ -98,6 +98,36 @@ fn bench_cu_operations() {
         CuLibraryInstruction::SaturatingMulU32,
         CuLibraryInstruction::SaturatingMulU64,
         CuLibraryInstruction::SaturatingMulU128,
+        CuLibraryInstruction::StdAddU8,
+        CuLibraryInstruction::StdAddU16,
+        CuLibraryInstruction::StdAddU32,
+        CuLibraryInstruction::StdAddU64,
+        CuLibraryInstruction::StdAddU128,
+        CuLibraryInstruction::StdSubU8,
+        CuLibraryInstruction::StdSubU16,
+        CuLibraryInstruction::StdSubU32,
+        CuLibraryInstruction::StdSubU64,
+        CuLibraryInstruction::StdSubU128,
+        CuLibraryInstruction::StdMulU8,
+        CuLibraryInstruction::StdMulU16,
+        CuLibraryInstruction::StdMulU32,
+        CuLibraryInstruction::StdMulU64,
+        CuLibraryInstruction::StdMulU128,
+        CuLibraryInstruction::StdDivU8,
+        CuLibraryInstruction::StdDivU16,
+        CuLibraryInstruction::StdDivU32,
+        CuLibraryInstruction::StdDivU64,
+        CuLibraryInstruction::StdDivU128,
+        CuLibraryInstruction::AddAssignU8,
+        CuLibraryInstruction::AddAssignU16,
+        CuLibraryInstruction::AddAssignU32,
+        CuLibraryInstruction::AddAssignU64,
+        CuLibraryInstruction::AddAssignU128,
+        CuLibraryInstruction::SubAssignU8,
+        CuLibraryInstruction::SubAssignU16,
+        CuLibraryInstruction::SubAssignU32,
+        CuLibraryInstruction::SubAssignU64,
+        CuLibraryInstruction::SubAssignU128,
     ];
 
     for instruction_type in instructions.into_iter() {
@@ -188,7 +218,7 @@ fn parse_benchmark_log(logs: &[String]) -> Option<(String, String)> {
     None
 }
 
-fn write_categorized_readme(results_by_category: BTreeMap<String, Vec<(String, String)>>) {
+fn write_categorized_readme(mut results_by_category: BTreeMap<String, Vec<(String, String)>>) {
     let mut readme = OpenOptions::new()
         .create(true)
         .write(true)
@@ -201,7 +231,36 @@ fn write_categorized_readme(results_by_category: BTreeMap<String, Vec<(String, S
     writeln!(readme, "Benchmark results for Solana runtime operations:\n").unwrap();
     writeln!(readme, "**Note:** The `#[profile]` macro adds ~5-6 CU overhead to each measurement.\n").unwrap();
 
-    // Write each category
+    // Write Baseline category first if it exists
+    if let Some(baseline_results) = results_by_category.remove("baseline") {
+        writeln!(readme, "## Baseline\n").unwrap();
+        
+        // Write table header
+        writeln!(
+            readme,
+            "| Function                                    | CU Consumed |"
+        )
+        .unwrap();
+        writeln!(
+            readme,
+            "|---------------------------------------------|-------------|"
+        )
+        .unwrap();
+
+        // Write results
+        for (func_name, cu_value) in baseline_results {
+            writeln!(
+                readme,
+                "| {:<43} | {:<11} |",
+                func_name, cu_value
+            )
+            .unwrap();
+        }
+
+        writeln!(readme).unwrap(); // Empty line after baseline
+    }
+
+    // Write remaining categories
     for (category, results) in results_by_category {
         // Format category name (capitalize first letter)
         let category_name = format!(

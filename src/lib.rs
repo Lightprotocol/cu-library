@@ -12,38 +12,51 @@ use crate::arrayvec::vec_push::{
     arrayvec_push_u64, arrayvec_push_u8,
 };
 use crate::arrayvec::vec_with_capacity::{arrayvec_with_capacity_10, arrayvec_with_capacity_100};
+use crate::checked_math::checked_add::{
+    checked_add_u128, checked_add_u16, checked_add_u32, checked_add_u64, checked_add_u8,
+};
+use crate::checked_math::checked_div::{
+    checked_div_u128, checked_div_u16, checked_div_u32, checked_div_u64, checked_div_u8,
+};
+use crate::checked_math::checked_mul::{
+    checked_mul_u128, checked_mul_u16, checked_mul_u32, checked_mul_u64, checked_mul_u8,
+};
+use crate::checked_math::checked_sub::{
+    checked_sub_u128, checked_sub_u16, checked_sub_u32, checked_sub_u64, checked_sub_u8,
+};
 use crate::pinocchio_ops::msg::pinocchio_msg10_chars;
 use crate::pinocchio_ops::sysvar_clock::pinocchio_clock_get_slot;
 use crate::pinocchio_ops::sysvar_rent::pinocchio_sysvar_rent_exemption_165;
+use crate::saturating_math::saturating_add::{
+    saturating_add_u128, saturating_add_u16, saturating_add_u32, saturating_add_u64,
+    saturating_add_u8,
+};
+use crate::saturating_math::saturating_mul::{
+    saturating_mul_u128, saturating_mul_u16, saturating_mul_u32, saturating_mul_u64,
+    saturating_mul_u8,
+};
+use crate::saturating_math::saturating_sub::{
+    saturating_sub_u128, saturating_sub_u16, saturating_sub_u32, saturating_sub_u64,
+    saturating_sub_u8,
+};
 use crate::solana_ops::msg::solana_msg10_chars;
 use crate::solana_ops::msg_program_id::solana_msg_program_id;
 use crate::solana_ops::pubkey_new_from_array::solana_pubkey_new_from_array;
+use crate::std_math::add_assign::{
+    add_assign_u128, add_assign_u16, add_assign_u32, add_assign_u64, add_assign_u8,
+};
+use crate::std_math::std_add::{std_add_u128, std_add_u16, std_add_u32, std_add_u64, std_add_u8};
+use crate::std_math::std_div::{std_div_u128, std_div_u16, std_div_u32, std_div_u64, std_div_u8};
+use crate::std_math::std_mul::{std_mul_u128, std_mul_u16, std_mul_u32, std_mul_u64, std_mul_u8};
+use crate::std_math::std_sub::{std_sub_u128, std_sub_u16, std_sub_u32, std_sub_u64, std_sub_u8};
+use crate::std_math::sub_assign::{
+    sub_assign_u128, sub_assign_u16, sub_assign_u32, sub_assign_u64, sub_assign_u8,
+};
 use crate::vec::vec_new::vec_new;
 use crate::vec::vec_push::{
     vec_push_10_pubkey, vec_push_10_u64, vec_push_10_u8, vec_push_pubkey, vec_push_u64, vec_push_u8,
 };
 use crate::vec::vec_with_capacity::{vec_with_capacity_10, vec_with_capacity_100};
-use crate::checked_math::checked_add::{
-    checked_add_u8, checked_add_u16, checked_add_u32, checked_add_u64, checked_add_u128,
-};
-use crate::checked_math::checked_sub::{
-    checked_sub_u8, checked_sub_u16, checked_sub_u32, checked_sub_u64, checked_sub_u128,
-};
-use crate::checked_math::checked_mul::{
-    checked_mul_u8, checked_mul_u16, checked_mul_u32, checked_mul_u64, checked_mul_u128,
-};
-use crate::checked_math::checked_div::{
-    checked_div_u8, checked_div_u16, checked_div_u32, checked_div_u64, checked_div_u128,
-};
-use crate::saturating_math::saturating_add::{
-    saturating_add_u8, saturating_add_u16, saturating_add_u32, saturating_add_u64, saturating_add_u128,
-};
-use crate::saturating_math::saturating_sub::{
-    saturating_sub_u8, saturating_sub_u16, saturating_sub_u32, saturating_sub_u64, saturating_sub_u128,
-};
-use crate::saturating_math::saturating_mul::{
-    saturating_mul_u8, saturating_mul_u16, saturating_mul_u32, saturating_mul_u64, saturating_mul_u128,
-};
 use light_program_profiler::profile;
 
 pub mod array;
@@ -52,10 +65,11 @@ pub mod checked_math;
 pub mod pinocchio_ops;
 pub mod saturating_math;
 pub mod solana_ops;
+pub mod std_math;
 pub mod vec;
 
 #[profile]
-pub fn baseline_empty() {}
+pub fn baseline_empty_function() {}
 
 #[repr(u16)]
 #[derive(Debug, Clone, Copy)]
@@ -129,6 +143,36 @@ pub enum CuLibraryInstruction {
     SaturatingMulU32 = 66,
     SaturatingMulU64 = 67,
     SaturatingMulU128 = 68,
+    StdAddU8 = 69,
+    StdAddU16 = 70,
+    StdAddU32 = 71,
+    StdAddU64 = 72,
+    StdAddU128 = 73,
+    StdSubU8 = 74,
+    StdSubU16 = 75,
+    StdSubU32 = 76,
+    StdSubU64 = 77,
+    StdSubU128 = 78,
+    StdMulU8 = 79,
+    StdMulU16 = 80,
+    StdMulU32 = 81,
+    StdMulU64 = 82,
+    StdMulU128 = 83,
+    StdDivU8 = 84,
+    StdDivU16 = 85,
+    StdDivU32 = 86,
+    StdDivU64 = 87,
+    StdDivU128 = 88,
+    AddAssignU8 = 89,
+    AddAssignU16 = 90,
+    AddAssignU32 = 91,
+    AddAssignU64 = 92,
+    AddAssignU128 = 93,
+    SubAssignU8 = 94,
+    SubAssignU16 = 95,
+    SubAssignU32 = 96,
+    SubAssignU64 = 97,
+    SubAssignU128 = 98,
 }
 
 impl From<CuLibraryInstruction> for Vec<u8> {
@@ -212,6 +256,36 @@ impl TryFrom<&[u8]> for CuLibraryInstruction {
             66 => Ok(CuLibraryInstruction::SaturatingMulU32),
             67 => Ok(CuLibraryInstruction::SaturatingMulU64),
             68 => Ok(CuLibraryInstruction::SaturatingMulU128),
+            69 => Ok(CuLibraryInstruction::StdAddU8),
+            70 => Ok(CuLibraryInstruction::StdAddU16),
+            71 => Ok(CuLibraryInstruction::StdAddU32),
+            72 => Ok(CuLibraryInstruction::StdAddU64),
+            73 => Ok(CuLibraryInstruction::StdAddU128),
+            74 => Ok(CuLibraryInstruction::StdSubU8),
+            75 => Ok(CuLibraryInstruction::StdSubU16),
+            76 => Ok(CuLibraryInstruction::StdSubU32),
+            77 => Ok(CuLibraryInstruction::StdSubU64),
+            78 => Ok(CuLibraryInstruction::StdSubU128),
+            79 => Ok(CuLibraryInstruction::StdMulU8),
+            80 => Ok(CuLibraryInstruction::StdMulU16),
+            81 => Ok(CuLibraryInstruction::StdMulU32),
+            82 => Ok(CuLibraryInstruction::StdMulU64),
+            83 => Ok(CuLibraryInstruction::StdMulU128),
+            84 => Ok(CuLibraryInstruction::StdDivU8),
+            85 => Ok(CuLibraryInstruction::StdDivU16),
+            86 => Ok(CuLibraryInstruction::StdDivU32),
+            87 => Ok(CuLibraryInstruction::StdDivU64),
+            88 => Ok(CuLibraryInstruction::StdDivU128),
+            89 => Ok(CuLibraryInstruction::AddAssignU8),
+            90 => Ok(CuLibraryInstruction::AddAssignU16),
+            91 => Ok(CuLibraryInstruction::AddAssignU32),
+            92 => Ok(CuLibraryInstruction::AddAssignU64),
+            93 => Ok(CuLibraryInstruction::AddAssignU128),
+            94 => Ok(CuLibraryInstruction::SubAssignU8),
+            95 => Ok(CuLibraryInstruction::SubAssignU16),
+            96 => Ok(CuLibraryInstruction::SubAssignU32),
+            97 => Ok(CuLibraryInstruction::SubAssignU64),
+            98 => Ok(CuLibraryInstruction::SubAssignU128),
             _ => Err(ProgramError::InvalidInstructionData),
         }
     }
@@ -233,7 +307,7 @@ pub fn process_instruction(
     let instruction = CuLibraryInstruction::try_from(instruction_data)?;
     match instruction {
         CuLibraryInstruction::Baseline => {
-            baseline_empty();
+            baseline_empty_function();
             solana_msg::msg!("baseline complete");
         }
         CuLibraryInstruction::Msg10 => pinocchio_msg10_chars()?,
@@ -493,6 +567,126 @@ pub fn process_instruction(
         }
         CuLibraryInstruction::SaturatingMulU128 => {
             let res = saturating_mul_u128();
+            solana_msg::msg!("result: {:?}", res);
+        }
+        CuLibraryInstruction::StdAddU8 => {
+            let res = std_add_u8();
+            solana_msg::msg!("result: {:?}", res);
+        }
+        CuLibraryInstruction::StdAddU16 => {
+            let res = std_add_u16();
+            solana_msg::msg!("result: {:?}", res);
+        }
+        CuLibraryInstruction::StdAddU32 => {
+            let res = std_add_u32();
+            solana_msg::msg!("result: {:?}", res);
+        }
+        CuLibraryInstruction::StdAddU64 => {
+            let res = std_add_u64();
+            solana_msg::msg!("result: {:?}", res);
+        }
+        CuLibraryInstruction::StdAddU128 => {
+            let res = std_add_u128();
+            solana_msg::msg!("result: {:?}", res);
+        }
+        CuLibraryInstruction::StdSubU8 => {
+            let res = std_sub_u8();
+            solana_msg::msg!("result: {:?}", res);
+        }
+        CuLibraryInstruction::StdSubU16 => {
+            let res = std_sub_u16();
+            solana_msg::msg!("result: {:?}", res);
+        }
+        CuLibraryInstruction::StdSubU32 => {
+            let res = std_sub_u32();
+            solana_msg::msg!("result: {:?}", res);
+        }
+        CuLibraryInstruction::StdSubU64 => {
+            let res = std_sub_u64();
+            solana_msg::msg!("result: {:?}", res);
+        }
+        CuLibraryInstruction::StdSubU128 => {
+            let res = std_sub_u128();
+            solana_msg::msg!("result: {:?}", res);
+        }
+        CuLibraryInstruction::StdMulU8 => {
+            let res = std_mul_u8();
+            solana_msg::msg!("result: {:?}", res);
+        }
+        CuLibraryInstruction::StdMulU16 => {
+            let res = std_mul_u16();
+            solana_msg::msg!("result: {:?}", res);
+        }
+        CuLibraryInstruction::StdMulU32 => {
+            let res = std_mul_u32();
+            solana_msg::msg!("result: {:?}", res);
+        }
+        CuLibraryInstruction::StdMulU64 => {
+            let res = std_mul_u64();
+            solana_msg::msg!("result: {:?}", res);
+        }
+        CuLibraryInstruction::StdMulU128 => {
+            let res = std_mul_u128();
+            solana_msg::msg!("result: {:?}", res);
+        }
+        CuLibraryInstruction::StdDivU8 => {
+            let res = std_div_u8();
+            solana_msg::msg!("result: {:?}", res);
+        }
+        CuLibraryInstruction::StdDivU16 => {
+            let res = std_div_u16();
+            solana_msg::msg!("result: {:?}", res);
+        }
+        CuLibraryInstruction::StdDivU32 => {
+            let res = std_div_u32();
+            solana_msg::msg!("result: {:?}", res);
+        }
+        CuLibraryInstruction::StdDivU64 => {
+            let res = std_div_u64();
+            solana_msg::msg!("result: {:?}", res);
+        }
+        CuLibraryInstruction::StdDivU128 => {
+            let res = std_div_u128();
+            solana_msg::msg!("result: {:?}", res);
+        }
+        CuLibraryInstruction::AddAssignU8 => {
+            let res = add_assign_u8();
+            solana_msg::msg!("result: {:?}", res);
+        }
+        CuLibraryInstruction::AddAssignU16 => {
+            let res = add_assign_u16();
+            solana_msg::msg!("result: {:?}", res);
+        }
+        CuLibraryInstruction::AddAssignU32 => {
+            let res = add_assign_u32();
+            solana_msg::msg!("result: {:?}", res);
+        }
+        CuLibraryInstruction::AddAssignU64 => {
+            let res = add_assign_u64();
+            solana_msg::msg!("result: {:?}", res);
+        }
+        CuLibraryInstruction::AddAssignU128 => {
+            let res = add_assign_u128();
+            solana_msg::msg!("result: {:?}", res);
+        }
+        CuLibraryInstruction::SubAssignU8 => {
+            let res = sub_assign_u8();
+            solana_msg::msg!("result: {:?}", res);
+        }
+        CuLibraryInstruction::SubAssignU16 => {
+            let res = sub_assign_u16();
+            solana_msg::msg!("result: {:?}", res);
+        }
+        CuLibraryInstruction::SubAssignU32 => {
+            let res = sub_assign_u32();
+            solana_msg::msg!("result: {:?}", res);
+        }
+        CuLibraryInstruction::SubAssignU64 => {
+            let res = sub_assign_u64();
+            solana_msg::msg!("result: {:?}", res);
+        }
+        CuLibraryInstruction::SubAssignU128 => {
+            let res = sub_assign_u128();
             solana_msg::msg!("result: {:?}", res);
         }
     }

@@ -4,6 +4,22 @@ Benchmark results for Solana runtime operations:
 
 **Note:** The `#[profile]` macro adds ~5-6 CU overhead to each measurement.
 
+## Baseline
+
+| Function                                    | CU Consumed |
+|---------------------------------------------|-------------|
+| baseline_empty_function                     | 6           |
+
+## Add
+
+| Function                                    | CU Consumed |
+|---------------------------------------------|-------------|
+| add_assign_u8                               | 7           |
+| add_assign_u16                              | 7           |
+| add_assign_u32                              | 7           |
+| add_assign_u64                              | 7           |
+| add_assign_u128                             | 9           |
+
 ## Array
 
 | Function                                    | CU Consumed |
@@ -31,12 +47,6 @@ Benchmark results for Solana runtime operations:
 | arrayvec_push_10_u8                         | 10          |
 | arrayvec_push_10_u64                        | 17          |
 | arrayvec_push_10_pubkey                     | 87          |
-
-## Baseline
-
-| Function                                    | CU Consumed |
-|---------------------------------------------|-------------|
-| baseline_empty                              | 6           |
 
 ## Checked
 
@@ -67,9 +77,9 @@ Benchmark results for Solana runtime operations:
 
 | Function                                    | CU Consumed |
 |---------------------------------------------|-------------|
-| pinocchio_msg10_chars                       | 110         |
+| pinocchio_msg10_chars                       | 109         |
 | pinocchio_sysvar_rent_exemption_165         | 153         |
-| pinocchio_clock_get_slot                    | 170         |
+| pinocchio_clock_get_slot                    | 171         |
 
 ## Saturating
 
@@ -98,6 +108,41 @@ Benchmark results for Solana runtime operations:
 | solana_msg10_chars                          | 110         |
 | solana_msg_program_id                       | 6952        |
 | solana_pubkey_new_from_array                | 14          |
+
+## Std
+
+| Function                                    | CU Consumed |
+|---------------------------------------------|-------------|
+| std_add_u8                                  | 6           |
+| std_add_u16                                 | 6           |
+| std_add_u32                                 | 6           |
+| std_add_u64                                 | 6           |
+| std_add_u128                                | 6           |
+| std_sub_u8                                  | 6           |
+| std_sub_u16                                 | 6           |
+| std_sub_u32                                 | 6           |
+| std_sub_u64                                 | 6           |
+| std_sub_u128                                | 6           |
+| std_mul_u8                                  | 6           |
+| std_mul_u16                                 | 6           |
+| std_mul_u32                                 | 6           |
+| std_mul_u64                                 | 6           |
+| std_mul_u128                                | 6           |
+| std_div_u8                                  | 6           |
+| std_div_u16                                 | 6           |
+| std_div_u32                                 | 6           |
+| std_div_u64                                 | 6           |
+| std_div_u128                                | 6           |
+
+## Sub
+
+| Function                                    | CU Consumed |
+|---------------------------------------------|-------------|
+| sub_assign_u8                               | 7           |
+| sub_assign_u16                              | 7           |
+| sub_assign_u32                              | 7           |
+| sub_assign_u64                              | 7           |
+| sub_assign_u128                             | 9           |
 
 ## Vec
 
