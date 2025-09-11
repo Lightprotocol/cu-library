@@ -14,8 +14,8 @@ pinocchio = "0.9.1"
 solana-msg = "2.2.1"
 solana-pubkey = "2.2.1"
 arrayvec = { version = "0.7"}
-light-program-profiler = { git = "https://github.com/Lightprotocol/light-program-profiler", features = ["profile-program"] }
-
+light-program-profiler = {git = "https://github.com/Lightprotocol/light-program-profiler" ,features = ["profile-program", "inline"] }
+# git = "https://github.com/Lightprotocol/light-program-profiler",
 [dev-dependencies]
 litesvm = "0.6.1"
 solana-sdk = "2.2.1"

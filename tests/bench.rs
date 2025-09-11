@@ -29,21 +29,22 @@ fn bench_cu_operations() {
     let mut results_by_category: BTreeMap<String, Vec<(String, String)>> = BTreeMap::new();
 
     let instructions = vec![
+        CuLibraryInstruction::Baseline,
         CuLibraryInstruction::Msg10,
         CuLibraryInstruction::SolanaMsg10,
         CuLibraryInstruction::SolanaMsgProgramId,
         CuLibraryInstruction::SolanaPubkeyNewFromArray,
         CuLibraryInstruction::PinocchioSysvarRentExemption165,
         CuLibraryInstruction::PinocchioClockGetSlot,
-        CuLibraryInstruction::ArrayVecNew,
-        CuLibraryInstruction::ArrayVecPushPubkey,
-        CuLibraryInstruction::ArrayVecPushU64,
-        CuLibraryInstruction::ArrayVecPushU8,
-        CuLibraryInstruction::ArrayVecWithCapacity10,
-        CuLibraryInstruction::ArrayVecWithCapacity100,
-        CuLibraryInstruction::ArrayVecPush10U8,
-        CuLibraryInstruction::ArrayVecPush10U64,
-        CuLibraryInstruction::ArrayVecPush10Pubkey,
+        CuLibraryInstruction::ArrayvecNew,
+        CuLibraryInstruction::ArrayvecPushPubkey,
+        CuLibraryInstruction::ArrayvecPushU64,
+        CuLibraryInstruction::ArrayvecPushU8,
+        CuLibraryInstruction::ArrayvecWithCapacity10,
+        CuLibraryInstruction::ArrayvecWithCapacity100,
+        CuLibraryInstruction::ArrayvecPush10U8,
+        CuLibraryInstruction::ArrayvecPush10U64,
+        CuLibraryInstruction::ArrayvecPush10Pubkey,
         CuLibraryInstruction::VecNew,
         CuLibraryInstruction::VecWithCapacity10,
         CuLibraryInstruction::VecWithCapacity100,
@@ -53,6 +54,15 @@ fn bench_cu_operations() {
         CuLibraryInstruction::VecPush10U8,
         CuLibraryInstruction::VecPush10U64,
         CuLibraryInstruction::VecPush10Pubkey,
+        CuLibraryInstruction::ArrayNew,
+        CuLibraryInstruction::ArrayWithCapacity10,
+        CuLibraryInstruction::ArrayWithCapacity100,
+        CuLibraryInstruction::ArrayAssignU8,
+        CuLibraryInstruction::ArrayAssignU64,
+        CuLibraryInstruction::ArrayAssignPubkey,
+        CuLibraryInstruction::ArrayAssign10U8,
+        CuLibraryInstruction::ArrayAssign10U64,
+        CuLibraryInstruction::ArrayAssign10Pubkey,
     ];
 
     for instruction_type in instructions.into_iter() {
@@ -154,6 +164,7 @@ fn write_categorized_readme(results_by_category: BTreeMap<String, Vec<(String, S
     // Write README header
     writeln!(readme, "# CU Library Benchmarks\n").unwrap();
     writeln!(readme, "Benchmark results for Solana runtime operations:\n").unwrap();
+    writeln!(readme, "**Note:** The `#[profile]` macro adds ~5-6 CU overhead to each measurement.\n").unwrap();
 
     // Write each category
     for (category, results) in results_by_category {

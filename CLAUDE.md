@@ -79,6 +79,26 @@ CuLibraryInstruction::CheckedAddU64 => {
 - Print the full value (not just `.len()` or similar)
 - Use the value in a way that prevents optimization
 
+**Using Pubkeys in Benchmarks:**
+
+When your benchmark function needs a `Pubkey` parameter, always pass the `program_id` from the `process_instruction` function:
+
+```rust
+// In your benchmark function
+#[profile]
+pub fn arrayvec_push_pubkey(program_id: &Pubkey) -> ArrayVec<Pubkey, 10> {
+    let mut vec = ArrayVec::new();
+    vec.push(*program_id);
+    vec
+}
+
+// In lib.rs process_instruction
+CuLibraryInstruction::ArrayVecPushPubkey => {
+    let res = arrayvec_push_pubkey(program_id);  // Pass program_id
+    solana_msg::msg!("vec: {:?}", res.as_slice());
+}
+```
+
 2. **Add module declaration** to the directory's `mod.rs`:
 
 ```rust

@@ -2,34 +2,56 @@
 
 Benchmark results for Solana runtime operations:
 
+**Note:** The `#[profile]` macro adds ~5-6 CU overhead to each measurement.
+
 ## Array
 
 | Function                                    | CU Consumed |
 |---------------------------------------------|-------------|
-| array_vec_new                               | 7           |
-| array_vec_push_pubkey                       | 15          |
-| array_vec_push_u64                          | 8           |
-| array_vec_push_u8                           | 8           |
-| array_vec_with_capacity_10                  | 7           |
-| array_vec_with_capacity_100                 | 7           |
-| array_vec_push_10_u8                        | 10          |
-| array_vec_push_10_u64                       | 17          |
-| array_vec_push_10_pubkey                    | 87          |
+| array_new                                   | 10          |
+| array_with_capacity_10                      | 8           |
+| array_with_capacity_100                     | 27          |
+| array_assign_u8                             | 9           |
+| array_assign_u64                            | 16          |
+| array_assign_pubkey                         | 107         |
+| array_assign_10_u8                          | 9           |
+| array_assign_10_u64                         | 16          |
+| array_assign_10_pubkey                      | 107         |
+
+## Arrayvec
+
+| Function                                    | CU Consumed |
+|---------------------------------------------|-------------|
+| arrayvec_new                                | 7           |
+| arrayvec_push_pubkey                        | 50          |
+| arrayvec_push_u64                           | 43          |
+| arrayvec_push_u8                            | 25          |
+| arrayvec_with_capacity_10                   | 7           |
+| arrayvec_with_capacity_100                  | 7           |
+| arrayvec_push_10_u8                         | 10          |
+| arrayvec_push_10_u64                        | 17          |
+| arrayvec_push_10_pubkey                     | 87          |
+
+## Baseline
+
+| Function                                    | CU Consumed |
+|---------------------------------------------|-------------|
+| baseline_empty                              | 6           |
 
 ## Pinocchio
 
 | Function                                    | CU Consumed |
 |---------------------------------------------|-------------|
 | pinocchio_msg10_chars                       | 110         |
-| pinocchio_sysvar_rent_exemption_165         | 152         |
-| pinocchio_clock_get_slot                    | 171         |
+| pinocchio_sysvar_rent_exemption_165         | 153         |
+| pinocchio_clock_get_slot                    | 170         |
 
 ## Solana
 
 | Function                                    | CU Consumed |
 |---------------------------------------------|-------------|
 | solana_msg10_chars                          | 110         |
-| solana_msg_program_id                       | 6941        |
+| solana_msg_program_id                       | 6952        |
 | solana_pubkey_new_from_array                | 14          |
 
 ## Vec
@@ -37,12 +59,12 @@ Benchmark results for Solana runtime operations:
 | Function                                    | CU Consumed |
 |---------------------------------------------|-------------|
 | vec_new                                     | 9           |
-| vec_with_capacity_10                        | 18          |
-| vec_with_capacity_100                       | 18          |
+| vec_with_capacity_10                        | 39          |
+| vec_with_capacity_100                       | 39          |
 | vec_push_u8                                 | 78          |
 | vec_push_u64                                | 83          |
 | vec_push_pubkey                             | 89          |
-| vec_push_10_u8                              | 208         |
-| vec_push_10_u64                             | 319         |
-| vec_push_10_pubkey                          | 385         |
+| vec_push_10_u8                              | 207         |
+| vec_push_10_u64                             | 318         |
+| vec_push_10_pubkey                          | 384         |
 
