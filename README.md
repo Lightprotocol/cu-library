@@ -67,9 +67,29 @@ Benchmark results for Solana runtime operations:
 
 | Function                                    | CU Consumed |
 |---------------------------------------------|-------------|
-| pinocchio_msg10_chars                       | 109         |
+| pinocchio_msg10_chars                       | 110         |
 | pinocchio_sysvar_rent_exemption_165         | 153         |
-| pinocchio_clock_get_slot                    | 171         |
+| pinocchio_clock_get_slot                    | 170         |
+
+## Saturating
+
+| Function                                    | CU Consumed |
+|---------------------------------------------|-------------|
+| saturating_add_u8                           | 7           |
+| saturating_add_u16                          | 7           |
+| saturating_add_u32                          | 7           |
+| saturating_add_u64                          | 7           |
+| saturating_add_u128                         | 8           |
+| saturating_sub_u8                           | 7           |
+| saturating_sub_u16                          | 7           |
+| saturating_sub_u32                          | 7           |
+| saturating_sub_u64                          | 7           |
+| saturating_sub_u128                         | 8           |
+| saturating_mul_u8                           | 7           |
+| saturating_mul_u16                          | 7           |
+| saturating_mul_u32                          | 7           |
+| saturating_mul_u64                          | 7           |
+| saturating_mul_u128                         | 8           |
 
 ## Solana
 

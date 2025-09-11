@@ -83,6 +83,21 @@ fn bench_cu_operations() {
         CuLibraryInstruction::CheckedDivU32,
         CuLibraryInstruction::CheckedDivU64,
         CuLibraryInstruction::CheckedDivU128,
+        CuLibraryInstruction::SaturatingAddU8,
+        CuLibraryInstruction::SaturatingAddU16,
+        CuLibraryInstruction::SaturatingAddU32,
+        CuLibraryInstruction::SaturatingAddU64,
+        CuLibraryInstruction::SaturatingAddU128,
+        CuLibraryInstruction::SaturatingSubU8,
+        CuLibraryInstruction::SaturatingSubU16,
+        CuLibraryInstruction::SaturatingSubU32,
+        CuLibraryInstruction::SaturatingSubU64,
+        CuLibraryInstruction::SaturatingSubU128,
+        CuLibraryInstruction::SaturatingMulU8,
+        CuLibraryInstruction::SaturatingMulU16,
+        CuLibraryInstruction::SaturatingMulU32,
+        CuLibraryInstruction::SaturatingMulU64,
+        CuLibraryInstruction::SaturatingMulU128,
     ];
 
     for instruction_type in instructions.into_iter() {

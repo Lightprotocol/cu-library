@@ -35,12 +35,22 @@ use crate::checked_math::checked_mul::{
 use crate::checked_math::checked_div::{
     checked_div_u8, checked_div_u16, checked_div_u32, checked_div_u64, checked_div_u128,
 };
+use crate::saturating_math::saturating_add::{
+    saturating_add_u8, saturating_add_u16, saturating_add_u32, saturating_add_u64, saturating_add_u128,
+};
+use crate::saturating_math::saturating_sub::{
+    saturating_sub_u8, saturating_sub_u16, saturating_sub_u32, saturating_sub_u64, saturating_sub_u128,
+};
+use crate::saturating_math::saturating_mul::{
+    saturating_mul_u8, saturating_mul_u16, saturating_mul_u32, saturating_mul_u64, saturating_mul_u128,
+};
 use light_program_profiler::profile;
 
 pub mod array;
 pub mod arrayvec;
 pub mod checked_math;
 pub mod pinocchio_ops;
+pub mod saturating_math;
 pub mod solana_ops;
 pub mod vec;
 
@@ -104,6 +114,21 @@ pub enum CuLibraryInstruction {
     CheckedDivU32 = 51,
     CheckedDivU64 = 52,
     CheckedDivU128 = 53,
+    SaturatingAddU8 = 54,
+    SaturatingAddU16 = 55,
+    SaturatingAddU32 = 56,
+    SaturatingAddU64 = 57,
+    SaturatingAddU128 = 58,
+    SaturatingSubU8 = 59,
+    SaturatingSubU16 = 60,
+    SaturatingSubU32 = 61,
+    SaturatingSubU64 = 62,
+    SaturatingSubU128 = 63,
+    SaturatingMulU8 = 64,
+    SaturatingMulU16 = 65,
+    SaturatingMulU32 = 66,
+    SaturatingMulU64 = 67,
+    SaturatingMulU128 = 68,
 }
 
 impl From<CuLibraryInstruction> for Vec<u8> {
@@ -172,6 +197,21 @@ impl TryFrom<&[u8]> for CuLibraryInstruction {
             51 => Ok(CuLibraryInstruction::CheckedDivU32),
             52 => Ok(CuLibraryInstruction::CheckedDivU64),
             53 => Ok(CuLibraryInstruction::CheckedDivU128),
+            54 => Ok(CuLibraryInstruction::SaturatingAddU8),
+            55 => Ok(CuLibraryInstruction::SaturatingAddU16),
+            56 => Ok(CuLibraryInstruction::SaturatingAddU32),
+            57 => Ok(CuLibraryInstruction::SaturatingAddU64),
+            58 => Ok(CuLibraryInstruction::SaturatingAddU128),
+            59 => Ok(CuLibraryInstruction::SaturatingSubU8),
+            60 => Ok(CuLibraryInstruction::SaturatingSubU16),
+            61 => Ok(CuLibraryInstruction::SaturatingSubU32),
+            62 => Ok(CuLibraryInstruction::SaturatingSubU64),
+            63 => Ok(CuLibraryInstruction::SaturatingSubU128),
+            64 => Ok(CuLibraryInstruction::SaturatingMulU8),
+            65 => Ok(CuLibraryInstruction::SaturatingMulU16),
+            66 => Ok(CuLibraryInstruction::SaturatingMulU32),
+            67 => Ok(CuLibraryInstruction::SaturatingMulU64),
+            68 => Ok(CuLibraryInstruction::SaturatingMulU128),
             _ => Err(ProgramError::InvalidInstructionData),
         }
     }
@@ -393,6 +433,66 @@ pub fn process_instruction(
         }
         CuLibraryInstruction::CheckedDivU128 => {
             let res = checked_div_u128();
+            solana_msg::msg!("result: {:?}", res);
+        }
+        CuLibraryInstruction::SaturatingAddU8 => {
+            let res = saturating_add_u8();
+            solana_msg::msg!("result: {:?}", res);
+        }
+        CuLibraryInstruction::SaturatingAddU16 => {
+            let res = saturating_add_u16();
+            solana_msg::msg!("result: {:?}", res);
+        }
+        CuLibraryInstruction::SaturatingAddU32 => {
+            let res = saturating_add_u32();
+            solana_msg::msg!("result: {:?}", res);
+        }
+        CuLibraryInstruction::SaturatingAddU64 => {
+            let res = saturating_add_u64();
+            solana_msg::msg!("result: {:?}", res);
+        }
+        CuLibraryInstruction::SaturatingAddU128 => {
+            let res = saturating_add_u128();
+            solana_msg::msg!("result: {:?}", res);
+        }
+        CuLibraryInstruction::SaturatingSubU8 => {
+            let res = saturating_sub_u8();
+            solana_msg::msg!("result: {:?}", res);
+        }
+        CuLibraryInstruction::SaturatingSubU16 => {
+            let res = saturating_sub_u16();
+            solana_msg::msg!("result: {:?}", res);
+        }
+        CuLibraryInstruction::SaturatingSubU32 => {
+            let res = saturating_sub_u32();
+            solana_msg::msg!("result: {:?}", res);
+        }
+        CuLibraryInstruction::SaturatingSubU64 => {
+            let res = saturating_sub_u64();
+            solana_msg::msg!("result: {:?}", res);
+        }
+        CuLibraryInstruction::SaturatingSubU128 => {
+            let res = saturating_sub_u128();
+            solana_msg::msg!("result: {:?}", res);
+        }
+        CuLibraryInstruction::SaturatingMulU8 => {
+            let res = saturating_mul_u8();
+            solana_msg::msg!("result: {:?}", res);
+        }
+        CuLibraryInstruction::SaturatingMulU16 => {
+            let res = saturating_mul_u16();
+            solana_msg::msg!("result: {:?}", res);
+        }
+        CuLibraryInstruction::SaturatingMulU32 => {
+            let res = saturating_mul_u32();
+            solana_msg::msg!("result: {:?}", res);
+        }
+        CuLibraryInstruction::SaturatingMulU64 => {
+            let res = saturating_mul_u64();
+            solana_msg::msg!("result: {:?}", res);
+        }
+        CuLibraryInstruction::SaturatingMulU128 => {
+            let res = saturating_mul_u128();
             solana_msg::msg!("result: {:?}", res);
         }
     }
