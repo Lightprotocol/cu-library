@@ -8,8 +8,12 @@ use crate::pinocchio_ops::sysvar_rent::pinocchio_sysvar_rent_exemption_165;
 use crate::solana_ops::msg::solana_msg10_chars;
 use crate::solana_ops::msg_program_id::solana_msg_program_id;
 use crate::solana_ops::pubkey_new_from_array::solana_pubkey_new_from_array;
+use crate::array_vec::vec_new::array_vec_new;
+use crate::array_vec::vec_with_capacity::{array_vec_with_capacity_10, array_vec_with_capacity_100};
+use crate::array_vec::vec_push::{array_vec_push_u8, array_vec_push_u64, array_vec_push_pubkey};
 pub mod pinocchio_ops;
 pub mod solana_ops;
+pub mod array_vec;
 
 #[repr(u16)]
 #[derive(Debug, Clone, Copy)]
@@ -20,6 +24,12 @@ pub enum CuLibraryInstruction {
     SolanaPubkeyNewFromArray = 4,
     PinocchioSysvarRentExemption165 = 5,
     PinocchioClockGetSlot = 6,
+    ArrayVecNew = 7,
+    ArrayVecWithCapacity10 = 8,
+    ArrayVecWithCapacity100 = 9,
+    ArrayVecPushU8 = 10,
+    ArrayVecPushU64 = 11,
+    ArrayVecPushPubkey = 12,
 }
 
 impl From<CuLibraryInstruction> for Vec<u8> {
@@ -40,6 +50,12 @@ impl TryFrom<&[u8]> for CuLibraryInstruction {
             4 => Ok(CuLibraryInstruction::SolanaPubkeyNewFromArray),
             5 => Ok(CuLibraryInstruction::PinocchioSysvarRentExemption165),
             6 => Ok(CuLibraryInstruction::PinocchioClockGetSlot),
+            7 => Ok(CuLibraryInstruction::ArrayVecNew),
+            8 => Ok(CuLibraryInstruction::ArrayVecWithCapacity10),
+            9 => Ok(CuLibraryInstruction::ArrayVecWithCapacity100),
+            10 => Ok(CuLibraryInstruction::ArrayVecPushU8),
+            11 => Ok(CuLibraryInstruction::ArrayVecPushU64),
+            12 => Ok(CuLibraryInstruction::ArrayVecPushPubkey),
             _ => Err(ProgramError::InvalidInstructionData),
         }
     }
@@ -67,5 +83,11 @@ pub fn process_instruction(
         CuLibraryInstruction::SolanaPubkeyNewFromArray => solana_pubkey_new_from_array(program_id),
         CuLibraryInstruction::PinocchioSysvarRentExemption165 => pinocchio_sysvar_rent_exemption_165(),
         CuLibraryInstruction::PinocchioClockGetSlot => pinocchio_clock_get_slot(),
+        CuLibraryInstruction::ArrayVecNew => array_vec_new(),
+        CuLibraryInstruction::ArrayVecWithCapacity10 => array_vec_with_capacity_10(),
+        CuLibraryInstruction::ArrayVecWithCapacity100 => array_vec_with_capacity_100(),
+        CuLibraryInstruction::ArrayVecPushU8 => array_vec_push_u8(),
+        CuLibraryInstruction::ArrayVecPushU64 => array_vec_push_u64(),
+        CuLibraryInstruction::ArrayVecPushPubkey => array_vec_push_pubkey(program_id),
     }
 }

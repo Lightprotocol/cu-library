@@ -35,8 +35,14 @@ fn bench_cu_operations() {
         CuLibraryInstruction::SolanaPubkeyNewFromArray,
         CuLibraryInstruction::PinocchioSysvarRentExemption165,
         CuLibraryInstruction::PinocchioClockGetSlot,
+        CuLibraryInstruction::ArrayVecNew,
+        CuLibraryInstruction::ArrayVecPushPubkey,
+        CuLibraryInstruction::ArrayVecPushU64,
+        CuLibraryInstruction::ArrayVecPushU8,
+        CuLibraryInstruction::ArrayVecWithCapacity10,
+        CuLibraryInstruction::ArrayVecWithCapacity100,
     ];
-    
+
     for instruction_type in instructions.into_iter() {
         let instruction = create_instruction(program_id, instruction_type, payer.pubkey());
         println!("instruction {:?}", instruction);
@@ -74,11 +80,15 @@ fn parse_benchmark_log(logs: &[String]) -> Option<(String, String, String)> {
     // Parse the logs to extract profiler output
     for log in logs {
         // Check if this log contains profiler output
-        if log.starts_with("Program log:") && log.contains("#") && log.contains("CU") && log.contains("consumed") {
+        if log.starts_with("Program log:")
+            && log.contains("#")
+            && log.contains("CU")
+            && log.contains("consumed")
+        {
             // Remove "Program log: " prefix and split by newlines
             let content = log.strip_prefix("Program log: ").unwrap_or(log);
             let lines: Vec<&str> = content.lines().collect();
-            
+
             for (i, line) in lines.iter().enumerate() {
                 // Look for lines starting with "#" which indicate profiler function names
                 if line.contains("#") && line.contains("    ") {
@@ -89,29 +99,32 @@ fn parse_benchmark_log(logs: &[String]) -> Option<(String, String, String)> {
                         let parts: Vec<&str> = func_part.split_whitespace().collect();
                         if !parts.is_empty() {
                             let func_name = parts[0].to_string();
-                            
+
                             // Look for the CU consumption line (2 lines down)
                             let mut cu_value = "N/A".to_string();
                             let mut heap_value = "0".to_string();
-                            
+
                             if i + 2 < lines.len() {
                                 if let Some(cu_line) = lines.get(i + 2) {
                                     if cu_line.contains("CU") && cu_line.contains("consumed") {
                                         // Extract CU consumed value
                                         if let Some(consumed_pos) = cu_line.find("consumed") {
-                                            let after_consumed = &cu_line[consumed_pos + 8..].trim();
+                                            let after_consumed =
+                                                &cu_line[consumed_pos + 8..].trim();
                                             // Find the number after "consumed"
-                                            let parts: Vec<&str> = after_consumed.split_whitespace().collect();
+                                            let parts: Vec<&str> =
+                                                after_consumed.split_whitespace().collect();
                                             if !parts.is_empty() {
                                                 cu_value = parts[0].to_string();
                                             }
                                         }
-                                        
+
                                         // Look for heap usage in the same line
                                         if let Some(heap_pos) = cu_line.find("heap") {
                                             let after_heap = &cu_line[heap_pos + 4..].trim();
                                             // Extract heap value
-                                            let parts: Vec<&str> = after_heap.split_whitespace().collect();
+                                            let parts: Vec<&str> =
+                                                after_heap.split_whitespace().collect();
                                             if !parts.is_empty() {
                                                 heap_value = parts[0].to_string();
                                             }
@@ -119,7 +132,7 @@ fn parse_benchmark_log(logs: &[String]) -> Option<(String, String, String)> {
                                     }
                                 }
                             }
-                            
+
                             return Some((func_name, cu_value, heap_value));
                         }
                     }
@@ -141,30 +154,40 @@ fn write_categorized_readme(results_by_category: BTreeMap<String, Vec<(String, S
     // Write README header
     writeln!(readme, "# CU Library Benchmarks\n").unwrap();
     writeln!(readme, "Benchmark results for Solana runtime operations:\n").unwrap();
-    
+
     // Write each category
     for (category, results) in results_by_category {
         // Format category name (capitalize first letter)
-        let category_name = format!("{}{}", 
+        let category_name = format!(
+            "{}{}",
             category.chars().next().unwrap().to_uppercase(),
             &category[1..]
         );
-        
+
         writeln!(readme, "## {}\n", category_name).unwrap();
-        
+
         // Write table header
-        writeln!(readme, "| Function                                    | CU Consumed | Heap Bytes Used |").unwrap();
-        writeln!(readme, "|---------------------------------------------|-------------|-----------------|").unwrap();
-        
+        writeln!(
+            readme,
+            "| Function                                    | CU Consumed | Heap Bytes Used |"
+        )
+        .unwrap();
+        writeln!(
+            readme,
+            "|---------------------------------------------|-------------|-----------------|"
+        )
+        .unwrap();
+
         // Write results
         for (func_name, cu_value, heap_value) in results {
             writeln!(
                 readme,
                 "| {:<43} | {:<11} | {:<15} |",
                 func_name, cu_value, heap_value
-            ).unwrap();
+            )
+            .unwrap();
         }
-        
+
         writeln!(readme).unwrap(); // Empty line between categories
     }
 }

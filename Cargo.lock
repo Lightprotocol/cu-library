@@ -906,6 +906,7 @@ dependencies = [
 name = "cu-library"
 version = "0.1.0"
 dependencies = [
+ "arrayvec",
  "light-heap",
  "light-program-profiler",
  "litesvm",
