@@ -10,6 +10,37 @@ Benchmark results for Solana runtime operations:
 |---------------------------------------------|-------------|
 | baseline_empty_function                     | 6           |
 
+## Account
+
+| Function                                    | CU Consumed |
+|---------------------------------------------|-------------|
+| account_info_key                            | 9           |
+| account_info_owner                          | 9           |
+| account_info_is_signer                      | 12          |
+| account_info_is_writable                    | 11          |
+| account_info_executable                     | 12          |
+| account_info_data_len                       | 9           |
+| account_info_lamports                       | 9           |
+| account_info_data_is_empty                  | 12          |
+| account_info_is_owned_by                    | 30          |
+| account_info_assign                         | 15          |
+| account_info_is_borrowed                    | 12          |
+| account_info_borrow_lamports_unchecked      | 9           |
+| account_info_borrow_mut_lamports_unchecked  | 9           |
+| account_info_borrow_data_unchecked          | 8           |
+| account_info_borrow_mut_data_unchecked      | 8           |
+| account_info_try_borrow_lamports            | 15          |
+| account_info_try_borrow_mut_lamports        | 10          |
+| account_info_can_borrow_lamports            | 8           |
+| account_info_can_borrow_mut_lamports        | 8           |
+| account_info_try_borrow_data                | 14          |
+| account_info_try_borrow_mut_data            | 11          |
+| account_info_can_borrow_data                | 8           |
+| account_info_can_borrow_mut_data            | 8           |
+| account_info_realloc                        | 16          |
+| account_info_close                          | 27          |
+| account_info_close_unchecked                | 21          |
+
 ## Add
 
 | Function                                    | CU Consumed |
@@ -77,9 +108,9 @@ Benchmark results for Solana runtime operations:
 
 | Function                                    | CU Consumed |
 |---------------------------------------------|-------------|
-| pinocchio_msg10_chars                       | 109         |
+| pinocchio_msg10_chars                       | 110         |
 | pinocchio_sysvar_rent_exemption_165         | 153         |
-| pinocchio_clock_get_slot                    | 171         |
+| pinocchio_clock_get_slot                    | 170         |
 
 ## Saturating
 

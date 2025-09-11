@@ -61,8 +61,29 @@ use crate::vec::vec_push::{
     vec_push_10_u8_with_capacity, vec_push_10_u64_with_capacity, vec_push_10_pubkey_with_capacity,
 };
 use crate::vec::vec_with_capacity::{vec_u8_with_capacity_10, vec_u8_with_capacity_100};
+use crate::account_info::account_key::account_info_key;
+use crate::account_info::account_owner::account_info_owner;
+use crate::account_info::account_checks::{
+    account_info_is_signer, account_info_is_writable, account_info_executable,
+    account_info_data_is_empty,
+};
+use crate::account_info::account_data::{account_info_data_len, account_info_lamports};
+use crate::account_info::account_ownership::{account_info_is_owned_by, account_info_assign};
+use crate::account_info::account_borrows::{
+    account_info_is_borrowed, account_info_borrow_lamports_unchecked,
+    account_info_borrow_mut_lamports_unchecked, account_info_borrow_data_unchecked,
+    account_info_borrow_mut_data_unchecked, account_info_try_borrow_lamports,
+    account_info_try_borrow_mut_lamports, account_info_can_borrow_lamports,
+    account_info_can_borrow_mut_lamports, account_info_try_borrow_data,
+    account_info_try_borrow_mut_data, account_info_can_borrow_data,
+    account_info_can_borrow_mut_data,
+};
+use crate::account_info::account_realloc::{
+    account_info_realloc, account_info_close, account_info_close_unchecked,
+};
 use light_program_profiler::profile;
 
+pub mod account_info;
 pub mod array;
 pub mod arrayvec;
 pub mod checked_math;
@@ -183,6 +204,32 @@ pub enum CuLibraryInstruction {
     VecPush10U8WithCapacity = 102,
     VecPush10U64WithCapacity = 103,
     VecPush10PubkeyWithCapacity = 104,
+    AccountInfoKey = 105,
+    AccountInfoOwner = 106,
+    AccountInfoIsSigner = 107,
+    AccountInfoIsWritable = 108,
+    AccountInfoExecutable = 109,
+    AccountInfoDataLen = 110,
+    AccountInfoLamports = 111,
+    AccountInfoDataIsEmpty = 112,
+    AccountInfoIsOwnedBy = 113,
+    AccountInfoAssign = 114,
+    AccountInfoIsBorrowed = 115,
+    AccountInfoBorrowLamportsUnchecked = 116,
+    AccountInfoBorrowMutLamportsUnchecked = 117,
+    AccountInfoBorrowDataUnchecked = 118,
+    AccountInfoBorrowMutDataUnchecked = 119,
+    AccountInfoTryBorrowLamports = 120,
+    AccountInfoTryBorrowMutLamports = 121,
+    AccountInfoCanBorrowLamports = 122,
+    AccountInfoCanBorrowMutLamports = 123,
+    AccountInfoTryBorrowData = 124,
+    AccountInfoTryBorrowMutData = 125,
+    AccountInfoCanBorrowData = 126,
+    AccountInfoCanBorrowMutData = 127,
+    AccountInfoRealloc = 128,
+    AccountInfoClose = 129,
+    AccountInfoCloseUnchecked = 130,
 }
 
 impl From<CuLibraryInstruction> for Vec<u8> {
@@ -302,6 +349,32 @@ impl TryFrom<&[u8]> for CuLibraryInstruction {
             102 => Ok(CuLibraryInstruction::VecPush10U8WithCapacity),
             103 => Ok(CuLibraryInstruction::VecPush10U64WithCapacity),
             104 => Ok(CuLibraryInstruction::VecPush10PubkeyWithCapacity),
+            105 => Ok(CuLibraryInstruction::AccountInfoKey),
+            106 => Ok(CuLibraryInstruction::AccountInfoOwner),
+            107 => Ok(CuLibraryInstruction::AccountInfoIsSigner),
+            108 => Ok(CuLibraryInstruction::AccountInfoIsWritable),
+            109 => Ok(CuLibraryInstruction::AccountInfoExecutable),
+            110 => Ok(CuLibraryInstruction::AccountInfoDataLen),
+            111 => Ok(CuLibraryInstruction::AccountInfoLamports),
+            112 => Ok(CuLibraryInstruction::AccountInfoDataIsEmpty),
+            113 => Ok(CuLibraryInstruction::AccountInfoIsOwnedBy),
+            114 => Ok(CuLibraryInstruction::AccountInfoAssign),
+            115 => Ok(CuLibraryInstruction::AccountInfoIsBorrowed),
+            116 => Ok(CuLibraryInstruction::AccountInfoBorrowLamportsUnchecked),
+            117 => Ok(CuLibraryInstruction::AccountInfoBorrowMutLamportsUnchecked),
+            118 => Ok(CuLibraryInstruction::AccountInfoBorrowDataUnchecked),
+            119 => Ok(CuLibraryInstruction::AccountInfoBorrowMutDataUnchecked),
+            120 => Ok(CuLibraryInstruction::AccountInfoTryBorrowLamports),
+            121 => Ok(CuLibraryInstruction::AccountInfoTryBorrowMutLamports),
+            122 => Ok(CuLibraryInstruction::AccountInfoCanBorrowLamports),
+            123 => Ok(CuLibraryInstruction::AccountInfoCanBorrowMutLamports),
+            124 => Ok(CuLibraryInstruction::AccountInfoTryBorrowData),
+            125 => Ok(CuLibraryInstruction::AccountInfoTryBorrowMutData),
+            126 => Ok(CuLibraryInstruction::AccountInfoCanBorrowData),
+            127 => Ok(CuLibraryInstruction::AccountInfoCanBorrowMutData),
+            128 => Ok(CuLibraryInstruction::AccountInfoRealloc),
+            129 => Ok(CuLibraryInstruction::AccountInfoClose),
+            130 => Ok(CuLibraryInstruction::AccountInfoCloseUnchecked),
             _ => Err(ProgramError::InvalidInstructionData),
         }
     }
@@ -317,7 +390,7 @@ program_entrypoint!(process_instruction);
 default_panic_handler!();
 pub fn process_instruction(
     program_id: &Pubkey,
-    _accounts: &[AccountInfo],
+    accounts: &[AccountInfo],
     instruction_data: &[u8],
 ) -> Result<(), ProgramError> {
     let instruction = CuLibraryInstruction::try_from(instruction_data)?;
@@ -728,6 +801,208 @@ pub fn process_instruction(
         CuLibraryInstruction::VecPush10PubkeyWithCapacity => {
             let res = vec_push_10_pubkey_with_capacity(program_id);
             solana_msg::msg!("vec: {:?}", res);
+        }
+        CuLibraryInstruction::AccountInfoKey => {
+            if accounts.is_empty() {
+                return Err(ProgramError::NotEnoughAccountKeys);
+            }
+            let key = account_info_key(&accounts[0]);
+            solana_msg::msg!("account key: {:?}", key);
+        }
+        CuLibraryInstruction::AccountInfoOwner => {
+            if accounts.is_empty() {
+                return Err(ProgramError::NotEnoughAccountKeys);
+            }
+            let owner = account_info_owner(&accounts[0]);
+            solana_msg::msg!("account owner: {:?}", owner);
+        }
+        CuLibraryInstruction::AccountInfoIsSigner => {
+            if accounts.is_empty() {
+                return Err(ProgramError::NotEnoughAccountKeys);
+            }
+            let is_signer = account_info_is_signer(&accounts[0]);
+            solana_msg::msg!("is_signer: {}", is_signer);
+        }
+        CuLibraryInstruction::AccountInfoIsWritable => {
+            if accounts.is_empty() {
+                return Err(ProgramError::NotEnoughAccountKeys);
+            }
+            let is_writable = account_info_is_writable(&accounts[0]);
+            solana_msg::msg!("is_writable: {}", is_writable);
+        }
+        CuLibraryInstruction::AccountInfoExecutable => {
+            if accounts.is_empty() {
+                return Err(ProgramError::NotEnoughAccountKeys);
+            }
+            let executable = account_info_executable(&accounts[0]);
+            solana_msg::msg!("executable: {}", executable);
+        }
+        CuLibraryInstruction::AccountInfoDataLen => {
+            if accounts.is_empty() {
+                return Err(ProgramError::NotEnoughAccountKeys);
+            }
+            let data_len = account_info_data_len(&accounts[0]);
+            solana_msg::msg!("data_len: {}", data_len);
+        }
+        CuLibraryInstruction::AccountInfoLamports => {
+            if accounts.is_empty() {
+                return Err(ProgramError::NotEnoughAccountKeys);
+            }
+            let lamports = account_info_lamports(&accounts[0]);
+            solana_msg::msg!("lamports: {}", lamports);
+        }
+        CuLibraryInstruction::AccountInfoDataIsEmpty => {
+            if accounts.is_empty() {
+                return Err(ProgramError::NotEnoughAccountKeys);
+            }
+            let is_empty = account_info_data_is_empty(&accounts[0]);
+            solana_msg::msg!("data_is_empty: {}", is_empty);
+        }
+        CuLibraryInstruction::AccountInfoIsOwnedBy => {
+            if accounts.is_empty() {
+                return Err(ProgramError::NotEnoughAccountKeys);
+            }
+            let is_owned = account_info_is_owned_by(&accounts[0], program_id);
+            solana_msg::msg!("is_owned_by: {}", is_owned);
+        }
+        CuLibraryInstruction::AccountInfoAssign => {
+            if accounts.is_empty() {
+                return Err(ProgramError::NotEnoughAccountKeys);
+            }
+            account_info_assign(&accounts[0], program_id);
+            solana_msg::msg!("assigned");
+        }
+        CuLibraryInstruction::AccountInfoIsBorrowed => {
+            if accounts.is_empty() {
+                return Err(ProgramError::NotEnoughAccountKeys);
+            }
+            let is_borrowed = account_info_is_borrowed(&accounts[0]);
+            solana_msg::msg!("is_borrowed: {}", is_borrowed);
+        }
+        CuLibraryInstruction::AccountInfoBorrowLamportsUnchecked => {
+            if accounts.is_empty() {
+                return Err(ProgramError::NotEnoughAccountKeys);
+            }
+            let lamports = account_info_borrow_lamports_unchecked(&accounts[0]);
+            solana_msg::msg!("lamports: {}", lamports);
+        }
+        CuLibraryInstruction::AccountInfoBorrowMutLamportsUnchecked => {
+            if accounts.is_empty() {
+                return Err(ProgramError::NotEnoughAccountKeys);
+            }
+            let lamports = account_info_borrow_mut_lamports_unchecked(&accounts[0]);
+            solana_msg::msg!("lamports: {}", lamports);
+        }
+        CuLibraryInstruction::AccountInfoBorrowDataUnchecked => {
+            if accounts.is_empty() {
+                return Err(ProgramError::NotEnoughAccountKeys);
+            }
+            let data = account_info_borrow_data_unchecked(&accounts[0]);
+            solana_msg::msg!("data len: {}", data.len());
+        }
+        CuLibraryInstruction::AccountInfoBorrowMutDataUnchecked => {
+            if accounts.is_empty() {
+                return Err(ProgramError::NotEnoughAccountKeys);
+            }
+            let data = account_info_borrow_mut_data_unchecked(&accounts[0]);
+            solana_msg::msg!("data len: {}", data.len());
+        }
+        CuLibraryInstruction::AccountInfoTryBorrowLamports => {
+            if accounts.is_empty() {
+                return Err(ProgramError::NotEnoughAccountKeys);
+            }
+            let _ = account_info_try_borrow_lamports(&accounts[0])?;
+            solana_msg::msg!("borrowed lamports");
+        }
+        CuLibraryInstruction::AccountInfoTryBorrowMutLamports => {
+            if accounts.is_empty() {
+                return Err(ProgramError::NotEnoughAccountKeys);
+            }
+            let _ = account_info_try_borrow_mut_lamports(&accounts[0])?;
+            solana_msg::msg!("borrowed mut lamports");
+        }
+        CuLibraryInstruction::AccountInfoCanBorrowLamports => {
+            if accounts.is_empty() {
+                return Err(ProgramError::NotEnoughAccountKeys);
+            }
+            let _ = account_info_can_borrow_lamports(&accounts[0])?;
+            solana_msg::msg!("can borrow lamports");
+        }
+        CuLibraryInstruction::AccountInfoCanBorrowMutLamports => {
+            if accounts.is_empty() {
+                return Err(ProgramError::NotEnoughAccountKeys);
+            }
+            let _ = account_info_can_borrow_mut_lamports(&accounts[0])?;
+            solana_msg::msg!("can borrow mut lamports");
+        }
+        CuLibraryInstruction::AccountInfoTryBorrowData => {
+            if accounts.is_empty() {
+                return Err(ProgramError::NotEnoughAccountKeys);
+            }
+            let _ = account_info_try_borrow_data(&accounts[0])?;
+            solana_msg::msg!("borrowed data");
+        }
+        CuLibraryInstruction::AccountInfoTryBorrowMutData => {
+            if accounts.is_empty() {
+                return Err(ProgramError::NotEnoughAccountKeys);
+            }
+            let _ = account_info_try_borrow_mut_data(&accounts[0])?;
+            solana_msg::msg!("borrowed mut data");
+        }
+        CuLibraryInstruction::AccountInfoCanBorrowData => {
+            if accounts.is_empty() {
+                return Err(ProgramError::NotEnoughAccountKeys);
+            }
+            let _ = account_info_can_borrow_data(&accounts[0])?;
+            solana_msg::msg!("can borrow data");
+        }
+        CuLibraryInstruction::AccountInfoCanBorrowMutData => {
+            if accounts.is_empty() {
+                return Err(ProgramError::NotEnoughAccountKeys);
+            }
+            let _ = account_info_can_borrow_mut_data(&accounts[0])?;
+            solana_msg::msg!("can borrow mut data");
+        }
+        CuLibraryInstruction::AccountInfoRealloc => {
+            if accounts.is_empty() {
+                return Err(ProgramError::NotEnoughAccountKeys);
+            }
+            let _ = account_info_realloc(&accounts[0], 1024)?;  // Keep same size
+            solana_msg::msg!("reallocated");
+        }
+        CuLibraryInstruction::AccountInfoClose => {
+            if accounts.len() < 2 {
+                return Err(ProgramError::NotEnoughAccountKeys);
+            }
+            // Transfer lamports to payer before closing to avoid unbalanced instruction
+            let account = &accounts[0];
+            let payer = &accounts[1];
+            let lamports = account.lamports();
+            if lamports > 0 {
+                let mut account_lamports = account.try_borrow_mut_lamports()?;
+                let mut payer_lamports = payer.try_borrow_mut_lamports()?;
+                *account_lamports -= lamports;
+                *payer_lamports += lamports;
+            }
+            let _ = account_info_close(account)?;
+            solana_msg::msg!("closed");
+        }
+        CuLibraryInstruction::AccountInfoCloseUnchecked => {
+            if accounts.len() < 2 {
+                return Err(ProgramError::NotEnoughAccountKeys);
+            }
+            // Transfer lamports to payer before closing to avoid unbalanced instruction
+            let account = &accounts[0];
+            let payer = &accounts[1];
+            let lamports = account.lamports();
+            if lamports > 0 {
+                unsafe {
+                    *account.borrow_mut_lamports_unchecked() -= lamports;
+                    *payer.borrow_mut_lamports_unchecked() += lamports;
+                }
+            }
+            account_info_close_unchecked(account);
+            solana_msg::msg!("closed unchecked");
         }
     }
     Ok(())

@@ -1,5 +1,6 @@
 use cu_library::CuLibraryInstruction;
 use litesvm::LiteSVM;
+use solana_account::Account;
 use solana_instruction::{AccountMeta, Instruction};
 use solana_keypair::Keypair;
 use solana_pubkey::Pubkey;
@@ -24,6 +25,9 @@ fn bench_cu_operations() {
 
     let payer = Keypair::new();
     svm.airdrop(&payer.pubkey(), 10_000_000_000).unwrap();
+
+    // Create a test account with 1KB of data for AccountInfo benchmarks
+    let test_account = Keypair::new();
 
     // Collect benchmark results by category
     let mut results_by_category: BTreeMap<String, Vec<(String, String)>> = BTreeMap::new();
@@ -134,10 +138,87 @@ fn bench_cu_operations() {
         CuLibraryInstruction::VecPush10U8WithCapacity,
         CuLibraryInstruction::VecPush10U64WithCapacity,
         CuLibraryInstruction::VecPush10PubkeyWithCapacity,
+        CuLibraryInstruction::AccountInfoKey,
+        CuLibraryInstruction::AccountInfoOwner,
+        CuLibraryInstruction::AccountInfoIsSigner,
+        CuLibraryInstruction::AccountInfoIsWritable,
+        CuLibraryInstruction::AccountInfoExecutable,
+        CuLibraryInstruction::AccountInfoDataLen,
+        CuLibraryInstruction::AccountInfoLamports,
+        CuLibraryInstruction::AccountInfoDataIsEmpty,
+        CuLibraryInstruction::AccountInfoIsOwnedBy,
+        CuLibraryInstruction::AccountInfoAssign,
+        CuLibraryInstruction::AccountInfoIsBorrowed,
+        CuLibraryInstruction::AccountInfoBorrowLamportsUnchecked,
+        CuLibraryInstruction::AccountInfoBorrowMutLamportsUnchecked,
+        CuLibraryInstruction::AccountInfoBorrowDataUnchecked,
+        CuLibraryInstruction::AccountInfoBorrowMutDataUnchecked,
+        CuLibraryInstruction::AccountInfoTryBorrowLamports,
+        CuLibraryInstruction::AccountInfoTryBorrowMutLamports,
+        CuLibraryInstruction::AccountInfoCanBorrowLamports,
+        CuLibraryInstruction::AccountInfoCanBorrowMutLamports,
+        CuLibraryInstruction::AccountInfoTryBorrowData,
+        CuLibraryInstruction::AccountInfoTryBorrowMutData,
+        CuLibraryInstruction::AccountInfoCanBorrowData,
+        CuLibraryInstruction::AccountInfoCanBorrowMutData,
+        CuLibraryInstruction::AccountInfoRealloc,
+        // Skip close operations as they would affect subsequent tests
+        CuLibraryInstruction::AccountInfoClose,
+        CuLibraryInstruction::AccountInfoCloseUnchecked,
     ];
 
     for instruction_type in instructions.into_iter() {
-        let instruction = create_instruction(program_id, instruction_type, payer.pubkey());
+        let instruction = if matches!(
+            instruction_type,
+            CuLibraryInstruction::AccountInfoKey
+                | CuLibraryInstruction::AccountInfoOwner
+                | CuLibraryInstruction::AccountInfoIsSigner
+                | CuLibraryInstruction::AccountInfoIsWritable
+                | CuLibraryInstruction::AccountInfoExecutable
+                | CuLibraryInstruction::AccountInfoDataLen
+                | CuLibraryInstruction::AccountInfoLamports
+                | CuLibraryInstruction::AccountInfoDataIsEmpty
+                | CuLibraryInstruction::AccountInfoIsOwnedBy
+                | CuLibraryInstruction::AccountInfoAssign
+                | CuLibraryInstruction::AccountInfoIsBorrowed
+                | CuLibraryInstruction::AccountInfoBorrowLamportsUnchecked
+                | CuLibraryInstruction::AccountInfoBorrowMutLamportsUnchecked
+                | CuLibraryInstruction::AccountInfoBorrowDataUnchecked
+                | CuLibraryInstruction::AccountInfoBorrowMutDataUnchecked
+                | CuLibraryInstruction::AccountInfoTryBorrowLamports
+                | CuLibraryInstruction::AccountInfoTryBorrowMutLamports
+                | CuLibraryInstruction::AccountInfoCanBorrowLamports
+                | CuLibraryInstruction::AccountInfoCanBorrowMutLamports
+                | CuLibraryInstruction::AccountInfoTryBorrowData
+                | CuLibraryInstruction::AccountInfoTryBorrowMutData
+                | CuLibraryInstruction::AccountInfoCanBorrowData
+                | CuLibraryInstruction::AccountInfoCanBorrowMutData
+                | CuLibraryInstruction::AccountInfoRealloc
+                | CuLibraryInstruction::AccountInfoClose
+                | CuLibraryInstruction::AccountInfoCloseUnchecked
+        ) {
+            let test_account_data = vec![1u8; 1024]; // 1KB of 1u8
+            svm.set_account(
+                test_account.pubkey(),
+                Account {
+                    lamports: 1_000_000_000,
+                    data: test_account_data,
+                    owner: program_id,
+                    executable: false,
+                    rent_epoch: 0,
+                },
+            )
+            .unwrap();
+
+            create_instruction_with_account(
+                program_id,
+                instruction_type,
+                payer.pubkey(),
+                test_account.pubkey(),
+            )
+        } else {
+            create_instruction(program_id, instruction_type, payer.pubkey())
+        };
         println!("instruction {:?}", instruction);
         let blockhash = svm.latest_blockhash();
 
@@ -235,12 +316,16 @@ fn write_categorized_readme(mut results_by_category: BTreeMap<String, Vec<(Strin
     // Write README header
     writeln!(readme, "# CU Library Benchmarks\n").unwrap();
     writeln!(readme, "Benchmark results for Solana runtime operations:\n").unwrap();
-    writeln!(readme, "**Note:** The `#[profile]` macro adds ~5-6 CU overhead to each measurement.\n").unwrap();
+    writeln!(
+        readme,
+        "**Note:** The `#[profile]` macro adds ~5-6 CU overhead to each measurement.\n"
+    )
+    .unwrap();
 
     // Write Baseline category first if it exists
     if let Some(baseline_results) = results_by_category.remove("baseline") {
         writeln!(readme, "## Baseline\n").unwrap();
-        
+
         // Write table header
         writeln!(
             readme,
@@ -255,12 +340,7 @@ fn write_categorized_readme(mut results_by_category: BTreeMap<String, Vec<(Strin
 
         // Write results
         for (func_name, cu_value) in baseline_results {
-            writeln!(
-                readme,
-                "| {:<43} | {:<11} |",
-                func_name, cu_value
-            )
-            .unwrap();
+            writeln!(readme, "| {:<43} | {:<11} |", func_name, cu_value).unwrap();
         }
 
         writeln!(readme).unwrap(); // Empty line after baseline
@@ -291,12 +371,7 @@ fn write_categorized_readme(mut results_by_category: BTreeMap<String, Vec<(Strin
 
         // Write results
         for (func_name, cu_value) in results {
-            writeln!(
-                readme,
-                "| {:<43} | {:<11} |",
-                func_name, cu_value
-            )
-            .unwrap();
+            writeln!(readme, "| {:<43} | {:<11} |", func_name, cu_value).unwrap();
         }
 
         writeln!(readme).unwrap(); // Empty line between categories
@@ -311,6 +386,22 @@ pub fn create_instruction(
     Instruction {
         program_id,
         accounts: vec![AccountMeta::new(payer, true)],
+        data: instruction_type.into(),
+    }
+}
+
+pub fn create_instruction_with_account(
+    program_id: Pubkey,
+    instruction_type: CuLibraryInstruction,
+    payer: Pubkey,
+    test_account: Pubkey,
+) -> Instruction {
+    Instruction {
+        program_id,
+        accounts: vec![
+            AccountMeta::new(test_account, false),
+            AccountMeta::new(payer, true),
+        ],
         data: instruction_type.into(),
     }
 }
