@@ -32,7 +32,6 @@ Organize profiling functions by operation category:
 - `src/solana_ops/` - Solana SDK operations (e.g., solana_msg::msg!)
 - `src/checked_math/` - Checked arithmetic operations
 - `src/unchecked_math/` - Unchecked arithmetic operations
-- `src/sysvar_ops/` - Sysvar access operations
 
 ### Steps to Add a New Profiling Case
 

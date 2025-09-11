@@ -33,6 +33,8 @@ fn bench_cu_operations() {
         CuLibraryInstruction::SolanaMsg10,
         CuLibraryInstruction::SolanaMsgProgramId,
         CuLibraryInstruction::SolanaPubkeyNewFromArray,
+        CuLibraryInstruction::PinocchioSysvarRentExemption165,
+        CuLibraryInstruction::PinocchioClockGetSlot,
     ];
     
     for instruction_type in instructions.into_iter() {

@@ -6,7 +6,9 @@ Benchmark results for Solana runtime operations:
 
 | Function                                    | CU Consumed | Heap Bytes Used |
 |---------------------------------------------|-------------|-----------------|
-| pinocchio_msg10_chars                       | 111         | 0               |
+| pinocchio_msg10_chars                       | 112         | 0               |
+| pinocchio_sysvar_rent_exemption_165         | 152         | 0               |
+| pinocchio_clock_get_slot                    | 173         | 0               |
 
 ## Solana
 

@@ -3,6 +3,8 @@ use pinocchio::{
 };
 
 use crate::pinocchio_ops::msg::pinocchio_msg10_chars;
+use crate::pinocchio_ops::sysvar_clock::pinocchio_clock_get_slot;
+use crate::pinocchio_ops::sysvar_rent::pinocchio_sysvar_rent_exemption_165;
 use crate::solana_ops::msg::solana_msg10_chars;
 use crate::solana_ops::msg_program_id::solana_msg_program_id;
 use crate::solana_ops::pubkey_new_from_array::solana_pubkey_new_from_array;
@@ -16,6 +18,8 @@ pub enum CuLibraryInstruction {
     SolanaMsg10 = 2,
     SolanaMsgProgramId = 3,
     SolanaPubkeyNewFromArray = 4,
+    PinocchioSysvarRentExemption165 = 5,
+    PinocchioClockGetSlot = 6,
 }
 
 impl From<CuLibraryInstruction> for Vec<u8> {
@@ -34,6 +38,8 @@ impl TryFrom<&[u8]> for CuLibraryInstruction {
             2 => Ok(CuLibraryInstruction::SolanaMsg10),
             3 => Ok(CuLibraryInstruction::SolanaMsgProgramId),
             4 => Ok(CuLibraryInstruction::SolanaPubkeyNewFromArray),
+            5 => Ok(CuLibraryInstruction::PinocchioSysvarRentExemption165),
+            6 => Ok(CuLibraryInstruction::PinocchioClockGetSlot),
             _ => Err(ProgramError::InvalidInstructionData),
         }
     }
@@ -59,5 +65,7 @@ pub fn process_instruction(
         CuLibraryInstruction::SolanaMsg10 => solana_msg10_chars(),
         CuLibraryInstruction::SolanaMsgProgramId => solana_msg_program_id(program_id),
         CuLibraryInstruction::SolanaPubkeyNewFromArray => solana_pubkey_new_from_array(program_id),
+        CuLibraryInstruction::PinocchioSysvarRentExemption165 => pinocchio_sysvar_rent_exemption_165(),
+        CuLibraryInstruction::PinocchioClockGetSlot => pinocchio_clock_get_slot(),
     }
 }
