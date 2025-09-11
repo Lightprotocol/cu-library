@@ -1,0 +1,9 @@
+# Rust
+target/
+
+# OS
+.DS_Store
+
+# Logs
+*.log
+bench.log
