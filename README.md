@@ -38,12 +38,12 @@ Benchmark results for Solana runtime operations:
 
 | Function                                    | CU Consumed |
 |---------------------------------------------|-------------|
-| arrayvec_new                                | 7           |
+| arrayvec_u8_new                             | 7           |
 | arrayvec_push_pubkey                        | 50          |
 | arrayvec_push_u64                           | 43          |
 | arrayvec_push_u8                            | 25          |
-| arrayvec_with_capacity_10                   | 7           |
-| arrayvec_with_capacity_100                  | 7           |
+| arrayvec_u8_with_capacity_10                | 7           |
+| arrayvec_u8_with_capacity_100               | 7           |
 | arrayvec_push_10_u8                         | 10          |
 | arrayvec_push_10_u64                        | 17          |
 | arrayvec_push_10_pubkey                     | 87          |
@@ -106,7 +106,7 @@ Benchmark results for Solana runtime operations:
 | Function                                    | CU Consumed |
 |---------------------------------------------|-------------|
 | solana_msg10_chars                          | 110         |
-| solana_msg_program_id                       | 6952        |
+| solana_msg_program_id                       | 6954        |
 | solana_pubkey_new_from_array                | 14          |
 
 ## Std
@@ -148,13 +148,19 @@ Benchmark results for Solana runtime operations:
 
 | Function                                    | CU Consumed |
 |---------------------------------------------|-------------|
-| vec_new                                     | 9           |
-| vec_with_capacity_10                        | 39          |
-| vec_with_capacity_100                       | 39          |
+| vec_u8_new                                  | 9           |
+| vec_u8_with_capacity_10                     | 113         |
+| vec_u8_with_capacity_100                    | 113         |
 | vec_push_u8                                 | 78          |
 | vec_push_u64                                | 83          |
 | vec_push_pubkey                             | 89          |
 | vec_push_10_u8                              | 207         |
 | vec_push_10_u64                             | 318         |
 | vec_push_10_pubkey                          | 384         |
+| vec_push_u8_with_capacity                   | 120         |
+| vec_push_u64_with_capacity                  | 120         |
+| vec_push_pubkey_with_capacity               | 127         |
+| vec_push_10_u8_with_capacity                | 153         |
+| vec_push_10_u64_with_capacity               | 149         |
+| vec_push_10_pubkey_with_capacity            | 217         |
 

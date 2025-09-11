@@ -128,6 +128,12 @@ fn bench_cu_operations() {
         CuLibraryInstruction::SubAssignU32,
         CuLibraryInstruction::SubAssignU64,
         CuLibraryInstruction::SubAssignU128,
+        CuLibraryInstruction::VecPushU8WithCapacity,
+        CuLibraryInstruction::VecPushU64WithCapacity,
+        CuLibraryInstruction::VecPushPubkeyWithCapacity,
+        CuLibraryInstruction::VecPush10U8WithCapacity,
+        CuLibraryInstruction::VecPush10U64WithCapacity,
+        CuLibraryInstruction::VecPush10PubkeyWithCapacity,
     ];
 
     for instruction_type in instructions.into_iter() {

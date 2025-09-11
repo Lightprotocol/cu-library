@@ -6,12 +6,14 @@ use crate::array::array_assign::{
 };
 use crate::array::array_new::array_new;
 use crate::array::array_with_capacity::{array_with_capacity_10, array_with_capacity_100};
-use crate::arrayvec::vec_new::arrayvec_new;
+use crate::arrayvec::vec_new::arrayvec_u8_new;
 use crate::arrayvec::vec_push::{
     arrayvec_push_10_pubkey, arrayvec_push_10_u64, arrayvec_push_10_u8, arrayvec_push_pubkey,
     arrayvec_push_u64, arrayvec_push_u8,
 };
-use crate::arrayvec::vec_with_capacity::{arrayvec_with_capacity_10, arrayvec_with_capacity_100};
+use crate::arrayvec::vec_with_capacity::{
+    arrayvec_u8_with_capacity_10, arrayvec_u8_with_capacity_100,
+};
 use crate::checked_math::checked_add::{
     checked_add_u128, checked_add_u16, checked_add_u32, checked_add_u64, checked_add_u8,
 };
@@ -52,11 +54,13 @@ use crate::std_math::std_sub::{std_sub_u128, std_sub_u16, std_sub_u32, std_sub_u
 use crate::std_math::sub_assign::{
     sub_assign_u128, sub_assign_u16, sub_assign_u32, sub_assign_u64, sub_assign_u8,
 };
-use crate::vec::vec_new::vec_new;
+use crate::vec::vec_new::vec_u8_new;
 use crate::vec::vec_push::{
     vec_push_10_pubkey, vec_push_10_u64, vec_push_10_u8, vec_push_pubkey, vec_push_u64, vec_push_u8,
+    vec_push_u8_with_capacity, vec_push_u64_with_capacity, vec_push_pubkey_with_capacity,
+    vec_push_10_u8_with_capacity, vec_push_10_u64_with_capacity, vec_push_10_pubkey_with_capacity,
 };
-use crate::vec::vec_with_capacity::{vec_with_capacity_10, vec_with_capacity_100};
+use crate::vec::vec_with_capacity::{vec_u8_with_capacity_10, vec_u8_with_capacity_100};
 use light_program_profiler::profile;
 
 pub mod array;
@@ -173,6 +177,12 @@ pub enum CuLibraryInstruction {
     SubAssignU32 = 96,
     SubAssignU64 = 97,
     SubAssignU128 = 98,
+    VecPushU8WithCapacity = 99,
+    VecPushU64WithCapacity = 100,
+    VecPushPubkeyWithCapacity = 101,
+    VecPush10U8WithCapacity = 102,
+    VecPush10U64WithCapacity = 103,
+    VecPush10PubkeyWithCapacity = 104,
 }
 
 impl From<CuLibraryInstruction> for Vec<u8> {
@@ -286,6 +296,12 @@ impl TryFrom<&[u8]> for CuLibraryInstruction {
             96 => Ok(CuLibraryInstruction::SubAssignU32),
             97 => Ok(CuLibraryInstruction::SubAssignU64),
             98 => Ok(CuLibraryInstruction::SubAssignU128),
+            99 => Ok(CuLibraryInstruction::VecPushU8WithCapacity),
+            100 => Ok(CuLibraryInstruction::VecPushU64WithCapacity),
+            101 => Ok(CuLibraryInstruction::VecPushPubkeyWithCapacity),
+            102 => Ok(CuLibraryInstruction::VecPush10U8WithCapacity),
+            103 => Ok(CuLibraryInstruction::VecPush10U64WithCapacity),
+            104 => Ok(CuLibraryInstruction::VecPush10PubkeyWithCapacity),
             _ => Err(ProgramError::InvalidInstructionData),
         }
     }
@@ -322,15 +338,15 @@ pub fn process_instruction(
         }
         CuLibraryInstruction::PinocchioClockGetSlot => pinocchio_clock_get_slot()?,
         CuLibraryInstruction::ArrayvecNew => {
-            let res = arrayvec_new();
+            let res = arrayvec_u8_new();
             solana_msg::msg!("vec: {:?}", res.as_slice());
         }
         CuLibraryInstruction::ArrayvecWithCapacity10 => {
-            let res = arrayvec_with_capacity_10();
+            let res = arrayvec_u8_with_capacity_10();
             solana_msg::msg!("vec: {:?}", res.as_slice());
         }
         CuLibraryInstruction::ArrayvecWithCapacity100 => {
-            let res = arrayvec_with_capacity_100();
+            let res = arrayvec_u8_with_capacity_100();
             solana_msg::msg!("vec: {:?}", res.as_slice());
         }
         CuLibraryInstruction::ArrayvecPushU8 => {
@@ -358,15 +374,15 @@ pub fn process_instruction(
             solana_msg::msg!("vec: {:?}", res.as_slice());
         }
         CuLibraryInstruction::VecNew => {
-            let res = vec_new();
+            let res = vec_u8_new();
             solana_msg::msg!("vec: {:?}", res);
         }
         CuLibraryInstruction::VecWithCapacity10 => {
-            let res = vec_with_capacity_10();
+            let res = vec_u8_with_capacity_10();
             solana_msg::msg!("vec: {:?}", res);
         }
         CuLibraryInstruction::VecWithCapacity100 => {
-            let res = vec_with_capacity_100();
+            let res = vec_u8_with_capacity_100();
             solana_msg::msg!("vec: {:?}", res);
         }
         CuLibraryInstruction::VecPushU8 => {
@@ -688,6 +704,30 @@ pub fn process_instruction(
         CuLibraryInstruction::SubAssignU128 => {
             let res = sub_assign_u128();
             solana_msg::msg!("result: {:?}", res);
+        }
+        CuLibraryInstruction::VecPushU8WithCapacity => {
+            let res = vec_push_u8_with_capacity();
+            solana_msg::msg!("vec: {:?}", res);
+        }
+        CuLibraryInstruction::VecPushU64WithCapacity => {
+            let res = vec_push_u64_with_capacity();
+            solana_msg::msg!("vec: {:?}", res);
+        }
+        CuLibraryInstruction::VecPushPubkeyWithCapacity => {
+            let res = vec_push_pubkey_with_capacity(program_id);
+            solana_msg::msg!("vec: {:?}", res);
+        }
+        CuLibraryInstruction::VecPush10U8WithCapacity => {
+            let res = vec_push_10_u8_with_capacity();
+            solana_msg::msg!("vec: {:?}", res);
+        }
+        CuLibraryInstruction::VecPush10U64WithCapacity => {
+            let res = vec_push_10_u64_with_capacity();
+            solana_msg::msg!("vec: {:?}", res);
+        }
+        CuLibraryInstruction::VecPush10PubkeyWithCapacity => {
+            let res = vec_push_10_pubkey_with_capacity(program_id);
+            solana_msg::msg!("vec: {:?}", res);
         }
     }
     Ok(())
