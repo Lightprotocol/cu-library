@@ -12,6 +12,8 @@ custom-heap = []
 
 [dependencies]
 pinocchio = "0.9.1"
+solana-msg = "2.2.1"
+solana-pubkey = "2.2.1"
 light-program-profiler = { git = "https://github.com/Lightprotocol/light-program-profiler", features = ["profile-program", "profile-heap"] }
 light-heap = {path = "../light-protocol2/program-libs/heap"}
 

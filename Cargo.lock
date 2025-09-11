@@ -914,6 +914,7 @@ dependencies = [
  "solana-instruction",
  "solana-keypair",
  "solana-message",
+ "solana-msg",
  "solana-program",
  "solana-pubkey",
  "solana-sdk",

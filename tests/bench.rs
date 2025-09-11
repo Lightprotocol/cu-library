@@ -5,7 +5,8 @@ use solana_keypair::Keypair;
 use solana_pubkey::Pubkey;
 use solana_signer::Signer;
 use solana_transaction::Transaction;
-use std::fs::{self, OpenOptions};
+use std::collections::BTreeMap;
+use std::fs::OpenOptions;
 use std::io::Write;
 
 #[test]
@@ -24,20 +25,16 @@ fn bench_cu_operations() {
     let payer = Keypair::new();
     svm.airdrop(&payer.pubkey(), 10_000_000_000).unwrap();
 
-    // Create log file
-    fs::create_dir_all("target").ok();
-    let mut log_file = OpenOptions::new()
-        .create(true)
-        .write(true)
-        .truncate(true)
-        .open("target/bench.log")
-        .expect("Failed to create log file");
+    // Collect benchmark results by category
+    let mut results_by_category: BTreeMap<String, Vec<(String, String, String)>> = BTreeMap::new();
 
-    // Write table header
-    writeln!(log_file, "Function                | CU Consumed | Heap Bytes Used").unwrap();
-    writeln!(log_file, "------------------------|-------------|----------------").unwrap();
-
-    let instructions = vec![CuLibraryInstruction::Msg10];
+    let instructions = vec![
+        CuLibraryInstruction::Msg10,
+        CuLibraryInstruction::SolanaMsg10,
+        CuLibraryInstruction::SolanaMsgProgramId,
+        CuLibraryInstruction::SolanaPubkeyNewFromArray,
+    ];
+    
     for instruction_type in instructions.into_iter() {
         let instruction = create_instruction(program_id, instruction_type, payer.pubkey());
         println!("instruction {:?}", instruction);
@@ -54,14 +51,24 @@ fn bench_cu_operations() {
         let logs = meta.pretty_logs();
         println!("{}", logs);
 
-        // Parse and write benchmark results to log
-        write_benchmark_log(&mut log_file, &meta.logs);
+        // Parse benchmark results
+        if let Some((func_name, cu_value, heap_value)) = parse_benchmark_log(&meta.logs) {
+            // Determine category from function name prefix
+            let category = func_name.split('_').next().unwrap_or("other").to_string();
+            results_by_category
+                .entry(category)
+                .or_insert_with(Vec::new)
+                .push((func_name, cu_value, heap_value));
+        }
     }
 
-    println!("Benchmark results written to target/bench.log");
+    // Write results to README.md grouped by category
+    write_categorized_readme(results_by_category);
+
+    println!("Benchmark results written to README.md");
 }
 
-fn write_benchmark_log(log_file: &mut std::fs::File, logs: &[String]) {
+fn parse_benchmark_log(logs: &[String]) -> Option<(String, String, String)> {
     // Parse the logs to extract profiler output
     for log in logs {
         // Check if this log contains profiler output
@@ -79,11 +86,11 @@ fn write_benchmark_log(log_file: &mut std::fs::File, logs: &[String]) {
                         let func_part = &trimmed[start..].trim();
                         let parts: Vec<&str> = func_part.split_whitespace().collect();
                         if !parts.is_empty() {
-                            let func_name = parts[0];
+                            let func_name = parts[0].to_string();
                             
                             // Look for the CU consumption line (2 lines down)
-                            let mut cu_value = "N/A";
-                            let mut heap_value = "0";
+                            let mut cu_value = "N/A".to_string();
+                            let mut heap_value = "0".to_string();
                             
                             if i + 2 < lines.len() {
                                 if let Some(cu_line) = lines.get(i + 2) {
@@ -94,7 +101,7 @@ fn write_benchmark_log(log_file: &mut std::fs::File, logs: &[String]) {
                                             // Find the number after "consumed"
                                             let parts: Vec<&str> = after_consumed.split_whitespace().collect();
                                             if !parts.is_empty() {
-                                                cu_value = parts[0];
+                                                cu_value = parts[0].to_string();
                                             }
                                         }
                                         
@@ -104,24 +111,59 @@ fn write_benchmark_log(log_file: &mut std::fs::File, logs: &[String]) {
                                             // Extract heap value
                                             let parts: Vec<&str> = after_heap.split_whitespace().collect();
                                             if !parts.is_empty() {
-                                                heap_value = parts[0];
+                                                heap_value = parts[0].to_string();
                                             }
                                         }
                                     }
                                 }
                             }
                             
-                            writeln!(
-                                log_file,
-                                "{:<24}| {:<11} | {}",
-                                func_name, cu_value, heap_value
-                            )
-                            .unwrap();
+                            return Some((func_name, cu_value, heap_value));
                         }
                     }
                 }
             }
         }
+    }
+    None
+}
+
+fn write_categorized_readme(results_by_category: BTreeMap<String, Vec<(String, String, String)>>) {
+    let mut readme = OpenOptions::new()
+        .create(true)
+        .write(true)
+        .truncate(true)
+        .open("README.md")
+        .expect("Failed to create README.md");
+
+    // Write README header
+    writeln!(readme, "# CU Library Benchmarks\n").unwrap();
+    writeln!(readme, "Benchmark results for Solana runtime operations:\n").unwrap();
+    
+    // Write each category
+    for (category, results) in results_by_category {
+        // Format category name (capitalize first letter)
+        let category_name = format!("{}{}", 
+            category.chars().next().unwrap().to_uppercase(),
+            &category[1..]
+        );
+        
+        writeln!(readme, "## {}\n", category_name).unwrap();
+        
+        // Write table header
+        writeln!(readme, "| Function                                    | CU Consumed | Heap Bytes Used |").unwrap();
+        writeln!(readme, "|---------------------------------------------|-------------|-----------------|").unwrap();
+        
+        // Write results
+        for (func_name, cu_value, heap_value) in results {
+            writeln!(
+                readme,
+                "| {:<43} | {:<11} | {:<15} |",
+                func_name, cu_value, heap_value
+            ).unwrap();
+        }
+        
+        writeln!(readme).unwrap(); // Empty line between categories
     }
 }
 
