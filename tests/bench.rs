@@ -26,8 +26,23 @@ fn bench_cu_operations() {
     let payer = Keypair::new();
     svm.airdrop(&payer.pubkey(), 10_000_000_000).unwrap();
 
-    // Create a test account with 1KB of data for AccountInfo benchmarks
+    // Create test accounts for AccountInfo and CPI benchmarks
     let test_account = Keypair::new();
+    
+    // Create 10 accounts for CPI benchmarks
+    let cpi_accounts: Vec<Keypair> = (0..10).map(|_| Keypair::new()).collect();
+    for account in &cpi_accounts {
+        svm.set_account(
+            account.pubkey(),
+            Account {
+                lamports: 100_000_000,
+                data: vec![],
+                owner: program_id,
+                executable: false,
+                rent_epoch: 0,
+            },
+        ).unwrap();
+    }
 
     // Collect benchmark results by category
     let mut results_by_category: BTreeMap<String, Vec<(String, String)>> = BTreeMap::new();
@@ -165,10 +180,28 @@ fn bench_cu_operations() {
         // Skip close operations as they would affect subsequent tests
         CuLibraryInstruction::AccountInfoClose,
         CuLibraryInstruction::AccountInfoCloseUnchecked,
+        CuLibraryInstruction::CpiAccountMetaArray10,
+        CuLibraryInstruction::CpiAccountInfoArray10Ref,
+        CuLibraryInstruction::CpiAccountInfoArray10Clone,
+        CuLibraryInstruction::CpiAccountInfoArray10Move,
     ];
 
     for instruction_type in instructions.into_iter() {
         let instruction = if matches!(
+            instruction_type,
+            CuLibraryInstruction::CpiAccountMetaArray10
+                | CuLibraryInstruction::CpiAccountInfoArray10Ref
+                | CuLibraryInstruction::CpiAccountInfoArray10Clone
+                | CuLibraryInstruction::CpiAccountInfoArray10Move
+        ) {
+            let cpi_pubkeys: Vec<Pubkey> = cpi_accounts.iter().map(|k| k.pubkey()).collect();
+            create_instruction_with_10_accounts(
+                program_id,
+                instruction_type,
+                payer.pubkey(),
+                &cpi_pubkeys,
+            )
+        } else if matches!(
             instruction_type,
             CuLibraryInstruction::AccountInfoKey
                 | CuLibraryInstruction::AccountInfoOwner
@@ -402,6 +435,25 @@ pub fn create_instruction_with_account(
             AccountMeta::new(test_account, false),
             AccountMeta::new(payer, true),
         ],
+        data: instruction_type.into(),
+    }
+}
+
+pub fn create_instruction_with_10_accounts(
+    program_id: Pubkey,
+    instruction_type: CuLibraryInstruction,
+    payer: Pubkey,
+    cpi_accounts: &[Pubkey],
+) -> Instruction {
+    let mut accounts = vec![];
+    for account in cpi_accounts.iter().take(10) {
+        accounts.push(AccountMeta::new_readonly(*account, false));
+    }
+    accounts.push(AccountMeta::new(payer, true));
+    
+    Instruction {
+        program_id,
+        accounts,
         data: instruction_type.into(),
     }
 }

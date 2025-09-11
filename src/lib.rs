@@ -1,5 +1,24 @@
 use pinocchio::{account_info::AccountInfo, program_error::ProgramError, pubkey::Pubkey};
 
+use crate::account_info::account_borrows::{
+    account_info_borrow_data_unchecked, account_info_borrow_lamports_unchecked,
+    account_info_borrow_mut_data_unchecked, account_info_borrow_mut_lamports_unchecked,
+    account_info_can_borrow_data, account_info_can_borrow_lamports,
+    account_info_can_borrow_mut_data, account_info_can_borrow_mut_lamports,
+    account_info_is_borrowed, account_info_try_borrow_data, account_info_try_borrow_lamports,
+    account_info_try_borrow_mut_data, account_info_try_borrow_mut_lamports,
+};
+use crate::account_info::account_checks::{
+    account_info_data_is_empty, account_info_executable, account_info_is_signer,
+    account_info_is_writable,
+};
+use crate::account_info::account_data::{account_info_data_len, account_info_lamports};
+use crate::account_info::account_key::account_info_key;
+use crate::account_info::account_owner::account_info_owner;
+use crate::account_info::account_ownership::{account_info_assign, account_info_is_owned_by};
+use crate::account_info::account_realloc::{
+    account_info_close, account_info_close_unchecked, account_info_realloc,
+};
 use crate::array::array_assign::{
     array_assign_10_pubkey, array_assign_10_u64, array_assign_10_u8, array_assign_pubkey,
     array_assign_u64, array_assign_u8,
@@ -25,6 +44,10 @@ use crate::checked_math::checked_mul::{
 };
 use crate::checked_math::checked_sub::{
     checked_sub_u128, checked_sub_u16, checked_sub_u32, checked_sub_u64, checked_sub_u8,
+};
+use crate::cpi::cpi_arrays::{
+    cpi_account_info_array_10_clone, cpi_account_info_array_10_move, cpi_account_info_array_10_ref,
+    cpi_account_meta_array_10,
 };
 use crate::pinocchio_ops::msg::pinocchio_msg10_chars;
 use crate::pinocchio_ops::sysvar_clock::pinocchio_clock_get_slot;
@@ -56,37 +79,19 @@ use crate::std_math::sub_assign::{
 };
 use crate::vec::vec_new::vec_u8_new;
 use crate::vec::vec_push::{
-    vec_push_10_pubkey, vec_push_10_u64, vec_push_10_u8, vec_push_pubkey, vec_push_u64, vec_push_u8,
-    vec_push_u8_with_capacity, vec_push_u64_with_capacity, vec_push_pubkey_with_capacity,
-    vec_push_10_u8_with_capacity, vec_push_10_u64_with_capacity, vec_push_10_pubkey_with_capacity,
+    vec_push_10_pubkey, vec_push_10_pubkey_with_capacity, vec_push_10_u64,
+    vec_push_10_u64_with_capacity, vec_push_10_u8, vec_push_10_u8_with_capacity, vec_push_pubkey,
+    vec_push_pubkey_with_capacity, vec_push_u64, vec_push_u64_with_capacity, vec_push_u8,
+    vec_push_u8_with_capacity,
 };
 use crate::vec::vec_with_capacity::{vec_u8_with_capacity_10, vec_u8_with_capacity_100};
-use crate::account_info::account_key::account_info_key;
-use crate::account_info::account_owner::account_info_owner;
-use crate::account_info::account_checks::{
-    account_info_is_signer, account_info_is_writable, account_info_executable,
-    account_info_data_is_empty,
-};
-use crate::account_info::account_data::{account_info_data_len, account_info_lamports};
-use crate::account_info::account_ownership::{account_info_is_owned_by, account_info_assign};
-use crate::account_info::account_borrows::{
-    account_info_is_borrowed, account_info_borrow_lamports_unchecked,
-    account_info_borrow_mut_lamports_unchecked, account_info_borrow_data_unchecked,
-    account_info_borrow_mut_data_unchecked, account_info_try_borrow_lamports,
-    account_info_try_borrow_mut_lamports, account_info_can_borrow_lamports,
-    account_info_can_borrow_mut_lamports, account_info_try_borrow_data,
-    account_info_try_borrow_mut_data, account_info_can_borrow_data,
-    account_info_can_borrow_mut_data,
-};
-use crate::account_info::account_realloc::{
-    account_info_realloc, account_info_close, account_info_close_unchecked,
-};
 use light_program_profiler::profile;
 
 pub mod account_info;
 pub mod array;
 pub mod arrayvec;
 pub mod checked_math;
+pub mod cpi;
 pub mod pinocchio_ops;
 pub mod saturating_math;
 pub mod solana_ops;
@@ -230,6 +235,10 @@ pub enum CuLibraryInstruction {
     AccountInfoRealloc = 128,
     AccountInfoClose = 129,
     AccountInfoCloseUnchecked = 130,
+    CpiAccountMetaArray10 = 131,
+    CpiAccountInfoArray10Ref = 132,
+    CpiAccountInfoArray10Clone = 133,
+    CpiAccountInfoArray10Move = 134,
 }
 
 impl From<CuLibraryInstruction> for Vec<u8> {
@@ -375,6 +384,10 @@ impl TryFrom<&[u8]> for CuLibraryInstruction {
             128 => Ok(CuLibraryInstruction::AccountInfoRealloc),
             129 => Ok(CuLibraryInstruction::AccountInfoClose),
             130 => Ok(CuLibraryInstruction::AccountInfoCloseUnchecked),
+            131 => Ok(CuLibraryInstruction::CpiAccountMetaArray10),
+            132 => Ok(CuLibraryInstruction::CpiAccountInfoArray10Ref),
+            133 => Ok(CuLibraryInstruction::CpiAccountInfoArray10Clone),
+            134 => Ok(CuLibraryInstruction::CpiAccountInfoArray10Move),
             _ => Err(ProgramError::InvalidInstructionData),
         }
     }
@@ -967,7 +980,7 @@ pub fn process_instruction(
             if accounts.is_empty() {
                 return Err(ProgramError::NotEnoughAccountKeys);
             }
-            let _ = account_info_realloc(&accounts[0], 1024)?;  // Keep same size
+            let _ = account_info_realloc(&accounts[0], 1024)?; // Keep same size
             solana_msg::msg!("reallocated");
         }
         CuLibraryInstruction::AccountInfoClose => {
@@ -1003,6 +1016,34 @@ pub fn process_instruction(
             }
             account_info_close_unchecked(account);
             solana_msg::msg!("closed unchecked");
+        }
+        CuLibraryInstruction::CpiAccountMetaArray10 => {
+            if accounts.len() < 10 {
+                return Err(ProgramError::NotEnoughAccountKeys);
+            }
+            let metas = cpi_account_meta_array_10(&accounts[0..10]);
+            solana_msg::msg!("created {} account metas", metas.len());
+        }
+        CuLibraryInstruction::CpiAccountInfoArray10Ref => {
+            if accounts.len() < 10 {
+                return Err(ProgramError::NotEnoughAccountKeys);
+            }
+            let refs = cpi_account_info_array_10_ref(&accounts[0..10]);
+            solana_msg::msg!("created {} account info refs", refs.len());
+        }
+        CuLibraryInstruction::CpiAccountInfoArray10Clone => {
+            if accounts.len() < 10 {
+                return Err(ProgramError::NotEnoughAccountKeys);
+            }
+            let clones = cpi_account_info_array_10_clone(&accounts[0..10]);
+            solana_msg::msg!("cloned {} account infos", clones.len());
+        }
+        CuLibraryInstruction::CpiAccountInfoArray10Move => {
+            if accounts.len() < 10 {
+                return Err(ProgramError::NotEnoughAccountKeys);
+            }
+            let moved = cpi_account_info_array_10_move(&accounts[0..10]);
+            solana_msg::msg!("moved {} account infos", moved.len());
         }
     }
     Ok(())

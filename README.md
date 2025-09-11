@@ -104,6 +104,15 @@ Benchmark results for Solana runtime operations:
 | checked_div_u64                             | 8           |
 | checked_div_u128                            | 10          |
 
+## Cpi
+
+| Function                                    | CU Consumed |
+|---------------------------------------------|-------------|
+| cpi_account_meta_array_10                   | 6           |
+| cpi_account_info_array_10_ref               | 6           |
+| cpi_account_info_array_10_clone             | 6           |
+| cpi_account_info_array_10_move              | 6           |
+
 ## Pinocchio
 
 | Function                                    | CU Consumed |
@@ -194,4 +203,3 @@ Benchmark results for Solana runtime operations:
 | vec_push_10_u8_with_capacity                | 153         |
 | vec_push_10_u64_with_capacity               | 149         |
 | vec_push_10_pubkey_with_capacity            | 217         |
-
