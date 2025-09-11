@@ -1,21 +1,17 @@
-use pinocchio::{
-    account_info::AccountInfo, program_error::ProgramError, pubkey::Pubkey,
-};
+use pinocchio::{account_info::AccountInfo, program_error::ProgramError, pubkey::Pubkey};
 
-use crate::array::array_new::array_new;
-use crate::array::array_with_capacity::{array_with_capacity_10, array_with_capacity_100};
 use crate::array::array_assign::{
     array_assign_10_pubkey, array_assign_10_u64, array_assign_10_u8, array_assign_pubkey,
     array_assign_u64, array_assign_u8,
 };
+use crate::array::array_new::array_new;
+use crate::array::array_with_capacity::{array_with_capacity_10, array_with_capacity_100};
 use crate::arrayvec::vec_new::arrayvec_new;
 use crate::arrayvec::vec_push::{
     arrayvec_push_10_pubkey, arrayvec_push_10_u64, arrayvec_push_10_u8, arrayvec_push_pubkey,
     arrayvec_push_u64, arrayvec_push_u8,
 };
-use crate::arrayvec::vec_with_capacity::{
-    arrayvec_with_capacity_10, arrayvec_with_capacity_100,
-};
+use crate::arrayvec::vec_with_capacity::{arrayvec_with_capacity_10, arrayvec_with_capacity_100};
 use crate::pinocchio_ops::msg::pinocchio_msg10_chars;
 use crate::pinocchio_ops::sysvar_clock::pinocchio_clock_get_slot;
 use crate::pinocchio_ops::sysvar_rent::pinocchio_sysvar_rent_exemption_165;
@@ -27,17 +23,29 @@ use crate::vec::vec_push::{
     vec_push_10_pubkey, vec_push_10_u64, vec_push_10_u8, vec_push_pubkey, vec_push_u64, vec_push_u8,
 };
 use crate::vec::vec_with_capacity::{vec_with_capacity_10, vec_with_capacity_100};
+use crate::checked_math::checked_add::{
+    checked_add_u8, checked_add_u16, checked_add_u32, checked_add_u64, checked_add_u128,
+};
+use crate::checked_math::checked_sub::{
+    checked_sub_u8, checked_sub_u16, checked_sub_u32, checked_sub_u64, checked_sub_u128,
+};
+use crate::checked_math::checked_mul::{
+    checked_mul_u8, checked_mul_u16, checked_mul_u32, checked_mul_u64, checked_mul_u128,
+};
+use crate::checked_math::checked_div::{
+    checked_div_u8, checked_div_u16, checked_div_u32, checked_div_u64, checked_div_u128,
+};
 use light_program_profiler::profile;
 
 pub mod array;
 pub mod arrayvec;
+pub mod checked_math;
 pub mod pinocchio_ops;
 pub mod solana_ops;
 pub mod vec;
 
 #[profile]
-pub fn baseline_empty() {
-}
+pub fn baseline_empty() {}
 
 #[repr(u16)]
 #[derive(Debug, Clone, Copy)]
@@ -76,6 +84,26 @@ pub enum CuLibraryInstruction {
     ArrayAssign10U8 = 31,
     ArrayAssign10U64 = 32,
     ArrayAssign10Pubkey = 33,
+    CheckedAddU8 = 34,
+    CheckedAddU16 = 35,
+    CheckedAddU32 = 36,
+    CheckedAddU64 = 37,
+    CheckedAddU128 = 38,
+    CheckedSubU8 = 39,
+    CheckedSubU16 = 40,
+    CheckedSubU32 = 41,
+    CheckedSubU64 = 42,
+    CheckedSubU128 = 43,
+    CheckedMulU8 = 44,
+    CheckedMulU16 = 45,
+    CheckedMulU32 = 46,
+    CheckedMulU64 = 47,
+    CheckedMulU128 = 48,
+    CheckedDivU8 = 49,
+    CheckedDivU16 = 50,
+    CheckedDivU32 = 51,
+    CheckedDivU64 = 52,
+    CheckedDivU128 = 53,
 }
 
 impl From<CuLibraryInstruction> for Vec<u8> {
@@ -124,6 +152,26 @@ impl TryFrom<&[u8]> for CuLibraryInstruction {
             31 => Ok(CuLibraryInstruction::ArrayAssign10U8),
             32 => Ok(CuLibraryInstruction::ArrayAssign10U64),
             33 => Ok(CuLibraryInstruction::ArrayAssign10Pubkey),
+            34 => Ok(CuLibraryInstruction::CheckedAddU8),
+            35 => Ok(CuLibraryInstruction::CheckedAddU16),
+            36 => Ok(CuLibraryInstruction::CheckedAddU32),
+            37 => Ok(CuLibraryInstruction::CheckedAddU64),
+            38 => Ok(CuLibraryInstruction::CheckedAddU128),
+            39 => Ok(CuLibraryInstruction::CheckedSubU8),
+            40 => Ok(CuLibraryInstruction::CheckedSubU16),
+            41 => Ok(CuLibraryInstruction::CheckedSubU32),
+            42 => Ok(CuLibraryInstruction::CheckedSubU64),
+            43 => Ok(CuLibraryInstruction::CheckedSubU128),
+            44 => Ok(CuLibraryInstruction::CheckedMulU8),
+            45 => Ok(CuLibraryInstruction::CheckedMulU16),
+            46 => Ok(CuLibraryInstruction::CheckedMulU32),
+            47 => Ok(CuLibraryInstruction::CheckedMulU64),
+            48 => Ok(CuLibraryInstruction::CheckedMulU128),
+            49 => Ok(CuLibraryInstruction::CheckedDivU8),
+            50 => Ok(CuLibraryInstruction::CheckedDivU16),
+            51 => Ok(CuLibraryInstruction::CheckedDivU32),
+            52 => Ok(CuLibraryInstruction::CheckedDivU64),
+            53 => Ok(CuLibraryInstruction::CheckedDivU128),
             _ => Err(ProgramError::InvalidInstructionData),
         }
     }
@@ -266,6 +314,86 @@ pub fn process_instruction(
         CuLibraryInstruction::ArrayAssign10Pubkey => {
             let res = array_assign_10_pubkey(program_id);
             solana_msg::msg!("array: {:?}", res);
+        }
+        CuLibraryInstruction::CheckedAddU8 => {
+            let res = checked_add_u8();
+            solana_msg::msg!("result: {:?}", res);
+        }
+        CuLibraryInstruction::CheckedAddU16 => {
+            let res = checked_add_u16();
+            solana_msg::msg!("result: {:?}", res);
+        }
+        CuLibraryInstruction::CheckedAddU32 => {
+            let res = checked_add_u32();
+            solana_msg::msg!("result: {:?}", res);
+        }
+        CuLibraryInstruction::CheckedAddU64 => {
+            let res = checked_add_u64();
+            solana_msg::msg!("result: {:?}", res);
+        }
+        CuLibraryInstruction::CheckedAddU128 => {
+            let res = checked_add_u128();
+            solana_msg::msg!("result: {:?}", res);
+        }
+        CuLibraryInstruction::CheckedSubU8 => {
+            let res = checked_sub_u8();
+            solana_msg::msg!("result: {:?}", res);
+        }
+        CuLibraryInstruction::CheckedSubU16 => {
+            let res = checked_sub_u16();
+            solana_msg::msg!("result: {:?}", res);
+        }
+        CuLibraryInstruction::CheckedSubU32 => {
+            let res = checked_sub_u32();
+            solana_msg::msg!("result: {:?}", res);
+        }
+        CuLibraryInstruction::CheckedSubU64 => {
+            let res = checked_sub_u64();
+            solana_msg::msg!("result: {:?}", res);
+        }
+        CuLibraryInstruction::CheckedSubU128 => {
+            let res = checked_sub_u128();
+            solana_msg::msg!("result: {:?}", res);
+        }
+        CuLibraryInstruction::CheckedMulU8 => {
+            let res = checked_mul_u8();
+            solana_msg::msg!("result: {:?}", res);
+        }
+        CuLibraryInstruction::CheckedMulU16 => {
+            let res = checked_mul_u16();
+            solana_msg::msg!("result: {:?}", res);
+        }
+        CuLibraryInstruction::CheckedMulU32 => {
+            let res = checked_mul_u32();
+            solana_msg::msg!("result: {:?}", res);
+        }
+        CuLibraryInstruction::CheckedMulU64 => {
+            let res = checked_mul_u64();
+            solana_msg::msg!("result: {:?}", res);
+        }
+        CuLibraryInstruction::CheckedMulU128 => {
+            let res = checked_mul_u128();
+            solana_msg::msg!("result: {:?}", res);
+        }
+        CuLibraryInstruction::CheckedDivU8 => {
+            let res = checked_div_u8();
+            solana_msg::msg!("result: {:?}", res);
+        }
+        CuLibraryInstruction::CheckedDivU16 => {
+            let res = checked_div_u16();
+            solana_msg::msg!("result: {:?}", res);
+        }
+        CuLibraryInstruction::CheckedDivU32 => {
+            let res = checked_div_u32();
+            solana_msg::msg!("result: {:?}", res);
+        }
+        CuLibraryInstruction::CheckedDivU64 => {
+            let res = checked_div_u64();
+            solana_msg::msg!("result: {:?}", res);
+        }
+        CuLibraryInstruction::CheckedDivU128 => {
+            let res = checked_div_u128();
+            solana_msg::msg!("result: {:?}", res);
         }
     }
     Ok(())

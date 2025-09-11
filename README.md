@@ -38,13 +38,38 @@ Benchmark results for Solana runtime operations:
 |---------------------------------------------|-------------|
 | baseline_empty                              | 6           |
 
+## Checked
+
+| Function                                    | CU Consumed |
+|---------------------------------------------|-------------|
+| checked_add_u8                              | 7           |
+| checked_add_u16                             | 7           |
+| checked_add_u32                             | 8           |
+| checked_add_u64                             | 8           |
+| checked_add_u128                            | 10          |
+| checked_sub_u8                              | 7           |
+| checked_sub_u16                             | 7           |
+| checked_sub_u32                             | 8           |
+| checked_sub_u64                             | 8           |
+| checked_sub_u128                            | 10          |
+| checked_mul_u8                              | 7           |
+| checked_mul_u16                             | 7           |
+| checked_mul_u32                             | 8           |
+| checked_mul_u64                             | 8           |
+| checked_mul_u128                            | 10          |
+| checked_div_u8                              | 7           |
+| checked_div_u16                             | 7           |
+| checked_div_u32                             | 8           |
+| checked_div_u64                             | 8           |
+| checked_div_u128                            | 10          |
+
 ## Pinocchio
 
 | Function                                    | CU Consumed |
 |---------------------------------------------|-------------|
-| pinocchio_msg10_chars                       | 110         |
+| pinocchio_msg10_chars                       | 109         |
 | pinocchio_sysvar_rent_exemption_165         | 153         |
-| pinocchio_clock_get_slot                    | 170         |
+| pinocchio_clock_get_slot                    | 171         |
 
 ## Solana
 
