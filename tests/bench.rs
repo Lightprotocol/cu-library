@@ -468,12 +468,7 @@ fn write_categorized_readme(mut results_by_category: BTreeMap<String, Vec<(Strin
 
     // Write README header
     writeln!(readme, "# CU Library Benchmarks\n").unwrap();
-    writeln!(readme, "Benchmark results for Solana runtime operations:\n").unwrap();
-    writeln!(
-        readme,
-        "**Note:** The `#[profile]` macro adds ~5-6 CU overhead to each measurement.\n"
-    )
-    .unwrap();
+    writeln!(readme, "Benchmark results for Solana runtime operations.\n").unwrap();
     
     // Generate table of contents
     writeln!(readme, "## Table of Contents\n").unwrap();
@@ -497,6 +492,32 @@ fn write_categorized_readme(mut results_by_category: BTreeMap<String, Vec<(Strin
     }
     
     writeln!(readme).unwrap(); // Empty line after TOC
+    
+    // Write definitions
+    writeln!(readme, "## Definitions\n").unwrap();
+    writeln!(
+        readme,
+        "- **CU Consumed**: Total compute units consumed by the profiled function"
+    )
+    .unwrap();
+    writeln!(
+        readme,
+        "- **CU Adjusted**: Actual operation cost with baseline profiling overhead subtracted (CU Consumed - Baseline CU)"
+    )
+    .unwrap();
+    writeln!(
+        readme,
+        "- **Baseline CU**: CU consumed by an empty profiled function (`#[profile]` macro overhead)\n"
+    )
+    .unwrap();
+
+    // Get baseline CU value for adjustment
+    let mut baseline_cu: u64 = 0;
+    if let Some(baseline_results) = results_by_category.get("baseline") {
+        if let Some((_, cu_str, _)) = baseline_results.first() {
+            baseline_cu = cu_str.parse::<u64>().unwrap_or(0);
+        }
+    }
 
     // Write Baseline category first if it exists
     if let Some(baseline_results) = results_by_category.remove("baseline") {
@@ -548,15 +569,15 @@ fn write_categorized_readme(mut results_by_category: BTreeMap<String, Vec<(Strin
 
         writeln!(readme, "## {}\n", category_name).unwrap();
 
-        // Write table header
+        // Write table header with adjusted column
         writeln!(
             readme,
-            "| Function                                                                                                                                         | CU Consumed |"
+            "| Function                                                                                                                                         | CU Consumed | CU Adjusted |"
         )
         .unwrap();
         writeln!(
             readme,
-            "|--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|"
+            "|--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|"
         )
         .unwrap();
 
@@ -577,7 +598,16 @@ fn write_categorized_readme(mut results_by_category: BTreeMap<String, Vec<(Strin
             } else {
                 func_name.clone()
             };
-            writeln!(readme, "| {:<144} | {:<11} |", github_link, cu_value).unwrap();
+            
+            // Calculate adjusted CU value
+            let cu_consumed = cu_value.parse::<u64>().unwrap_or(0);
+            let cu_adjusted = if cu_consumed >= baseline_cu {
+                (cu_consumed - baseline_cu).to_string()
+            } else {
+                "0".to_string()
+            };
+            
+            writeln!(readme, "| {:<144} | {:<11} | {:<11} |", github_link, cu_value, cu_adjusted).unwrap();
         }
 
         writeln!(readme).unwrap(); // Empty line between categories
