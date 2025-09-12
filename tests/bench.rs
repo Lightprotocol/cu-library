@@ -474,6 +474,29 @@ fn write_categorized_readme(mut results_by_category: BTreeMap<String, Vec<(Strin
         "**Note:** The `#[profile]` macro adds ~5-6 CU overhead to each measurement.\n"
     )
     .unwrap();
+    
+    // Generate table of contents
+    writeln!(readme, "## Table of Contents\n").unwrap();
+    
+    // Add Baseline to TOC if it exists
+    if results_by_category.contains_key("baseline") {
+        writeln!(readme, "● **[Baseline](#baseline)**  ").unwrap();
+    }
+    
+    // Add all other categories to TOC
+    for category in results_by_category.keys() {
+        if category != "baseline" {
+            // Format category name (capitalize first letter)
+            let category_name = format!(
+                "{}{}",
+                category.chars().next().unwrap().to_uppercase(),
+                &category[1..]
+            );
+            writeln!(readme, "● **[{}](#{})**  ", category_name, category).unwrap();
+        }
+    }
+    
+    writeln!(readme).unwrap(); // Empty line after TOC
 
     // Write Baseline category first if it exists
     if let Some(baseline_results) = results_by_category.remove("baseline") {

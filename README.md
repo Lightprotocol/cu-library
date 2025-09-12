@@ -4,6 +4,26 @@ Benchmark results for Solana runtime operations:
 
 **Note:** The `#[profile]` macro adds ~5-6 CU overhead to each measurement.
 
+## Table of Contents
+
+● **[Baseline](#baseline)**  
+● **[Access](#access)**  
+● **[Account](#account)**  
+● **[Add](#add)**  
+● **[Array](#array)**  
+● **[Arrayvec](#arrayvec)**  
+● **[Checked](#checked)**  
+● **[Conversions](#conversions)**  
+● **[Cpi](#cpi)**  
+● **[Option](#option)**  
+● **[Partial](#partial)**  
+● **[Pinocchio](#pinocchio)**  
+● **[Saturating](#saturating)**  
+● **[Solana](#solana)**  
+● **[Std](#std)**  
+● **[Sub](#sub)**  
+● **[Vec](#vec)**  
+
 ## Baseline
 
 | Function                                              | CU Consumed |
