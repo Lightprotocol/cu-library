@@ -505,12 +505,12 @@ fn write_categorized_readme(mut results_by_category: BTreeMap<String, Vec<(Strin
         // Write table header
         writeln!(
             readme,
-            "| Function                                              | CU Consumed |"
+            "| Function                                                                                                                                         | CU Consumed |"
         )
         .unwrap();
         writeln!(
             readme,
-            "|-------------------------------------------------------|-------------|"
+            "|--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|"
         )
         .unwrap();
 
@@ -531,7 +531,7 @@ fn write_categorized_readme(mut results_by_category: BTreeMap<String, Vec<(Strin
             } else {
                 func_name.clone()
             };
-            writeln!(readme, "| {:<53} | {:<11} |", github_link, cu_value).unwrap();
+            writeln!(readme, "| {:<144} | {:<11} |", github_link, cu_value).unwrap();
         }
 
         writeln!(readme).unwrap(); // Empty line after baseline
@@ -551,12 +551,12 @@ fn write_categorized_readme(mut results_by_category: BTreeMap<String, Vec<(Strin
         // Write table header
         writeln!(
             readme,
-            "| Function                                              | CU Consumed |"
+            "| Function                                                                                                                                         | CU Consumed |"
         )
         .unwrap();
         writeln!(
             readme,
-            "|-------------------------------------------------------|-------------|"
+            "|--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|"
         )
         .unwrap();
 
@@ -577,7 +577,7 @@ fn write_categorized_readme(mut results_by_category: BTreeMap<String, Vec<(Strin
             } else {
                 func_name.clone()
             };
-            writeln!(readme, "| {:<53} | {:<11} |", github_link, cu_value).unwrap();
+            writeln!(readme, "| {:<144} | {:<11} |", github_link, cu_value).unwrap();
         }
 
         writeln!(readme).unwrap(); // Empty line between categories
