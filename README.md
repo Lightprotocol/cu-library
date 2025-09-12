@@ -14,32 +14,30 @@ Benchmark results for Solana runtime operations:
 
 | Function                                              | CU Consumed |
 |-------------------------------------------------------|-------------|
-| account_info_key                                      | 9           |
-| account_info_owner                                    | 9           |
-| account_info_is_signer                                | 12          |
-| account_info_is_writable                              | 11          |
-| account_info_executable                               | 12          |
-| account_info_data_len                                 | 9           |
-| account_info_lamports                                 | 9           |
-| account_info_data_is_empty                            | 12          |
-| account_info_is_owned_by                              | 30          |
-| account_info_assign                                   | 15          |
-| account_info_is_borrowed                              | 12          |
-| account_info_borrow_lamports_unchecked                | 9           |
-| account_info_borrow_mut_lamports_unchecked            | 9           |
-| account_info_borrow_data_unchecked                    | 8           |
-| account_info_borrow_mut_data_unchecked                | 8           |
-| account_info_try_borrow_lamports                      | 15          |
-| account_info_try_borrow_mut_lamports                  | 10          |
-| account_info_can_borrow_lamports                      | 8           |
-| account_info_can_borrow_mut_lamports                  | 8           |
-| account_info_try_borrow_data                          | 14          |
-| account_info_try_borrow_mut_data                      | 11          |
-| account_info_can_borrow_data                          | 8           |
-| account_info_can_borrow_mut_data                      | 8           |
-| account_info_realloc                                  | 16          |
-| account_info_close                                    | 27          |
-| account_info_close_unchecked                          | 21          |
+| account_info_key                                      | 10          |
+| account_info_owner                                    | 10          |
+| account_info_is_signer                                | 13          |
+| account_info_is_writable                              | 12          |
+| account_info_executable                               | 13          |
+| account_info_data_len                                 | 10          |
+| account_info_lamports                                 | 10          |
+| account_info_data_is_empty                            | 13          |
+| account_info_is_owned_by                              | 31          |
+| account_info_assign                                   | 17          |
+| account_info_is_borrowed                              | 13          |
+| account_info_borrow_lamports_unchecked                | 10          |
+| account_info_borrow_mut_lamports_unchecked            | 10          |
+| account_info_borrow_data_unchecked                    | 9           |
+| account_info_borrow_mut_data_unchecked                | 9           |
+| account_info_try_borrow_lamports                      | 16          |
+| account_info_try_borrow_mut_lamports                  | 11          |
+| account_info_can_borrow_lamports                      | 9           |
+| account_info_can_borrow_mut_lamports                  | 9           |
+| account_info_try_borrow_data                          | 15          |
+| account_info_try_borrow_mut_data                      | 12          |
+| account_info_can_borrow_data                          | 9           |
+| account_info_can_borrow_mut_data                      | 9           |
+| account_info_realloc                                  | 17          |
 
 ## Add
 
@@ -60,10 +58,10 @@ Benchmark results for Solana runtime operations:
 | array_with_capacity_100                               | 27          |
 | array_assign_u8                                       | 9           |
 | array_assign_u64                                      | 16          |
-| array_assign_pubkey                                   | 107         |
+| array_assign_pubkey                                   | 108         |
 | array_assign_10_u8                                    | 9           |
 | array_assign_10_u64                                   | 16          |
-| array_assign_10_pubkey                                | 107         |
+| array_assign_10_pubkey                                | 108         |
 
 ## Arrayvec
 
@@ -77,7 +75,7 @@ Benchmark results for Solana runtime operations:
 | arrayvec_u8_with_capacity_100                         | 7           |
 | arrayvec_push_10_u8                                   | 10          |
 | arrayvec_push_10_u64                                  | 17          |
-| arrayvec_push_10_pubkey                               | 87          |
+| arrayvec_push_10_pubkey                               | 88          |
 
 ## Checked
 
@@ -108,7 +106,7 @@ Benchmark results for Solana runtime operations:
 
 | Function                                              | CU Consumed |
 |-------------------------------------------------------|-------------|
-| conversions_try_into_slice_to_array_32_unwrap         | 14          |
+| conversions_try_into_slice_to_array_32_unwrap         | 15          |
 | conversions_try_into_slice_to_array_32_map_err        | 6           |
 | conversions_try_into_usize_to_u64_unwrap              | 7           |
 | conversions_try_into_usize_to_u64_map_err             | 6           |
@@ -145,14 +143,35 @@ Benchmark results for Solana runtime operations:
 | cpi_account_info_array_10_ref                         | 6           |
 | cpi_account_info_array_10_clone                       | 6           |
 | cpi_account_info_array_10_move                        | 6           |
-| cpi_arrayvec_push_account_meta_10                     | 181         |
+| cpi_arrayvec_push_account_meta_10                     | 182         |
 | cpi_arrayvec_push_account_info_10_ref                 | 6           |
-| cpi_arrayvec_push_account_info_10_clone               | 7           |
-| cpi_arrayvec_push_account_info_10_move                | 7           |
-| cpi_account_meta_array_10_loop                        | 200         |
+| cpi_arrayvec_push_account_info_10_clone               | 8           |
+| cpi_arrayvec_push_account_info_10_move                | 8           |
+| cpi_account_meta_array_10_loop                        | 201         |
 | cpi_account_info_array_10_ref_loop                    | 6           |
-| cpi_account_info_array_10_clone_loop                  | 7           |
-| cpi_account_info_array_10_move_loop                   | 7           |
+| cpi_account_info_array_10_clone_loop                  | 8           |
+| cpi_account_info_array_10_move_loop                   | 8           |
+
+## Option
+
+| Function                                              | CU Consumed |
+|-------------------------------------------------------|-------------|
+| option_checked_add_u8_unwrap                          | 7           |
+| option_checked_add_u8_ok_or                           | 6           |
+| option_checked_add_u8_ok_or_else                      | 6           |
+| option_checked_add_u8_unwrap_or_default               | 8           |
+| option_checked_add_u8_unwrap_or                       | 8           |
+| option_slice_get_array_unwrap                         | 15          |
+| option_slice_get_array_ok_or                          | 6           |
+| option_slice_get_array_ok_or_else                     | 6           |
+| option_slice_get_array_unwrap_or_default              | 15          |
+| option_slice_get_array_unwrap_or                      | 15          |
+| option_pubkey_ref_map_deref                           | 6           |
+| option_pubkey_as_ref_map_convert                      | 6           |
+| option_if_let_some_u8                                 | 6           |
+| option_if_let_some_array                              | 15          |
+| option_if_let_some_pubkey                             | 15          |
+| option_if_let_some_array_ref                          | 6           |
 
 ## Partial
 
@@ -214,7 +233,7 @@ Benchmark results for Solana runtime operations:
 |-------------------------------------------------------|-------------|
 | solana_msg10_chars                                    | 110         |
 | solana_msg_program_id                                 | 6954        |
-| solana_pubkey_new_from_array                          | 14          |
+| solana_pubkey_new_from_array                          | 15          |
 
 ## Std
 
@@ -260,14 +279,14 @@ Benchmark results for Solana runtime operations:
 | vec_u8_with_capacity_100                              | 113         |
 | vec_push_u8                                           | 78          |
 | vec_push_u64                                          | 83          |
-| vec_push_pubkey                                       | 89          |
+| vec_push_pubkey                                       | 90          |
 | vec_push_10_u8                                        | 207         |
 | vec_push_10_u64                                       | 318         |
-| vec_push_10_pubkey                                    | 384         |
+| vec_push_10_pubkey                                    | 385         |
 | vec_push_u8_with_capacity                             | 120         |
 | vec_push_u64_with_capacity                            | 120         |
-| vec_push_pubkey_with_capacity                         | 127         |
+| vec_push_pubkey_with_capacity                         | 128         |
 | vec_push_10_u8_with_capacity                          | 153         |
 | vec_push_10_u64_with_capacity                         | 149         |
-| vec_push_10_pubkey_with_capacity                      | 217         |
+| vec_push_10_pubkey_with_capacity                      | 218         |
 

@@ -28,7 +28,7 @@ fn bench_cu_operations() {
 
     // Create test accounts for AccountInfo and CPI benchmarks
     let test_account = Keypair::new();
-    
+
     // Create 10 accounts for CPI benchmarks
     let cpi_accounts: Vec<Keypair> = (0..10).map(|_| Keypair::new()).collect();
     for account in &cpi_accounts {
@@ -41,7 +41,8 @@ fn bench_cu_operations() {
                 executable: false,
                 rent_epoch: 0,
             },
-        ).unwrap();
+        )
+        .unwrap();
     }
 
     // Collect benchmark results by category
@@ -177,9 +178,9 @@ fn bench_cu_operations() {
         CuLibraryInstruction::AccountInfoCanBorrowData,
         CuLibraryInstruction::AccountInfoCanBorrowMutData,
         CuLibraryInstruction::AccountInfoRealloc,
-        // Skip close operations as they would affect subsequent tests
-        CuLibraryInstruction::AccountInfoClose,
-        CuLibraryInstruction::AccountInfoCloseUnchecked,
+        // Close operations are skipped as they would affect subsequent tests
+        // CuLibraryInstruction::AccountInfoClose,
+        // CuLibraryInstruction::AccountInfoCloseUnchecked,
         CuLibraryInstruction::CpiAccountMetaArray10,
         CuLibraryInstruction::CpiAccountInfoArray10Ref,
         CuLibraryInstruction::CpiAccountInfoArray10Clone,
@@ -243,9 +244,34 @@ fn bench_cu_operations() {
         CuLibraryInstruction::ConversionsU64AsU16,
         CuLibraryInstruction::ConversionsU64AsU32,
         CuLibraryInstruction::ConversionsU64AsUsize,
+        // Option handling
+        CuLibraryInstruction::OptionCheckedAddU8Unwrap,
+        CuLibraryInstruction::OptionCheckedAddU8OkOr,
+        CuLibraryInstruction::OptionCheckedAddU8OkOrElse,
+        CuLibraryInstruction::OptionCheckedAddU8UnwrapOrDefault,
+        CuLibraryInstruction::OptionCheckedAddU8UnwrapOr,
+        CuLibraryInstruction::OptionSliceGetArrayUnwrap,
+        CuLibraryInstruction::OptionSliceGetArrayOkOr,
+        CuLibraryInstruction::OptionSliceGetArrayOkOrElse,
+        CuLibraryInstruction::OptionSliceGetArrayUnwrapOrDefault,
+        CuLibraryInstruction::OptionSliceGetArrayUnwrapOr,
+        CuLibraryInstruction::OptionPubkeyRefMapDeref,
+        CuLibraryInstruction::OptionPubkeyAsRefMapConvert,
+        CuLibraryInstruction::OptionIfLetSomeU8,
+        CuLibraryInstruction::OptionIfLetSomeArray,
+        CuLibraryInstruction::OptionIfLetSomePubkey,
+        CuLibraryInstruction::OptionIfLetSomeArrayRef,
     ];
 
     for instruction_type in instructions.into_iter() {
+        // Skip instructions that we don't want to test
+        if matches!(
+            instruction_type,
+            CuLibraryInstruction::AccountInfoClose | CuLibraryInstruction::AccountInfoCloseUnchecked
+        ) {
+            continue;
+        }
+        
         let instruction = if matches!(
             instruction_type,
             CuLibraryInstruction::CpiAccountMetaArray10
@@ -294,8 +320,6 @@ fn bench_cu_operations() {
                 | CuLibraryInstruction::AccountInfoCanBorrowData
                 | CuLibraryInstruction::AccountInfoCanBorrowMutData
                 | CuLibraryInstruction::AccountInfoRealloc
-                | CuLibraryInstruction::AccountInfoClose
-                | CuLibraryInstruction::AccountInfoCloseUnchecked
         ) {
             let test_account_data = vec![1u8; 1024]; // 1KB of 1u8
             svm.set_account(
@@ -517,7 +541,7 @@ pub fn create_instruction_with_10_accounts(
         accounts.push(AccountMeta::new_readonly(*account, false));
     }
     accounts.push(AccountMeta::new(payer, true));
-    
+
     Instruction {
         program_id,
         accounts,

@@ -90,6 +90,21 @@ use crate::cpi::cpi_arrayvec::{
     cpi_arrayvec_push_account_info_10_clone, cpi_arrayvec_push_account_info_10_move,
     cpi_arrayvec_push_account_info_10_ref, cpi_arrayvec_push_account_meta_10,
 };
+use crate::option::option_checked_add::{
+    option_checked_add_u8_unwrap, option_checked_add_u8_ok_or, option_checked_add_u8_ok_or_else,
+    option_checked_add_u8_unwrap_or_default, option_checked_add_u8_unwrap_or,
+};
+use crate::option::option_slice_get::{
+    option_slice_get_array_unwrap, option_slice_get_array_ok_or, option_slice_get_array_ok_or_else,
+    option_slice_get_array_unwrap_or_default, option_slice_get_array_unwrap_or,
+};
+use crate::option::option_pubkey_ref::{
+    option_pubkey_ref_map_deref, option_pubkey_as_ref_map_convert,
+};
+use crate::option::option_if_let::{
+    option_if_let_some_u8, option_if_let_some_array, option_if_let_some_pubkey,
+    option_if_let_some_array_ref,
+};
 use crate::partial_eq::partial_eq_arrays::{
     partial_eq_array_u16_32, partial_eq_array_u32_32, partial_eq_array_u64_32,
     partial_eq_array_u8_32, partial_eq_array_u8_32_ref,
@@ -147,6 +162,7 @@ pub mod arrayvec;
 pub mod checked_math;
 pub mod conversions;
 pub mod cpi;
+pub mod option;
 pub mod partial_eq;
 pub mod pinocchio_ops;
 pub mod saturating_math;
@@ -354,6 +370,23 @@ pub enum CuLibraryInstruction {
     ConversionsU64AsU16 = 194,
     ConversionsU64AsU32 = 195,
     ConversionsU64AsUsize = 196,
+    // Option handling
+    OptionCheckedAddU8Unwrap = 197,
+    OptionCheckedAddU8OkOr = 198,
+    OptionCheckedAddU8OkOrElse = 199,
+    OptionCheckedAddU8UnwrapOrDefault = 200,
+    OptionCheckedAddU8UnwrapOr = 201,
+    OptionSliceGetArrayUnwrap = 202,
+    OptionSliceGetArrayOkOr = 203,
+    OptionSliceGetArrayOkOrElse = 204,
+    OptionSliceGetArrayUnwrapOrDefault = 205,
+    OptionSliceGetArrayUnwrapOr = 206,
+    OptionPubkeyRefMapDeref = 207,
+    OptionPubkeyAsRefMapConvert = 208,
+    OptionIfLetSomeU8 = 209,
+    OptionIfLetSomeArray = 210,
+    OptionIfLetSomePubkey = 211,
+    OptionIfLetSomeArrayRef = 212,
 }
 
 impl From<CuLibraryInstruction> for Vec<u8> {
@@ -560,6 +593,22 @@ impl TryFrom<&[u8]> for CuLibraryInstruction {
             194 => Ok(CuLibraryInstruction::ConversionsU64AsU16),
             195 => Ok(CuLibraryInstruction::ConversionsU64AsU32),
             196 => Ok(CuLibraryInstruction::ConversionsU64AsUsize),
+            197 => Ok(CuLibraryInstruction::OptionCheckedAddU8Unwrap),
+            198 => Ok(CuLibraryInstruction::OptionCheckedAddU8OkOr),
+            199 => Ok(CuLibraryInstruction::OptionCheckedAddU8OkOrElse),
+            200 => Ok(CuLibraryInstruction::OptionCheckedAddU8UnwrapOrDefault),
+            201 => Ok(CuLibraryInstruction::OptionCheckedAddU8UnwrapOr),
+            202 => Ok(CuLibraryInstruction::OptionSliceGetArrayUnwrap),
+            203 => Ok(CuLibraryInstruction::OptionSliceGetArrayOkOr),
+            204 => Ok(CuLibraryInstruction::OptionSliceGetArrayOkOrElse),
+            205 => Ok(CuLibraryInstruction::OptionSliceGetArrayUnwrapOrDefault),
+            206 => Ok(CuLibraryInstruction::OptionSliceGetArrayUnwrapOr),
+            207 => Ok(CuLibraryInstruction::OptionPubkeyRefMapDeref),
+            208 => Ok(CuLibraryInstruction::OptionPubkeyAsRefMapConvert),
+            209 => Ok(CuLibraryInstruction::OptionIfLetSomeU8),
+            210 => Ok(CuLibraryInstruction::OptionIfLetSomeArray),
+            211 => Ok(CuLibraryInstruction::OptionIfLetSomePubkey),
+            212 => Ok(CuLibraryInstruction::OptionIfLetSomeArrayRef),
             _ => Err(ProgramError::InvalidInstructionData),
         }
     }
@@ -1164,10 +1213,16 @@ pub fn process_instruction(
             let payer = &accounts[1];
             let lamports = account.lamports();
             if lamports > 0 {
-                let mut account_lamports = account.try_borrow_mut_lamports()?;
-                let mut payer_lamports = payer.try_borrow_mut_lamports()?;
-                *account_lamports -= lamports;
-                *payer_lamports += lamports;
+                // Update account lamports first, then drop the borrow
+                {
+                    let mut account_lamports = account.try_borrow_mut_lamports()?;
+                    *account_lamports = 0;
+                }
+                // Now update payer lamports
+                {
+                    let mut payer_lamports = payer.try_borrow_mut_lamports()?;
+                    *payer_lamports += lamports;
+                }
             }
             let _ = account_info_close(account)?;
             solana_msg::msg!("closed");
@@ -1182,7 +1237,11 @@ pub fn process_instruction(
             let lamports = account.lamports();
             if lamports > 0 {
                 unsafe {
-                    *account.borrow_mut_lamports_unchecked() -= lamports;
+                    // Update account lamports first
+                    *account.borrow_mut_lamports_unchecked() = 0;
+                }
+                unsafe {
+                    // Now update payer lamports
                     *payer.borrow_mut_lamports_unchecked() += lamports;
                 }
             }
@@ -1690,6 +1749,116 @@ pub fn process_instruction(
             let val: u64 = 70000;
             let result = conversions_u64_as_usize(val);
             solana_msg::msg!("u64 as usize: {}", result);
+        }
+        // Option handling
+        CuLibraryInstruction::OptionCheckedAddU8Unwrap => {
+            // Get u8 value from instruction data (3rd byte if available, otherwise use 254)
+            let val = if instruction_data.len() > 2 {
+                instruction_data[2]
+            } else {
+                254u8  // Value that will overflow when adding 1
+            };
+            let result = option_checked_add_u8_unwrap(val);
+            solana_msg::msg!("option checked_add unwrap: {}", result);
+        }
+        CuLibraryInstruction::OptionCheckedAddU8OkOr => {
+            let val = if instruction_data.len() > 2 {
+                instruction_data[2]
+            } else {
+                254u8
+            };
+            let result = option_checked_add_u8_ok_or(val);
+            solana_msg::msg!("option checked_add ok_or: {:?}", result.is_ok());
+        }
+        CuLibraryInstruction::OptionCheckedAddU8OkOrElse => {
+            let val = if instruction_data.len() > 2 {
+                instruction_data[2]
+            } else {
+                254u8
+            };
+            let result = option_checked_add_u8_ok_or_else(val);
+            solana_msg::msg!("option checked_add ok_or_else: {:?}", result.is_ok());
+        }
+        CuLibraryInstruction::OptionCheckedAddU8UnwrapOrDefault => {
+            let val = if instruction_data.len() > 2 {
+                instruction_data[2]
+            } else {
+                255u8  // Will overflow
+            };
+            let result = option_checked_add_u8_unwrap_or_default(val);
+            solana_msg::msg!("option checked_add unwrap_or_default: {}", result);
+        }
+        CuLibraryInstruction::OptionCheckedAddU8UnwrapOr => {
+            let val = if instruction_data.len() > 2 {
+                instruction_data[2]
+            } else {
+                255u8  // Will overflow
+            };
+            let result = option_checked_add_u8_unwrap_or(val);
+            solana_msg::msg!("option checked_add unwrap_or: {}", result);
+        }
+        CuLibraryInstruction::OptionSliceGetArrayUnwrap => {
+            let arrays: [[u8; 32]; 2] = [*program_id, [2u8; 32]];
+            let result = option_slice_get_array_unwrap(&arrays);
+            solana_msg::msg!("option slice get unwrap: {:?}", result[0]);
+        }
+        CuLibraryInstruction::OptionSliceGetArrayOkOr => {
+            let arrays: [[u8; 32]; 2] = [*program_id, [2u8; 32]];
+            let result = option_slice_get_array_ok_or(&arrays);
+            solana_msg::msg!("option slice get ok_or: {:?}", result.is_ok());
+        }
+        CuLibraryInstruction::OptionSliceGetArrayOkOrElse => {
+            let arrays: [[u8; 32]; 2] = [*program_id, [2u8; 32]];
+            let result = option_slice_get_array_ok_or_else(&arrays);
+            solana_msg::msg!("option slice get ok_or_else: {:?}", result.is_ok());
+        }
+        CuLibraryInstruction::OptionSliceGetArrayUnwrapOrDefault => {
+            let arrays: [[u8; 32]; 2] = [*program_id, [2u8; 32]];
+            let result = option_slice_get_array_unwrap_or_default(&arrays);
+            solana_msg::msg!("option slice get unwrap_or_default: {:?}", result[0]);
+        }
+        CuLibraryInstruction::OptionSliceGetArrayUnwrapOr => {
+            let arrays: [[u8; 32]; 2] = [*program_id, [2u8; 32]];
+            let result = option_slice_get_array_unwrap_or(&arrays);
+            solana_msg::msg!("option slice get unwrap_or: {:?}", result[0]);
+        }
+        CuLibraryInstruction::OptionPubkeyRefMapDeref => {
+            let pubkey_option: Option<&Pubkey> = Some(program_id);
+            let result = option_pubkey_ref_map_deref(pubkey_option);
+            solana_msg::msg!("option pubkey ref map deref: {:?}", result.is_some());
+        }
+        CuLibraryInstruction::OptionPubkeyAsRefMapConvert => {
+            let pubkey_bytes: Option<[u8; 32]> = Some(*program_id);
+            let result = option_pubkey_as_ref_map_convert(pubkey_bytes);
+            solana_msg::msg!("option pubkey as_ref map convert: {:?}", result.is_some());
+        }
+        CuLibraryInstruction::OptionIfLetSomeU8 => {
+            let val = if instruction_data.len() > 2 {
+                instruction_data[2]
+            } else {
+                42u8
+            };
+            let option = Some(val);
+            let result = option_if_let_some_u8(option);
+            solana_msg::msg!("option if let some u8: {}", result);
+        }
+        CuLibraryInstruction::OptionIfLetSomeArray => {
+            let array: [u8; 32] = *program_id;
+            let option = Some(array);
+            let result = option_if_let_some_array(option);
+            solana_msg::msg!("option if let some array: {:?}", result[0]);
+        }
+        CuLibraryInstruction::OptionIfLetSomePubkey => {
+            let pubkey = *program_id;
+            let option = Some(pubkey);
+            let result = option_if_let_some_pubkey(option);
+            solana_msg::msg!("option if let some pubkey: {:?}", result[0]);
+        }
+        CuLibraryInstruction::OptionIfLetSomeArrayRef => {
+            let array: [u8; 32] = *program_id;
+            let option = Some(&array);
+            let result = option_if_let_some_array_ref(option);
+            solana_msg::msg!("option if let some array ref: {:?}", result[0]);
         }
     }
     Ok(())
