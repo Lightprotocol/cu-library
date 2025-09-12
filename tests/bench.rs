@@ -46,7 +46,7 @@ fn bench_cu_operations() {
     }
 
     // Collect benchmark results by category
-    let mut results_by_category: BTreeMap<String, Vec<(String, String)>> = BTreeMap::new();
+    let mut results_by_category: BTreeMap<String, Vec<(String, String, String)>> = BTreeMap::new();
 
     let instructions = vec![
         CuLibraryInstruction::Baseline,
@@ -375,13 +375,13 @@ fn bench_cu_operations() {
         println!("{}", logs);
 
         // Parse benchmark results
-        if let Some((func_name, cu_value)) = parse_benchmark_log(&meta.logs) {
+        if let Some((func_name, cu_value, file_location)) = parse_benchmark_log(&meta.logs) {
             // Determine category from function name prefix
             let category = func_name.split('_').next().unwrap_or("other").to_string();
             results_by_category
                 .entry(category)
                 .or_insert_with(Vec::new)
-                .push((func_name, cu_value));
+                .push((func_name, cu_value, file_location));
         }
     }
 
@@ -391,7 +391,7 @@ fn bench_cu_operations() {
     println!("Benchmark results written to README.md");
 }
 
-fn parse_benchmark_log(logs: &[String]) -> Option<(String, String)> {
+fn parse_benchmark_log(logs: &[String]) -> Option<(String, String, String)> {
     // Parse the logs to extract profiler output
     for log in logs {
         // Check if this log contains profiler output
@@ -414,6 +414,18 @@ fn parse_benchmark_log(logs: &[String]) -> Option<(String, String)> {
                         let parts: Vec<&str> = func_part.split_whitespace().collect();
                         if !parts.is_empty() {
                             let func_name = parts[0].to_string();
+                            
+                            // Look for the file location line (next line)
+                            let mut file_location = String::new();
+                            if i + 1 < lines.len() {
+                                if let Some(location_line) = lines.get(i + 1) {
+                                    // The location line contains "src/..." 
+                                    let location_trimmed = location_line.trim();
+                                    if location_trimmed.starts_with("src/") {
+                                        file_location = location_trimmed.to_string();
+                                    }
+                                }
+                            }
 
                             // Look for the CU consumption line (2 lines down)
                             let mut cu_value = "N/A".to_string();
@@ -436,7 +448,7 @@ fn parse_benchmark_log(logs: &[String]) -> Option<(String, String)> {
                                 }
                             }
 
-                            return Some((func_name, cu_value));
+                            return Some((func_name, cu_value, file_location));
                         }
                     }
                 }
@@ -446,7 +458,7 @@ fn parse_benchmark_log(logs: &[String]) -> Option<(String, String)> {
     None
 }
 
-fn write_categorized_readme(mut results_by_category: BTreeMap<String, Vec<(String, String)>>) {
+fn write_categorized_readme(mut results_by_category: BTreeMap<String, Vec<(String, String, String)>>) {
     let mut readme = OpenOptions::new()
         .create(true)
         .write(true)
@@ -480,8 +492,23 @@ fn write_categorized_readme(mut results_by_category: BTreeMap<String, Vec<(Strin
         .unwrap();
 
         // Write results
-        for (func_name, cu_value) in baseline_results {
-            writeln!(readme, "| {:<53} | {:<11} |", func_name, cu_value).unwrap();
+        for (func_name, cu_value, file_location) in baseline_results {
+            // Create GitHub link
+            let github_link = if !file_location.is_empty() {
+                // Extract file path and line number (format: "src/path/file.rs:line")
+                let parts: Vec<&str> = file_location.split(':').collect();
+                if parts.len() >= 2 {
+                    let file_path = parts[0];
+                    let line_num = parts[1].trim().parse::<usize>().unwrap_or(0) + 1;
+                    format!("[{}](https://github.com/Lightprotocol/cu-library/blob/master/{}#L{})", 
+                            func_name, file_path, line_num)
+                } else {
+                    func_name.clone()
+                }
+            } else {
+                func_name.clone()
+            };
+            writeln!(readme, "| {:<53} | {:<11} |", github_link, cu_value).unwrap();
         }
 
         writeln!(readme).unwrap(); // Empty line after baseline
@@ -511,8 +538,23 @@ fn write_categorized_readme(mut results_by_category: BTreeMap<String, Vec<(Strin
         .unwrap();
 
         // Write results
-        for (func_name, cu_value) in results {
-            writeln!(readme, "| {:<53} | {:<11} |", func_name, cu_value).unwrap();
+        for (func_name, cu_value, file_location) in results {
+            // Create GitHub link
+            let github_link = if !file_location.is_empty() {
+                // Extract file path and line number (format: "src/path/file.rs:line")
+                let parts: Vec<&str> = file_location.split(':').collect();
+                if parts.len() >= 2 {
+                    let file_path = parts[0];
+                    let line_num = parts[1].trim().parse::<usize>().unwrap_or(0) + 1;
+                    format!("[{}](https://github.com/Lightprotocol/cu-library/blob/master/{}#L{})", 
+                            func_name, file_path, line_num)
+                } else {
+                    func_name.clone()
+                }
+            } else {
+                func_name.clone()
+            };
+            writeln!(readme, "| {:<53} | {:<11} |", github_link, cu_value).unwrap();
         }
 
         writeln!(readme).unwrap(); // Empty line between categories
