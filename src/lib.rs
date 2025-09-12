@@ -1,5 +1,17 @@
 use pinocchio::{account_info::AccountInfo, program_error::ProgramError, pubkey::Pubkey};
 
+use crate::access::array_u8_32::{
+    access_array_u8_32_get, access_array_u8_32_get_ok_or, access_array_u8_32_if_let_get, access_array_u8_32_index,
+};
+use crate::access::array_u64_10::{
+    access_array_u64_10_get, access_array_u64_10_get_ok_or, access_array_u64_10_if_let_get, access_array_u64_10_index,
+};
+use crate::access::vec_u8_32::{
+    access_vec_u8_32_get, access_vec_u8_32_get_ok_or, access_vec_u8_32_if_let_get, access_vec_u8_32_index,
+};
+use crate::access::vec_u64_10::{
+    access_vec_u64_10_get, access_vec_u64_10_get_ok_or, access_vec_u64_10_if_let_get, access_vec_u64_10_index,
+};
 use crate::account_info::account_borrows::{
     account_info_borrow_data_unchecked, account_info_borrow_lamports_unchecked,
     account_info_borrow_mut_data_unchecked, account_info_borrow_mut_lamports_unchecked,
@@ -136,6 +148,7 @@ use crate::saturating_math::saturating_sub::{
 use crate::solana_ops::msg::solana_msg10_chars;
 use crate::solana_ops::msg_program_id::solana_msg_program_id;
 use crate::solana_ops::pubkey_new_from_array::solana_pubkey_new_from_array;
+use crate::solana_ops::pubkey_to_bytes::solana_pubkey_to_bytes;
 use crate::std_math::add_assign::{
     add_assign_u128, add_assign_u16, add_assign_u32, add_assign_u64, add_assign_u8,
 };
@@ -156,6 +169,7 @@ use crate::vec::vec_push::{
 use crate::vec::vec_with_capacity::{vec_u8_with_capacity_10, vec_u8_with_capacity_100};
 use light_program_profiler::profile;
 
+pub mod access;
 pub mod account_info;
 pub mod array;
 pub mod arrayvec;
@@ -181,6 +195,23 @@ pub enum CuLibraryInstruction {
     SolanaMsg10 = 2,
     SolanaMsgProgramId = 3,
     SolanaPubkeyNewFromArray = 4,
+    SolanaPubkeyToBytes = 213,
+    ArrayU8_32Index = 214,
+    ArrayU8_32Get = 215,
+    ArrayU8_32GetOkOr = 216,
+    ArrayU8_32IfLetGet = 217,
+    ArrayU64_10Index = 218,
+    ArrayU64_10Get = 219,
+    ArrayU64_10GetOkOr = 220,
+    ArrayU64_10IfLetGet = 221,
+    VecU8_32Index = 222,
+    VecU8_32Get = 223,
+    VecU8_32GetOkOr = 224,
+    VecU8_32IfLetGet = 225,
+    VecU64_10Index = 226,
+    VecU64_10Get = 227,
+    VecU64_10GetOkOr = 228,
+    VecU64_10IfLetGet = 229,
     PinocchioSysvarRentExemption165 = 5,
     PinocchioClockGetSlot = 6,
     ArrayvecNew = 7,
@@ -609,6 +640,23 @@ impl TryFrom<&[u8]> for CuLibraryInstruction {
             210 => Ok(CuLibraryInstruction::OptionIfLetSomeArray),
             211 => Ok(CuLibraryInstruction::OptionIfLetSomePubkey),
             212 => Ok(CuLibraryInstruction::OptionIfLetSomeArrayRef),
+            213 => Ok(CuLibraryInstruction::SolanaPubkeyToBytes),
+            214 => Ok(CuLibraryInstruction::ArrayU8_32Index),
+            215 => Ok(CuLibraryInstruction::ArrayU8_32Get),
+            216 => Ok(CuLibraryInstruction::ArrayU8_32GetOkOr),
+            217 => Ok(CuLibraryInstruction::ArrayU8_32IfLetGet),
+            218 => Ok(CuLibraryInstruction::ArrayU64_10Index),
+            219 => Ok(CuLibraryInstruction::ArrayU64_10Get),
+            220 => Ok(CuLibraryInstruction::ArrayU64_10GetOkOr),
+            221 => Ok(CuLibraryInstruction::ArrayU64_10IfLetGet),
+            222 => Ok(CuLibraryInstruction::VecU8_32Index),
+            223 => Ok(CuLibraryInstruction::VecU8_32Get),
+            224 => Ok(CuLibraryInstruction::VecU8_32GetOkOr),
+            225 => Ok(CuLibraryInstruction::VecU8_32IfLetGet),
+            226 => Ok(CuLibraryInstruction::VecU64_10Index),
+            227 => Ok(CuLibraryInstruction::VecU64_10Get),
+            228 => Ok(CuLibraryInstruction::VecU64_10GetOkOr),
+            229 => Ok(CuLibraryInstruction::VecU64_10IfLetGet),
             _ => Err(ProgramError::InvalidInstructionData),
         }
     }
@@ -639,6 +687,91 @@ pub fn process_instruction(
         CuLibraryInstruction::SolanaPubkeyNewFromArray => {
             let res = solana_pubkey_new_from_array(program_id);
             solana_msg::msg!("pubkey: {:?}", res);
+        }
+        CuLibraryInstruction::SolanaPubkeyToBytes => {
+            let solana_pubkey = solana_pubkey::Pubkey::from(*program_id);
+            let res = solana_pubkey_to_bytes(&solana_pubkey);
+            solana_msg::msg!("pubkey to_bytes: {:?}", res[0]);
+        }
+        CuLibraryInstruction::ArrayU8_32Index => {
+            let array: [u8; 32] = [1; 32];
+            let res = access_array_u8_32_index(&array);
+            solana_msg::msg!("{}", res);
+        }
+        CuLibraryInstruction::ArrayU8_32Get => {
+            let array: [u8; 32] = [1; 32];
+            let res = access_array_u8_32_get(&array);
+            solana_msg::msg!("{}", res.unwrap_or(&0));
+        }
+        CuLibraryInstruction::ArrayU8_32GetOkOr => {
+            let array: [u8; 32] = [1; 32];
+            let res = access_array_u8_32_get_ok_or(&array);
+            solana_msg::msg!("{}", res.unwrap_or(&0));
+        }
+        CuLibraryInstruction::ArrayU8_32IfLetGet => {
+            let array: [u8; 32] = [1; 32];
+            let res = access_array_u8_32_if_let_get(&array);
+            solana_msg::msg!("{}", res);
+        }
+        CuLibraryInstruction::ArrayU64_10Index => {
+            let array: [u64; 10] = [100; 10];
+            let res = access_array_u64_10_index(&array);
+            solana_msg::msg!("{}", res);
+        }
+        CuLibraryInstruction::ArrayU64_10Get => {
+            let array: [u64; 10] = [100; 10];
+            let res = access_array_u64_10_get(&array);
+            solana_msg::msg!("{}", res.unwrap_or(&0));
+        }
+        CuLibraryInstruction::ArrayU64_10GetOkOr => {
+            let array: [u64; 10] = [100; 10];
+            let res = access_array_u64_10_get_ok_or(&array);
+            solana_msg::msg!("{}", res.unwrap_or(&0));
+        }
+        CuLibraryInstruction::ArrayU64_10IfLetGet => {
+            let array: [u64; 10] = [100; 10];
+            let res = access_array_u64_10_if_let_get(&array);
+            solana_msg::msg!("{}", res);
+        }
+        CuLibraryInstruction::VecU8_32Index => {
+            let vec: Vec<u8> = vec![1; 32];
+            let res = access_vec_u8_32_index(&vec);
+            solana_msg::msg!("{}", res);
+        }
+        CuLibraryInstruction::VecU8_32Get => {
+            let vec: Vec<u8> = vec![1; 32];
+            let res = access_vec_u8_32_get(&vec);
+            solana_msg::msg!("{}", res.unwrap_or(&0));
+        }
+        CuLibraryInstruction::VecU8_32GetOkOr => {
+            let vec: Vec<u8> = vec![1; 32];
+            let res = access_vec_u8_32_get_ok_or(&vec);
+            solana_msg::msg!("{}", res.unwrap_or(&0));
+        }
+        CuLibraryInstruction::VecU8_32IfLetGet => {
+            let vec: Vec<u8> = vec![1; 32];
+            let res = access_vec_u8_32_if_let_get(&vec);
+            solana_msg::msg!("{}", res);
+        }
+        CuLibraryInstruction::VecU64_10Index => {
+            let vec: Vec<u64> = vec![100; 10];
+            let res = access_vec_u64_10_index(&vec);
+            solana_msg::msg!("{}", res);
+        }
+        CuLibraryInstruction::VecU64_10Get => {
+            let vec: Vec<u64> = vec![100; 10];
+            let res = access_vec_u64_10_get(&vec);
+            solana_msg::msg!("{}", res.unwrap_or(&0));
+        }
+        CuLibraryInstruction::VecU64_10GetOkOr => {
+            let vec: Vec<u64> = vec![100; 10];
+            let res = access_vec_u64_10_get_ok_or(&vec);
+            solana_msg::msg!("{}", res.unwrap_or(&0));
+        }
+        CuLibraryInstruction::VecU64_10IfLetGet => {
+            let vec: Vec<u64> = vec![100; 10];
+            let res = access_vec_u64_10_if_let_get(&vec);
+            solana_msg::msg!("{}", res);
         }
         CuLibraryInstruction::PinocchioSysvarRentExemption165 => {
             let _ = pinocchio_sysvar_rent_exemption_165();

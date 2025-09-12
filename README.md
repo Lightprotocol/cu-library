@@ -10,6 +10,27 @@ Benchmark results for Solana runtime operations:
 |-------------------------------------------------------|-------------|
 | baseline_empty_function                               | 6           |
 
+## Access
+
+| Function                                              | CU Consumed |
+|-------------------------------------------------------|-------------|
+| access_array_u8_32_index                              | 9           |
+| access_array_u8_32_get                                | 6           |
+| access_array_u8_32_get_ok_or                          | 6           |
+| access_array_u8_32_if_let_get                         | 9           |
+| access_array_u64_10_index                             | 9           |
+| access_array_u64_10_get                               | 6           |
+| access_array_u64_10_get_ok_or                         | 6           |
+| access_array_u64_10_if_let_get                        | 9           |
+| access_vec_u8_32_index                                | 9           |
+| access_vec_u8_32_get                                  | 8           |
+| access_vec_u8_32_get_ok_or                            | 8           |
+| access_vec_u8_32_if_let_get                           | 9           |
+| access_vec_u64_10_index                               | 9           |
+| access_vec_u64_10_get                                 | 8           |
+| access_vec_u64_10_get_ok_or                           | 8           |
+| access_vec_u64_10_if_let_get                          | 9           |
+
 ## Account
 
 | Function                                              | CU Consumed |
@@ -203,8 +224,8 @@ Benchmark results for Solana runtime operations:
 
 | Function                                              | CU Consumed |
 |-------------------------------------------------------|-------------|
-| pinocchio_msg10_chars                                 | 109         |
-| pinocchio_sysvar_rent_exemption_165                   | 153         |
+| pinocchio_msg10_chars                                 | 110         |
+| pinocchio_sysvar_rent_exemption_165                   | 151         |
 | pinocchio_clock_get_slot                              | 171         |
 
 ## Saturating
@@ -234,6 +255,7 @@ Benchmark results for Solana runtime operations:
 | solana_msg10_chars                                    | 110         |
 | solana_msg_program_id                                 | 6954        |
 | solana_pubkey_new_from_array                          | 15          |
+| solana_pubkey_to_bytes                                | 15          |
 
 ## Std
 
@@ -277,16 +299,15 @@ Benchmark results for Solana runtime operations:
 | vec_u8_new                                            | 9           |
 | vec_u8_with_capacity_10                               | 113         |
 | vec_u8_with_capacity_100                              | 113         |
-| vec_push_u8                                           | 78          |
-| vec_push_u64                                          | 83          |
-| vec_push_pubkey                                       | 90          |
-| vec_push_10_u8                                        | 207         |
-| vec_push_10_u64                                       | 318         |
-| vec_push_10_pubkey                                    | 385         |
+| vec_push_u8                                           | 73          |
+| vec_push_u64                                          | 78          |
+| vec_push_pubkey                                       | 85          |
+| vec_push_10_u8                                        | 202         |
+| vec_push_10_u64                                       | 313         |
+| vec_push_10_pubkey                                    | 380         |
 | vec_push_u8_with_capacity                             | 120         |
 | vec_push_u64_with_capacity                            | 120         |
 | vec_push_pubkey_with_capacity                         | 128         |
 | vec_push_10_u8_with_capacity                          | 153         |
 | vec_push_10_u64_with_capacity                         | 149         |
 | vec_push_10_pubkey_with_capacity                      | 218         |
-
