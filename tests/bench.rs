@@ -213,6 +213,36 @@ fn bench_cu_operations() {
         CuLibraryInstruction::PartialEqArrayU16_32Neq,
         CuLibraryInstruction::PartialEqArrayU32_32Neq,
         CuLibraryInstruction::PartialEqArrayU64_32Neq,
+        // Conversions
+        CuLibraryInstruction::ConversionsSliceToArray32Unwrap,
+        CuLibraryInstruction::ConversionsSliceToArray32MapErr,
+        CuLibraryInstruction::ConversionsUsizeToU64Unwrap,
+        CuLibraryInstruction::ConversionsUsizeToU64MapErr,
+        CuLibraryInstruction::ConversionsU64ToUsizeUnwrap,
+        CuLibraryInstruction::ConversionsU64ToUsizeMapErr,
+        CuLibraryInstruction::ConversionsU32ToUsizeUnwrap,
+        CuLibraryInstruction::ConversionsU32ToUsizeMapErr,
+        CuLibraryInstruction::ConversionsU16ToUsizeUnwrap,
+        CuLibraryInstruction::ConversionsU16ToUsizeMapErr,
+        CuLibraryInstruction::ConversionsU8ToUsizeUnwrap,
+        CuLibraryInstruction::ConversionsU8ToUsizeMapErr,
+        // Cast conversions
+        CuLibraryInstruction::ConversionsU8AsU16,
+        CuLibraryInstruction::ConversionsU8AsU32,
+        CuLibraryInstruction::ConversionsU8AsU64,
+        CuLibraryInstruction::ConversionsU8AsUsize,
+        CuLibraryInstruction::ConversionsU16AsU8,
+        CuLibraryInstruction::ConversionsU16AsU32,
+        CuLibraryInstruction::ConversionsU16AsU64,
+        CuLibraryInstruction::ConversionsU16AsUsize,
+        CuLibraryInstruction::ConversionsU32AsU8,
+        CuLibraryInstruction::ConversionsU32AsU16,
+        CuLibraryInstruction::ConversionsU32AsU64,
+        CuLibraryInstruction::ConversionsU32AsUsize,
+        CuLibraryInstruction::ConversionsU64AsU8,
+        CuLibraryInstruction::ConversionsU64AsU16,
+        CuLibraryInstruction::ConversionsU64AsU32,
+        CuLibraryInstruction::ConversionsU64AsUsize,
     ];
 
     for instruction_type in instructions.into_iter() {
@@ -399,18 +429,18 @@ fn write_categorized_readme(mut results_by_category: BTreeMap<String, Vec<(Strin
         // Write table header
         writeln!(
             readme,
-            "| Function                                    | CU Consumed |"
+            "| Function                                              | CU Consumed |"
         )
         .unwrap();
         writeln!(
             readme,
-            "|---------------------------------------------|-------------|"
+            "|-------------------------------------------------------|-------------|"
         )
         .unwrap();
 
         // Write results
         for (func_name, cu_value) in baseline_results {
-            writeln!(readme, "| {:<43} | {:<11} |", func_name, cu_value).unwrap();
+            writeln!(readme, "| {:<53} | {:<11} |", func_name, cu_value).unwrap();
         }
 
         writeln!(readme).unwrap(); // Empty line after baseline
@@ -430,18 +460,18 @@ fn write_categorized_readme(mut results_by_category: BTreeMap<String, Vec<(Strin
         // Write table header
         writeln!(
             readme,
-            "| Function                                    | CU Consumed |"
+            "| Function                                              | CU Consumed |"
         )
         .unwrap();
         writeln!(
             readme,
-            "|---------------------------------------------|-------------|"
+            "|-------------------------------------------------------|-------------|"
         )
         .unwrap();
 
         // Write results
         for (func_name, cu_value) in results {
-            writeln!(readme, "| {:<43} | {:<11} |", func_name, cu_value).unwrap();
+            writeln!(readme, "| {:<53} | {:<11} |", func_name, cu_value).unwrap();
         }
 
         writeln!(readme).unwrap(); // Empty line between categories

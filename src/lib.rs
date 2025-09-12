@@ -45,6 +45,39 @@ use crate::checked_math::checked_mul::{
 use crate::checked_math::checked_sub::{
     checked_sub_u128, checked_sub_u16, checked_sub_u32, checked_sub_u64, checked_sub_u8,
 };
+use crate::conversions::cast_u16::{
+    conversions_u16_as_u32, conversions_u16_as_u64,
+    conversions_u16_as_u8, conversions_u16_as_usize,
+};
+use crate::conversions::cast_u32::{
+    conversions_u32_as_u16, conversions_u32_as_u64,
+    conversions_u32_as_u8, conversions_u32_as_usize,
+};
+use crate::conversions::cast_u64::{
+    conversions_u64_as_u16, conversions_u64_as_u32,
+    conversions_u64_as_u8, conversions_u64_as_usize,
+};
+use crate::conversions::cast_u8::{
+    conversions_u8_as_u16, conversions_u8_as_u32, conversions_u8_as_u64,
+    conversions_u8_as_usize,
+};
+use crate::conversions::from_usize::{
+    conversions_try_into_usize_to_u64_map_err, conversions_try_into_usize_to_u64_unwrap,
+};
+use crate::conversions::slice_to_array::{
+    conversions_try_into_slice_to_array_32_map_err,
+    conversions_try_into_slice_to_array_32_unwrap,
+};
+use crate::conversions::to_usize::{
+    conversions_try_into_u16_to_usize_map_err,
+    conversions_try_into_u16_to_usize_unwrap,
+    conversions_try_into_u32_to_usize_map_err,
+    conversions_try_into_u32_to_usize_unwrap,
+    conversions_try_into_u64_to_usize_map_err,
+    conversions_try_into_u64_to_usize_unwrap,
+    conversions_try_into_u8_to_usize_map_err,
+    conversions_try_into_u8_to_usize_unwrap,
+};
 use crate::cpi::cpi_array_loop::{
     cpi_account_info_array_10_clone_loop, cpi_account_info_array_10_move_loop,
     cpi_account_info_array_10_ref_loop, cpi_account_meta_array_10_loop,
@@ -63,9 +96,9 @@ use crate::partial_eq::partial_eq_arrays::{
 };
 use crate::partial_eq::partial_eq_neq::{
     partial_eq_array_u16_32_neq, partial_eq_array_u32_32_neq, partial_eq_array_u64_32_neq,
-    partial_eq_array_u8_32_neq, partial_eq_array_u8_32_neq_ref, partial_eq_array_u8_32_neq_deref,
-    partial_eq_u128_neq, partial_eq_u16_neq, partial_eq_u32_neq,
-    partial_eq_u64_neq, partial_eq_u8_neq,
+    partial_eq_array_u8_32_neq, partial_eq_array_u8_32_neq_deref, partial_eq_array_u8_32_neq_ref,
+    partial_eq_u128_neq, partial_eq_u16_neq, partial_eq_u32_neq, partial_eq_u64_neq,
+    partial_eq_u8_neq,
 };
 use crate::partial_eq::partial_eq_primitives::{
     partial_eq_u128, partial_eq_u16, partial_eq_u32, partial_eq_u64, partial_eq_u8,
@@ -112,6 +145,7 @@ pub mod account_info;
 pub mod array;
 pub mod arrayvec;
 pub mod checked_math;
+pub mod conversions;
 pub mod cpi;
 pub mod partial_eq;
 pub mod pinocchio_ops;
@@ -290,6 +324,36 @@ pub enum CuLibraryInstruction {
     PartialEqArrayU16_32Neq = 161,
     PartialEqArrayU32_32Neq = 162,
     PartialEqArrayU64_32Neq = 163,
+    // Conversions
+    ConversionsSliceToArray32Unwrap = 164,
+    ConversionsSliceToArray32MapErr = 165,
+    ConversionsUsizeToU64Unwrap = 167,
+    ConversionsUsizeToU64MapErr = 168,
+    ConversionsU64ToUsizeUnwrap = 170,
+    ConversionsU64ToUsizeMapErr = 171,
+    ConversionsU32ToUsizeUnwrap = 173,
+    ConversionsU32ToUsizeMapErr = 174,
+    ConversionsU16ToUsizeUnwrap = 176,
+    ConversionsU16ToUsizeMapErr = 177,
+    ConversionsU8ToUsizeUnwrap = 179,
+    ConversionsU8ToUsizeMapErr = 180,
+    // Cast conversions
+    ConversionsU8AsU16 = 181,
+    ConversionsU8AsU32 = 182,
+    ConversionsU8AsU64 = 183,
+    ConversionsU8AsUsize = 184,
+    ConversionsU16AsU8 = 185,
+    ConversionsU16AsU32 = 186,
+    ConversionsU16AsU64 = 187,
+    ConversionsU16AsUsize = 188,
+    ConversionsU32AsU8 = 189,
+    ConversionsU32AsU16 = 190,
+    ConversionsU32AsU64 = 191,
+    ConversionsU32AsUsize = 192,
+    ConversionsU64AsU8 = 193,
+    ConversionsU64AsU16 = 194,
+    ConversionsU64AsU32 = 195,
+    ConversionsU64AsUsize = 196,
 }
 
 impl From<CuLibraryInstruction> for Vec<u8> {
@@ -468,6 +532,34 @@ impl TryFrom<&[u8]> for CuLibraryInstruction {
             161 => Ok(CuLibraryInstruction::PartialEqArrayU16_32Neq),
             162 => Ok(CuLibraryInstruction::PartialEqArrayU32_32Neq),
             163 => Ok(CuLibraryInstruction::PartialEqArrayU64_32Neq),
+            164 => Ok(CuLibraryInstruction::ConversionsSliceToArray32Unwrap),
+            165 => Ok(CuLibraryInstruction::ConversionsSliceToArray32MapErr),
+            167 => Ok(CuLibraryInstruction::ConversionsUsizeToU64Unwrap),
+            168 => Ok(CuLibraryInstruction::ConversionsUsizeToU64MapErr),
+            170 => Ok(CuLibraryInstruction::ConversionsU64ToUsizeUnwrap),
+            171 => Ok(CuLibraryInstruction::ConversionsU64ToUsizeMapErr),
+            173 => Ok(CuLibraryInstruction::ConversionsU32ToUsizeUnwrap),
+            174 => Ok(CuLibraryInstruction::ConversionsU32ToUsizeMapErr),
+            176 => Ok(CuLibraryInstruction::ConversionsU16ToUsizeUnwrap),
+            177 => Ok(CuLibraryInstruction::ConversionsU16ToUsizeMapErr),
+            179 => Ok(CuLibraryInstruction::ConversionsU8ToUsizeUnwrap),
+            180 => Ok(CuLibraryInstruction::ConversionsU8ToUsizeMapErr),
+            181 => Ok(CuLibraryInstruction::ConversionsU8AsU16),
+            182 => Ok(CuLibraryInstruction::ConversionsU8AsU32),
+            183 => Ok(CuLibraryInstruction::ConversionsU8AsU64),
+            184 => Ok(CuLibraryInstruction::ConversionsU8AsUsize),
+            185 => Ok(CuLibraryInstruction::ConversionsU16AsU8),
+            186 => Ok(CuLibraryInstruction::ConversionsU16AsU32),
+            187 => Ok(CuLibraryInstruction::ConversionsU16AsU64),
+            188 => Ok(CuLibraryInstruction::ConversionsU16AsUsize),
+            189 => Ok(CuLibraryInstruction::ConversionsU32AsU8),
+            190 => Ok(CuLibraryInstruction::ConversionsU32AsU16),
+            191 => Ok(CuLibraryInstruction::ConversionsU32AsU64),
+            192 => Ok(CuLibraryInstruction::ConversionsU32AsUsize),
+            193 => Ok(CuLibraryInstruction::ConversionsU64AsU8),
+            194 => Ok(CuLibraryInstruction::ConversionsU64AsU16),
+            195 => Ok(CuLibraryInstruction::ConversionsU64AsU32),
+            196 => Ok(CuLibraryInstruction::ConversionsU64AsUsize),
             _ => Err(ProgramError::InvalidInstructionData),
         }
     }
@@ -1456,6 +1548,148 @@ pub fn process_instruction(
             b[31] = val2; // Make last element different
             let result = partial_eq_array_u64_32_neq(&a, &b);
             solana_msg::msg!("array u64[32] neq: {}", result);
+        }
+        // Conversion benchmarks
+        CuLibraryInstruction::ConversionsSliceToArray32Unwrap => {
+            let slice = &program_id[..32];
+            let arr = conversions_try_into_slice_to_array_32_unwrap(slice);
+            solana_msg::msg!("slice to array unwrap: {:?}", arr[0]);
+        }
+        CuLibraryInstruction::ConversionsSliceToArray32MapErr => {
+            let slice = &program_id[..32];
+            let result = conversions_try_into_slice_to_array_32_map_err(slice);
+            solana_msg::msg!("slice to array map_err: {:?}", result.is_ok());
+        }
+        CuLibraryInstruction::ConversionsUsizeToU64Unwrap => {
+            let val: usize = 42;
+            let result = conversions_try_into_usize_to_u64_unwrap(val);
+            solana_msg::msg!("usize to u64 unwrap: {}", result);
+        }
+        CuLibraryInstruction::ConversionsUsizeToU64MapErr => {
+            let val: usize = 42;
+            let result = conversions_try_into_usize_to_u64_map_err(val);
+            solana_msg::msg!("usize to u64 map_err: {:?}", result.is_ok());
+        }
+        CuLibraryInstruction::ConversionsU64ToUsizeUnwrap => {
+            let val: u64 = 42;
+            let result = conversions_try_into_u64_to_usize_unwrap(val);
+            solana_msg::msg!("u64 to usize unwrap: {}", result);
+        }
+        CuLibraryInstruction::ConversionsU64ToUsizeMapErr => {
+            let val: u64 = 42;
+            let result = conversions_try_into_u64_to_usize_map_err(val);
+            solana_msg::msg!("u64 to usize map_err: {:?}", result.is_ok());
+        }
+        CuLibraryInstruction::ConversionsU32ToUsizeUnwrap => {
+            let val: u32 = 42;
+            let result = conversions_try_into_u32_to_usize_unwrap(val);
+            solana_msg::msg!("u32 to usize unwrap: {}", result);
+        }
+        CuLibraryInstruction::ConversionsU32ToUsizeMapErr => {
+            let val: u32 = 42;
+            let result = conversions_try_into_u32_to_usize_map_err(val);
+            solana_msg::msg!("u32 to usize map_err: {:?}", result.is_ok());
+        }
+        CuLibraryInstruction::ConversionsU16ToUsizeUnwrap => {
+            let val: u16 = 42;
+            let result = conversions_try_into_u16_to_usize_unwrap(val);
+            solana_msg::msg!("u16 to usize unwrap: {}", result);
+        }
+        CuLibraryInstruction::ConversionsU16ToUsizeMapErr => {
+            let val: u16 = 42;
+            let result = conversions_try_into_u16_to_usize_map_err(val);
+            solana_msg::msg!("u16 to usize map_err: {:?}", result.is_ok());
+        }
+        CuLibraryInstruction::ConversionsU8ToUsizeUnwrap => {
+            let val: u8 = 42;
+            let result = conversions_try_into_u8_to_usize_unwrap(val);
+            solana_msg::msg!("u8 to usize unwrap: {}", result);
+        }
+        CuLibraryInstruction::ConversionsU8ToUsizeMapErr => {
+            let val: u8 = 42;
+            let result = conversions_try_into_u8_to_usize_map_err(val);
+            solana_msg::msg!("u8 to usize map_err: {:?}", result.is_ok());
+        }
+        // Cast conversions
+        CuLibraryInstruction::ConversionsU8AsU16 => {
+            let val: u8 = 42;
+            let result = conversions_u8_as_u16(val);
+            solana_msg::msg!("u8 as u16: {}", result);
+        }
+        CuLibraryInstruction::ConversionsU8AsU32 => {
+            let val: u8 = 42;
+            let result = conversions_u8_as_u32(val);
+            solana_msg::msg!("u8 as u32: {}", result);
+        }
+        CuLibraryInstruction::ConversionsU8AsU64 => {
+            let val: u8 = 42;
+            let result = conversions_u8_as_u64(val);
+            solana_msg::msg!("u8 as u64: {}", result);
+        }
+        CuLibraryInstruction::ConversionsU8AsUsize => {
+            let val: u8 = 42;
+            let result = conversions_u8_as_usize(val);
+            solana_msg::msg!("u8 as usize: {}", result);
+        }
+        CuLibraryInstruction::ConversionsU16AsU8 => {
+            let val: u16 = 300;
+            let result = conversions_u16_as_u8(val);
+            solana_msg::msg!("u16 as u8: {}", result);
+        }
+        CuLibraryInstruction::ConversionsU16AsU32 => {
+            let val: u16 = 300;
+            let result = conversions_u16_as_u32(val);
+            solana_msg::msg!("u16 as u32: {}", result);
+        }
+        CuLibraryInstruction::ConversionsU16AsU64 => {
+            let val: u16 = 300;
+            let result = conversions_u16_as_u64(val);
+            solana_msg::msg!("u16 as u64: {}", result);
+        }
+        CuLibraryInstruction::ConversionsU16AsUsize => {
+            let val: u16 = 300;
+            let result = conversions_u16_as_usize(val);
+            solana_msg::msg!("u16 as usize: {}", result);
+        }
+        CuLibraryInstruction::ConversionsU32AsU8 => {
+            let val: u32 = 70000;
+            let result = conversions_u32_as_u8(val);
+            solana_msg::msg!("u32 as u8: {}", result);
+        }
+        CuLibraryInstruction::ConversionsU32AsU16 => {
+            let val: u32 = 70000;
+            let result = conversions_u32_as_u16(val);
+            solana_msg::msg!("u32 as u16: {}", result);
+        }
+        CuLibraryInstruction::ConversionsU32AsU64 => {
+            let val: u32 = 70000;
+            let result = conversions_u32_as_u64(val);
+            solana_msg::msg!("u32 as u64: {}", result);
+        }
+        CuLibraryInstruction::ConversionsU32AsUsize => {
+            let val: u32 = 70000;
+            let result = conversions_u32_as_usize(val);
+            solana_msg::msg!("u32 as usize: {}", result);
+        }
+        CuLibraryInstruction::ConversionsU64AsU8 => {
+            let val: u64 = 70000;
+            let result = conversions_u64_as_u8(val);
+            solana_msg::msg!("u64 as u8: {}", result);
+        }
+        CuLibraryInstruction::ConversionsU64AsU16 => {
+            let val: u64 = 70000;
+            let result = conversions_u64_as_u16(val);
+            solana_msg::msg!("u64 as u16: {}", result);
+        }
+        CuLibraryInstruction::ConversionsU64AsU32 => {
+            let val: u64 = 70000;
+            let result = conversions_u64_as_u32(val);
+            solana_msg::msg!("u64 as u32: {}", result);
+        }
+        CuLibraryInstruction::ConversionsU64AsUsize => {
+            let val: u64 = 70000;
+            let result = conversions_u64_as_usize(val);
+            solana_msg::msg!("u64 as usize: {}", result);
         }
     }
     Ok(())
