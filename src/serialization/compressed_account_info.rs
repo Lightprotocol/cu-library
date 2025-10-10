@@ -142,7 +142,7 @@ pub fn serialize_compressed_account_info_wincode() -> Vec<u8> {
 }
 
 #[profile]
-pub fn serialize_compressed_account_info_borsh_deserialize(
+pub fn borsh_deserialize(
     serialized_data: &[u8],
 ) -> Result<CompressedAccountInfo, ProgramError> {
     CompressedAccountInfo::try_from_slice(serialized_data)
@@ -150,7 +150,7 @@ pub fn serialize_compressed_account_info_borsh_deserialize(
 }
 
 #[profile]
-pub fn serialize_compressed_account_info_zero_copy_deserialize<'a>(
+pub fn zero_copy_deserialize<'a>(
     serialized_data: &'a [u8],
 ) -> Result<<CompressedAccountInfo as ZeroCopyAt<'a>>::ZeroCopyAt, ProgramError> {
     Ok(CompressedAccountInfo::zero_copy_at(serialized_data)
@@ -159,7 +159,7 @@ pub fn serialize_compressed_account_info_zero_copy_deserialize<'a>(
 }
 
 #[profile]
-pub fn serialize_compressed_account_info_wincode_deserialize(
+pub fn wincode_deserialize(
     serialized_data: &[u8],
 ) -> Result<CompressedAccountInfo, ProgramError> {
     wincode::deserialize(serialized_data).map_err(|_| ProgramError::InvalidAccountData)

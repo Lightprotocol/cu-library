@@ -2,7 +2,7 @@ use light_program_profiler::profile;
 use pinocchio::{account_info::AccountInfo, instruction::AccountMeta};
 
 #[profile]
-pub fn cpi_account_meta_array_10(accounts: &[AccountInfo]) -> [AccountMeta<'_>; 10] {
+pub fn account_meta_array_10(accounts: &[AccountInfo]) -> [AccountMeta<'_>; 10] {
     [
         AccountMeta {
             pubkey: accounts[0].key(),
@@ -58,7 +58,7 @@ pub fn cpi_account_meta_array_10(accounts: &[AccountInfo]) -> [AccountMeta<'_>; 
 }
 
 #[profile]
-pub fn cpi_account_info_array_10_ref(accounts: &[AccountInfo]) -> [&AccountInfo; 10] {
+pub fn account_info_array_10_ref(accounts: &[AccountInfo]) -> [&AccountInfo; 10] {
     [
         &accounts[0],
         &accounts[1],
@@ -74,7 +74,7 @@ pub fn cpi_account_info_array_10_ref(accounts: &[AccountInfo]) -> [&AccountInfo;
 }
 
 #[profile]
-pub fn cpi_account_info_array_10_clone(accounts: &[AccountInfo]) -> [AccountInfo; 10] {
+pub fn account_info_array_10_clone(accounts: &[AccountInfo]) -> [AccountInfo; 10] {
     [
         accounts[0].clone(),
         accounts[1].clone(),
@@ -90,7 +90,7 @@ pub fn cpi_account_info_array_10_clone(accounts: &[AccountInfo]) -> [AccountInfo
 }
 
 #[profile]
-pub fn cpi_account_info_array_10_move(accounts: &[AccountInfo]) -> [AccountInfo; 10] {
+pub fn account_info_array_10_move(accounts: &[AccountInfo]) -> [AccountInfo; 10] {
     [
         accounts[0],
         accounts[1],

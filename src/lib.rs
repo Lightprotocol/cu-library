@@ -1,172 +1,85 @@
 use pinocchio::{account_info::AccountInfo, program_error::ProgramError, pubkey::Pubkey};
 
 use crate::access::array_u64_10::{
-    access_array_u64_10_get, access_array_u64_10_get_ok_or, access_array_u64_10_if_let_get,
-    access_array_u64_10_index,
+    array_u64_10_get, array_u64_10_get_ok_or, array_u64_10_if_let_get, array_u64_10_index,
 };
 use crate::access::array_u8_32::{
-    access_array_u8_32_get, access_array_u8_32_get_ok_or, access_array_u8_32_if_let_get,
-    access_array_u8_32_index,
+    array_u8_32_get, array_u8_32_get_ok_or, array_u8_32_if_let_get, array_u8_32_index,
 };
 use crate::access::vec_u64_10::{
-    access_vec_u64_10_get, access_vec_u64_10_get_ok_or, access_vec_u64_10_if_let_get,
-    access_vec_u64_10_index,
+    vec_u64_10_get, vec_u64_10_get_ok_or, vec_u64_10_if_let_get, vec_u64_10_index,
 };
 use crate::access::vec_u8_32::{
-    access_vec_u8_32_get, access_vec_u8_32_get_ok_or, access_vec_u8_32_if_let_get,
-    access_vec_u8_32_index,
+    vec_u8_32_get, vec_u8_32_get_ok_or, vec_u8_32_if_let_get, vec_u8_32_index,
 };
 use crate::account_info::account_borrows::{
-    account_info_borrow_data_unchecked, account_info_borrow_lamports_unchecked,
-    account_info_borrow_mut_data_unchecked, account_info_borrow_mut_lamports_unchecked,
-    account_info_can_borrow_data, account_info_can_borrow_lamports,
-    account_info_can_borrow_mut_data, account_info_can_borrow_mut_lamports,
-    account_info_is_borrowed, account_info_try_borrow_data, account_info_try_borrow_lamports,
-    account_info_try_borrow_mut_data, account_info_try_borrow_mut_lamports,
+    borrow_data_unchecked, borrow_lamports_unchecked, borrow_mut_data_unchecked,
+    borrow_mut_lamports_unchecked, can_borrow_data, can_borrow_lamports, can_borrow_mut_data,
+    can_borrow_mut_lamports, is_borrowed, try_borrow_data, try_borrow_lamports,
+    try_borrow_mut_data, try_borrow_mut_lamports,
 };
-use crate::account_info::account_checks::{
-    account_info_data_is_empty, account_info_executable, account_info_is_signer,
-    account_info_is_writable,
-};
-use crate::account_info::account_data::{account_info_data_len, account_info_lamports};
-use crate::account_info::account_key::account_info_key;
-use crate::account_info::account_owner::account_info_owner;
-use crate::account_info::account_ownership::{account_info_assign, account_info_is_owned_by};
-use crate::account_info::account_realloc::{
-    account_info_close, account_info_close_unchecked, account_info_realloc,
-};
+use crate::account_info::account_checks::{data_is_empty, executable, is_signer, is_writable};
+use crate::account_info::account_data::{data_len, lamports};
+use crate::account_info::account_key::key;
+use crate::account_info::account_owner::owner;
+use crate::account_info::account_ownership::{assign, is_owned_by};
+use crate::account_info::account_realloc::{close, close_unchecked, realloc};
 use crate::array::array_assign::{
-    array_assign_10_pubkey, array_assign_10_u64, array_assign_10_u8, array_assign_pubkey,
-    array_assign_u64, array_assign_u8,
+    assign_10_pubkey, assign_10_u64, assign_10_u8, assign_pubkey, assign_u64, assign_u8,
 };
-use crate::array::array_new::array_new;
-use crate::array::array_with_capacity::{array_with_capacity_10, array_with_capacity_100};
-use crate::arrayvec::vec_new::arrayvec_u8_new;
-use crate::arrayvec::vec_push::{
-    arrayvec_push_10_pubkey, arrayvec_push_10_u64, arrayvec_push_10_u8, arrayvec_push_pubkey,
-    arrayvec_push_u64, arrayvec_push_u8,
-};
-use crate::arrayvec::vec_with_capacity::{
-    arrayvec_u8_with_capacity_10, arrayvec_u8_with_capacity_100,
-};
-use crate::checked_math::checked_add::{
-    checked_add_u128, checked_add_u16, checked_add_u32, checked_add_u64, checked_add_u8,
-};
-use crate::checked_math::checked_div::{
-    checked_div_u128, checked_div_u16, checked_div_u32, checked_div_u64, checked_div_u8,
-};
-use crate::checked_math::checked_mul::{
-    checked_mul_u128, checked_mul_u16, checked_mul_u32, checked_mul_u64, checked_mul_u8,
-};
-use crate::checked_math::checked_sub::{
-    checked_sub_u128, checked_sub_u16, checked_sub_u32, checked_sub_u64, checked_sub_u8,
-};
-use crate::conversions::cast_u16::{
-    conversions_u16_as_u32, conversions_u16_as_u64, conversions_u16_as_u8, conversions_u16_as_usize,
-};
-use crate::conversions::cast_u32::{
-    conversions_u32_as_u16, conversions_u32_as_u64, conversions_u32_as_u8, conversions_u32_as_usize,
-};
-use crate::conversions::cast_u64::{
-    conversions_u64_as_u16, conversions_u64_as_u32, conversions_u64_as_u8, conversions_u64_as_usize,
-};
-use crate::conversions::cast_u8::{
-    conversions_u8_as_u16, conversions_u8_as_u32, conversions_u8_as_u64, conversions_u8_as_usize,
-};
-use crate::conversions::from_usize::{
-    conversions_try_into_usize_to_u64_map_err, conversions_try_into_usize_to_u64_unwrap,
-};
+use crate::array::array_new::new;
+use crate::array::array_with_capacity::{with_capacity_10, with_capacity_100};
+use crate::conversions::cast_u16::{u16_as_u32, u16_as_u64, u16_as_u8, u16_as_usize};
+use crate::conversions::cast_u32::{u32_as_u16, u32_as_u64, u32_as_u8, u32_as_usize};
+use crate::conversions::cast_u64::{u64_as_u16, u64_as_u32, u64_as_u8, u64_as_usize};
+use crate::conversions::cast_u8::{u8_as_u16, u8_as_u32, u8_as_u64, u8_as_usize};
+use crate::conversions::from_usize::{try_into_usize_to_u64_map_err, try_into_usize_to_u64_unwrap};
 use crate::conversions::slice_to_array::{
-    conversions_try_into_slice_to_array_32_map_err, conversions_try_into_slice_to_array_32_unwrap,
+    try_into_slice_to_array_32_map_err, try_into_slice_to_array_32_unwrap,
 };
 use crate::conversions::to_usize::{
-    conversions_try_into_u16_to_usize_map_err, conversions_try_into_u16_to_usize_unwrap,
-    conversions_try_into_u32_to_usize_map_err, conversions_try_into_u32_to_usize_unwrap,
-    conversions_try_into_u64_to_usize_map_err, conversions_try_into_u64_to_usize_unwrap,
-    conversions_try_into_u8_to_usize_map_err, conversions_try_into_u8_to_usize_unwrap,
+    try_into_u16_to_usize_map_err, try_into_u16_to_usize_unwrap, try_into_u32_to_usize_map_err,
+    try_into_u32_to_usize_unwrap, try_into_u64_to_usize_map_err, try_into_u64_to_usize_unwrap,
+    try_into_u8_to_usize_map_err, try_into_u8_to_usize_unwrap,
 };
 use crate::cpi::cpi_array_loop::{
-    cpi_account_info_array_10_clone_loop, cpi_account_info_array_10_move_loop,
-    cpi_account_info_array_10_ref_loop, cpi_account_meta_array_10_loop,
+    account_info_array_10_clone_loop, account_info_array_10_move_loop,
+    account_info_array_10_ref_loop, account_meta_array_10_loop,
 };
 use crate::cpi::cpi_arrays::{
-    cpi_account_info_array_10_clone, cpi_account_info_array_10_move, cpi_account_info_array_10_ref,
-    cpi_account_meta_array_10,
+    account_info_array_10_clone, account_info_array_10_move, account_info_array_10_ref,
+    account_meta_array_10,
 };
 use crate::cpi::cpi_arrayvec::{
-    cpi_arrayvec_push_account_info_10_clone, cpi_arrayvec_push_account_info_10_move,
-    cpi_arrayvec_push_account_info_10_ref, cpi_arrayvec_push_account_meta_10,
+    arrayvec_push_account_info_10_clone, arrayvec_push_account_info_10_move,
+    arrayvec_push_account_info_10_ref, arrayvec_push_account_meta_10,
 };
 use crate::option::option_checked_add::{
-    option_checked_add_u8_ok_or, option_checked_add_u8_ok_or_else, option_checked_add_u8_unwrap,
-    option_checked_add_u8_unwrap_or, option_checked_add_u8_unwrap_or_default,
+    checked_add_u8_ok_or, checked_add_u8_ok_or_else, checked_add_u8_unwrap,
+    checked_add_u8_unwrap_or, checked_add_u8_unwrap_or_default,
 };
 use crate::option::option_if_let::{
-    option_if_let_some_array, option_if_let_some_array_ref, option_if_let_some_pubkey,
-    option_if_let_some_u8,
+    if_let_some_array, if_let_some_array_ref, if_let_some_pubkey, if_let_some_u8,
 };
-use crate::option::option_pubkey_ref::{
-    option_pubkey_as_ref_map_convert, option_pubkey_ref_map_deref,
-};
+use crate::option::option_pubkey_ref::{pubkey_as_ref_map_convert, pubkey_ref_map_deref};
 use crate::option::option_slice_get::{
-    option_slice_get_array_ok_or, option_slice_get_array_ok_or_else, option_slice_get_array_unwrap,
-    option_slice_get_array_unwrap_or, option_slice_get_array_unwrap_or_default,
+    slice_get_array_ok_or, slice_get_array_ok_or_else, slice_get_array_unwrap,
+    slice_get_array_unwrap_or, slice_get_array_unwrap_or_default,
 };
 use crate::partial_eq::partial_eq_arrays::{
-    partial_eq_array_u16_32, partial_eq_array_u32_32, partial_eq_array_u64_32,
-    partial_eq_array_u8_32, partial_eq_array_u8_32_ref,
+    array_u16_32, array_u32_32, array_u64_32, array_u8_32, array_u8_32_ref,
 };
 use crate::partial_eq::partial_eq_neq::{
-    partial_eq_array_u16_32_neq, partial_eq_array_u32_32_neq, partial_eq_array_u64_32_neq,
-    partial_eq_array_u8_32_neq, partial_eq_array_u8_32_neq_deref, partial_eq_array_u8_32_neq_ref,
-    partial_eq_u128_neq, partial_eq_u16_neq, partial_eq_u32_neq, partial_eq_u64_neq,
-    partial_eq_u8_neq,
+    array_u16_32_neq, array_u32_32_neq, array_u64_32_neq, array_u8_32_neq, array_u8_32_neq_deref,
+    array_u8_32_neq_ref, u128_neq, u16_neq, u32_neq, u64_neq, u8_neq,
 };
-use crate::partial_eq::partial_eq_primitives::{
-    partial_eq_u128, partial_eq_u16, partial_eq_u32, partial_eq_u64, partial_eq_u8,
-};
-use crate::pinocchio_ops::msg::pinocchio_msg10_chars;
-use crate::pinocchio_ops::sysvar_clock::pinocchio_clock_get_slot;
-use crate::pinocchio_ops::sysvar_rent::pinocchio_sysvar_rent_exemption_165;
-use crate::saturating_math::saturating_add::{
-    saturating_add_u128, saturating_add_u16, saturating_add_u32, saturating_add_u64,
-    saturating_add_u8,
-};
-use crate::saturating_math::saturating_mul::{
-    saturating_mul_u128, saturating_mul_u16, saturating_mul_u32, saturating_mul_u64,
-    saturating_mul_u8,
-};
-use crate::saturating_math::saturating_sub::{
-    saturating_sub_u128, saturating_sub_u16, saturating_sub_u32, saturating_sub_u64,
-    saturating_sub_u8,
-};
+use crate::partial_eq::partial_eq_primitives::{u128, u16, u32, u64, u8};
 use crate::serialization::compressed_account_info::{
-    serialize_compressed_account_info, serialize_compressed_account_info_borsh_deserialize,
-    serialize_compressed_account_info_wincode, serialize_compressed_account_info_wincode_deserialize,
-    serialize_compressed_account_info_zero_copy_deserialize,
+    borsh_deserialize, serialize_compressed_account_info,
+    serialize_compressed_account_info_wincode, wincode_deserialize, zero_copy_deserialize,
 };
-use crate::solana_ops::msg::solana_msg10_chars;
-use crate::solana_ops::msg_program_id::solana_msg_program_id;
-use crate::solana_ops::pubkey_new_from_array::solana_pubkey_new_from_array;
-use crate::solana_ops::pubkey_to_bytes::solana_pubkey_to_bytes;
-use crate::std_math::add_assign::{
-    add_assign_u128, add_assign_u16, add_assign_u32, add_assign_u64, add_assign_u8,
-};
-use crate::std_math::std_add::{std_add_u128, std_add_u16, std_add_u32, std_add_u64, std_add_u8};
-use crate::std_math::std_div::{std_div_u128, std_div_u16, std_div_u32, std_div_u64, std_div_u8};
-use crate::std_math::std_mul::{std_mul_u128, std_mul_u16, std_mul_u32, std_mul_u64, std_mul_u8};
-use crate::std_math::std_sub::{std_sub_u128, std_sub_u16, std_sub_u32, std_sub_u64, std_sub_u8};
-use crate::std_math::sub_assign::{
-    sub_assign_u128, sub_assign_u16, sub_assign_u32, sub_assign_u64, sub_assign_u8,
-};
-use crate::vec::vec_new::vec_u8_new;
-use crate::vec::vec_push::{
-    vec_push_10_pubkey, vec_push_10_pubkey_with_capacity, vec_push_10_u64,
-    vec_push_10_u64_with_capacity, vec_push_10_u8, vec_push_10_u8_with_capacity, vec_push_pubkey,
-    vec_push_pubkey_with_capacity, vec_push_u64, vec_push_u64_with_capacity, vec_push_u8,
-    vec_push_u8_with_capacity,
-};
-use crate::vec::vec_with_capacity::{vec_u8_with_capacity_10, vec_u8_with_capacity_100};
+use crate::std_math::add_assign::{add_assign_u128, add_assign_u16, add_assign_u32, add_assign_u64, add_assign_u8};
+use crate::std_math::sub_assign::{sub_assign_u128, sub_assign_u16, sub_assign_u32, sub_assign_u64, sub_assign_u8};
 use light_program_profiler::profile;
 
 pub mod access;
@@ -688,443 +601,443 @@ pub fn process_instruction(
             baseline_empty_function();
             solana_msg::msg!("baseline complete");
         }
-        CuLibraryInstruction::Msg10 => pinocchio_msg10_chars()?,
-        CuLibraryInstruction::SolanaMsg10 => solana_msg10_chars()?,
-        CuLibraryInstruction::SolanaMsgProgramId => solana_msg_program_id(program_id)?,
+        CuLibraryInstruction::Msg10 => pinocchio_ops::msg::msg10_chars()?,
+        CuLibraryInstruction::SolanaMsg10 => solana_ops::msg::msg10_chars()?,
+        CuLibraryInstruction::SolanaMsgProgramId => solana_ops::msg_program_id::msg_program_id(program_id)?,
         CuLibraryInstruction::SolanaPubkeyNewFromArray => {
-            let res = solana_pubkey_new_from_array(program_id);
+            let res = solana_ops::pubkey_new_from_array::pubkey_new_from_array(program_id);
             solana_msg::msg!("pubkey: {:?}", res);
         }
         CuLibraryInstruction::SolanaPubkeyToBytes => {
             let solana_pubkey = solana_pubkey::Pubkey::from(*program_id);
-            let res = solana_pubkey_to_bytes(&solana_pubkey);
+            let res = solana_ops::pubkey_to_bytes::pubkey_to_bytes(&solana_pubkey);
             solana_msg::msg!("pubkey to_bytes: {:?}", res[0]);
         }
         CuLibraryInstruction::ArrayU8_32Index => {
             let array: [u8; 32] = [1; 32];
-            let res = access_array_u8_32_index(&array);
+            let res = array_u8_32_index(&array);
             solana_msg::msg!("{}", res);
         }
         CuLibraryInstruction::ArrayU8_32Get => {
             let array: [u8; 32] = [1; 32];
-            let res = access_array_u8_32_get(&array);
+            let res = array_u8_32_get(&array);
             solana_msg::msg!("{}", res.unwrap_or(&0));
         }
         CuLibraryInstruction::ArrayU8_32GetOkOr => {
             let array: [u8; 32] = [1; 32];
-            let res = access_array_u8_32_get_ok_or(&array);
+            let res = array_u8_32_get_ok_or(&array);
             solana_msg::msg!("{}", res.unwrap_or(&0));
         }
         CuLibraryInstruction::ArrayU8_32IfLetGet => {
             let array: [u8; 32] = [1; 32];
-            let res = access_array_u8_32_if_let_get(&array);
+            let res = array_u8_32_if_let_get(&array);
             solana_msg::msg!("{}", res);
         }
         CuLibraryInstruction::ArrayU64_10Index => {
             let array: [u64; 10] = [100; 10];
-            let res = access_array_u64_10_index(&array);
+            let res = array_u64_10_index(&array);
             solana_msg::msg!("{}", res);
         }
         CuLibraryInstruction::ArrayU64_10Get => {
             let array: [u64; 10] = [100; 10];
-            let res = access_array_u64_10_get(&array);
+            let res = array_u64_10_get(&array);
             solana_msg::msg!("{}", res.unwrap_or(&0));
         }
         CuLibraryInstruction::ArrayU64_10GetOkOr => {
             let array: [u64; 10] = [100; 10];
-            let res = access_array_u64_10_get_ok_or(&array);
+            let res = array_u64_10_get_ok_or(&array);
             solana_msg::msg!("{}", res.unwrap_or(&0));
         }
         CuLibraryInstruction::ArrayU64_10IfLetGet => {
             let array: [u64; 10] = [100; 10];
-            let res = access_array_u64_10_if_let_get(&array);
+            let res = array_u64_10_if_let_get(&array);
             solana_msg::msg!("{}", res);
         }
         CuLibraryInstruction::VecU8_32Index => {
             let vec: Vec<u8> = vec![1; 32];
-            let res = access_vec_u8_32_index(&vec);
+            let res = vec_u8_32_index(&vec);
             solana_msg::msg!("{}", res);
         }
         CuLibraryInstruction::VecU8_32Get => {
             let vec: Vec<u8> = vec![1; 32];
-            let res = access_vec_u8_32_get(&vec);
+            let res = vec_u8_32_get(&vec);
             solana_msg::msg!("{}", res.unwrap_or(&0));
         }
         CuLibraryInstruction::VecU8_32GetOkOr => {
             let vec: Vec<u8> = vec![1; 32];
-            let res = access_vec_u8_32_get_ok_or(&vec);
+            let res = vec_u8_32_get_ok_or(&vec);
             solana_msg::msg!("{}", res.unwrap_or(&0));
         }
         CuLibraryInstruction::VecU8_32IfLetGet => {
             let vec: Vec<u8> = vec![1; 32];
-            let res = access_vec_u8_32_if_let_get(&vec);
+            let res = vec_u8_32_if_let_get(&vec);
             solana_msg::msg!("{}", res);
         }
         CuLibraryInstruction::VecU64_10Index => {
             let vec: Vec<u64> = vec![100; 10];
-            let res = access_vec_u64_10_index(&vec);
+            let res = vec_u64_10_index(&vec);
             solana_msg::msg!("{}", res);
         }
         CuLibraryInstruction::VecU64_10Get => {
             let vec: Vec<u64> = vec![100; 10];
-            let res = access_vec_u64_10_get(&vec);
+            let res = vec_u64_10_get(&vec);
             solana_msg::msg!("{}", res.unwrap_or(&0));
         }
         CuLibraryInstruction::VecU64_10GetOkOr => {
             let vec: Vec<u64> = vec![100; 10];
-            let res = access_vec_u64_10_get_ok_or(&vec);
+            let res = vec_u64_10_get_ok_or(&vec);
             solana_msg::msg!("{}", res.unwrap_or(&0));
         }
         CuLibraryInstruction::VecU64_10IfLetGet => {
             let vec: Vec<u64> = vec![100; 10];
-            let res = access_vec_u64_10_if_let_get(&vec);
+            let res = vec_u64_10_if_let_get(&vec);
             solana_msg::msg!("{}", res);
         }
         CuLibraryInstruction::SerializationCompressedAccountInfoBorshDeserialize => {
             let data = serialize_compressed_account_info();
-            let res = serialize_compressed_account_info_borsh_deserialize(data.as_slice())?;
+            let res = borsh_deserialize(data.as_slice())?;
             solana_msg::msg!("Borsh deserialized: {:?}", res.address.is_some());
         }
         CuLibraryInstruction::SerializationCompressedAccountInfoZeroCopyDeserialize => {
             let data = serialize_compressed_account_info();
-            let res = serialize_compressed_account_info_zero_copy_deserialize(data.as_slice())?;
+            let res = zero_copy_deserialize(data.as_slice())?;
             solana_msg::msg!("Zerocopy deserialized: {:?}", res.address.is_some());
         }
         CuLibraryInstruction::SerializationCompressedAccountInfoWincodeDeserialize => {
             let data = serialize_compressed_account_info_wincode();
-            let res = serialize_compressed_account_info_wincode_deserialize(data.as_slice())?;
+            let res = wincode_deserialize(data.as_slice())?;
             solana_msg::msg!("Wincode deserialized: {:?}", res.address.is_some());
         }
         CuLibraryInstruction::PinocchioSysvarRentExemption165 => {
-            let _ = pinocchio_sysvar_rent_exemption_165();
+            let _ = pinocchio_ops::sysvar_rent::sysvar_rent_exemption_165();
         }
-        CuLibraryInstruction::PinocchioClockGetSlot => pinocchio_clock_get_slot()?,
+        CuLibraryInstruction::PinocchioClockGetSlot => pinocchio_ops::sysvar_clock::clock_get_slot()?,
         CuLibraryInstruction::ArrayvecNew => {
-            let res = arrayvec_u8_new();
+            let res = arrayvec::vec_new::u8_new();
             solana_msg::msg!("vec: {:?}", res.as_slice());
         }
         CuLibraryInstruction::ArrayvecWithCapacity10 => {
-            let res = arrayvec_u8_with_capacity_10();
+            let res = arrayvec::vec_with_capacity::u8_with_capacity_10();
             solana_msg::msg!("vec: {:?}", res.as_slice());
         }
         CuLibraryInstruction::ArrayvecWithCapacity100 => {
-            let res = arrayvec_u8_with_capacity_100();
+            let res = arrayvec::vec_with_capacity::u8_with_capacity_100();
             solana_msg::msg!("vec: {:?}", res.as_slice());
         }
         CuLibraryInstruction::ArrayvecPushU8 => {
-            let res = arrayvec_push_u8();
+            let res = arrayvec::vec_push::push_u8();
             solana_msg::msg!("vec: {:?}", res.as_slice());
         }
         CuLibraryInstruction::ArrayvecPushU64 => {
-            let res = arrayvec_push_u64();
+            let res = arrayvec::vec_push::push_u64();
             solana_msg::msg!("vec: {:?}", res.as_slice());
         }
         CuLibraryInstruction::ArrayvecPushPubkey => {
-            let res = arrayvec_push_pubkey(program_id);
+            let res = arrayvec::vec_push::push_pubkey(program_id);
             solana_msg::msg!("vec: {:?}", res.as_slice());
         }
         CuLibraryInstruction::ArrayvecPush10U8 => {
-            let res = arrayvec_push_10_u8();
+            let res = arrayvec::vec_push::push_10_u8();
             solana_msg::msg!("vec: {:?}", res.as_slice());
         }
         CuLibraryInstruction::ArrayvecPush10U64 => {
-            let res = arrayvec_push_10_u64();
+            let res = arrayvec::vec_push::push_10_u64();
             solana_msg::msg!("vec: {:?}", res.as_slice());
         }
         CuLibraryInstruction::ArrayvecPush10Pubkey => {
-            let res = arrayvec_push_10_pubkey(program_id)?;
+            let res = arrayvec::vec_push::push_10_pubkey(program_id)?;
             solana_msg::msg!("vec: {:?}", res.as_slice());
         }
         CuLibraryInstruction::VecNew => {
-            let res = vec_u8_new();
+            let res = vec::vec_new::u8_new();
             solana_msg::msg!("vec: {:?}", res);
         }
         CuLibraryInstruction::VecWithCapacity10 => {
-            let res = vec_u8_with_capacity_10();
+            let res = vec::vec_with_capacity::u8_with_capacity_10();
             solana_msg::msg!("vec: {:?}", res);
         }
         CuLibraryInstruction::VecWithCapacity100 => {
-            let res = vec_u8_with_capacity_100();
+            let res = vec::vec_with_capacity::u8_with_capacity_100();
             solana_msg::msg!("vec: {:?}", res);
         }
         CuLibraryInstruction::VecPushU8 => {
-            let res = vec_push_u8();
+            let res = vec::vec_push::push_u8();
             solana_msg::msg!("vec: {:?}", res);
         }
         CuLibraryInstruction::VecPushU64 => {
-            let res = vec_push_u64();
+            let res = vec::vec_push::push_u64();
             solana_msg::msg!("vec: {:?}", res);
         }
         CuLibraryInstruction::VecPushPubkey => {
-            let res = vec_push_pubkey(program_id);
+            let res = vec::vec_push::push_pubkey(program_id);
             solana_msg::msg!("vec: {:?}", res);
         }
         CuLibraryInstruction::VecPush10U8 => {
-            let res = vec_push_10_u8();
+            let res = vec::vec_push::push_10_u8();
             solana_msg::msg!("vec: {:?}", res);
         }
         CuLibraryInstruction::VecPush10U64 => {
-            let res = vec_push_10_u64();
+            let res = vec::vec_push::push_10_u64();
             solana_msg::msg!("vec: {:?}", res);
         }
         CuLibraryInstruction::VecPush10Pubkey => {
-            let res = vec_push_10_pubkey(program_id);
+            let res = vec::vec_push::push_10_pubkey(program_id);
             solana_msg::msg!("vec: {:?}", res);
         }
         CuLibraryInstruction::ArrayNew => {
-            let res = array_new();
+            let res = new();
             solana_msg::msg!("array: {:?}", res);
         }
         CuLibraryInstruction::ArrayWithCapacity10 => {
-            let res = array_with_capacity_10();
+            let res = with_capacity_10();
             solana_msg::msg!("array: {:?}", res);
         }
         CuLibraryInstruction::ArrayWithCapacity100 => {
-            let res = array_with_capacity_100();
+            let res = with_capacity_100();
             solana_msg::msg!("array: {:?}", res);
         }
         CuLibraryInstruction::ArrayAssignU8 => {
-            let res = array_assign_u8();
+            let res = assign_u8();
             solana_msg::msg!("array: {:?}", res);
         }
         CuLibraryInstruction::ArrayAssignU64 => {
-            let res = array_assign_u64();
+            let res = assign_u64();
             solana_msg::msg!("array: {:?}", res);
         }
         CuLibraryInstruction::ArrayAssignPubkey => {
-            let res = array_assign_pubkey(program_id);
+            let res = assign_pubkey(program_id);
             solana_msg::msg!("array: {:?}", res);
         }
         CuLibraryInstruction::ArrayAssign10U8 => {
-            let res = array_assign_10_u8();
+            let res = assign_10_u8();
             solana_msg::msg!("array: {:?}", res);
         }
         CuLibraryInstruction::ArrayAssign10U64 => {
-            let res = array_assign_10_u64();
+            let res = assign_10_u64();
             solana_msg::msg!("array: {:?}", res);
         }
         CuLibraryInstruction::ArrayAssign10Pubkey => {
-            let res = array_assign_10_pubkey(program_id);
+            let res = assign_10_pubkey(program_id);
             solana_msg::msg!("array: {:?}", res);
         }
         CuLibraryInstruction::CheckedAddU8 => {
-            let res = checked_add_u8();
+            let res = checked_math::checked_add::add_u8();
             solana_msg::msg!("result: {:?}", res);
         }
         CuLibraryInstruction::CheckedAddU16 => {
-            let res = checked_add_u16();
+            let res = checked_math::checked_add::add_u16();
             solana_msg::msg!("result: {:?}", res);
         }
         CuLibraryInstruction::CheckedAddU32 => {
-            let res = checked_add_u32();
+            let res = checked_math::checked_add::add_u32();
             solana_msg::msg!("result: {:?}", res);
         }
         CuLibraryInstruction::CheckedAddU64 => {
-            let res = checked_add_u64();
+            let res = checked_math::checked_add::add_u64();
             solana_msg::msg!("result: {:?}", res);
         }
         CuLibraryInstruction::CheckedAddU128 => {
-            let res = checked_add_u128();
+            let res = checked_math::checked_add::add_u128();
             solana_msg::msg!("result: {:?}", res);
         }
         CuLibraryInstruction::CheckedSubU8 => {
-            let res = checked_sub_u8();
+            let res = checked_math::checked_sub::sub_u8();
             solana_msg::msg!("result: {:?}", res);
         }
         CuLibraryInstruction::CheckedSubU16 => {
-            let res = checked_sub_u16();
+            let res = checked_math::checked_sub::sub_u16();
             solana_msg::msg!("result: {:?}", res);
         }
         CuLibraryInstruction::CheckedSubU32 => {
-            let res = checked_sub_u32();
+            let res = checked_math::checked_sub::sub_u32();
             solana_msg::msg!("result: {:?}", res);
         }
         CuLibraryInstruction::CheckedSubU64 => {
-            let res = checked_sub_u64();
+            let res = checked_math::checked_sub::sub_u64();
             solana_msg::msg!("result: {:?}", res);
         }
         CuLibraryInstruction::CheckedSubU128 => {
-            let res = checked_sub_u128();
+            let res = checked_math::checked_sub::sub_u128();
             solana_msg::msg!("result: {:?}", res);
         }
         CuLibraryInstruction::CheckedMulU8 => {
-            let res = checked_mul_u8();
+            let res = checked_math::checked_mul::mul_u8();
             solana_msg::msg!("result: {:?}", res);
         }
         CuLibraryInstruction::CheckedMulU16 => {
-            let res = checked_mul_u16();
+            let res = checked_math::checked_mul::mul_u16();
             solana_msg::msg!("result: {:?}", res);
         }
         CuLibraryInstruction::CheckedMulU32 => {
-            let res = checked_mul_u32();
+            let res = checked_math::checked_mul::mul_u32();
             solana_msg::msg!("result: {:?}", res);
         }
         CuLibraryInstruction::CheckedMulU64 => {
-            let res = checked_mul_u64();
+            let res = checked_math::checked_mul::mul_u64();
             solana_msg::msg!("result: {:?}", res);
         }
         CuLibraryInstruction::CheckedMulU128 => {
-            let res = checked_mul_u128();
+            let res = checked_math::checked_mul::mul_u128();
             solana_msg::msg!("result: {:?}", res);
         }
         CuLibraryInstruction::CheckedDivU8 => {
-            let res = checked_div_u8();
+            let res = checked_math::checked_div::div_u8();
             solana_msg::msg!("result: {:?}", res);
         }
         CuLibraryInstruction::CheckedDivU16 => {
-            let res = checked_div_u16();
+            let res = checked_math::checked_div::div_u16();
             solana_msg::msg!("result: {:?}", res);
         }
         CuLibraryInstruction::CheckedDivU32 => {
-            let res = checked_div_u32();
+            let res = checked_math::checked_div::div_u32();
             solana_msg::msg!("result: {:?}", res);
         }
         CuLibraryInstruction::CheckedDivU64 => {
-            let res = checked_div_u64();
+            let res = checked_math::checked_div::div_u64();
             solana_msg::msg!("result: {:?}", res);
         }
         CuLibraryInstruction::CheckedDivU128 => {
-            let res = checked_div_u128();
+            let res = checked_math::checked_div::div_u128();
             solana_msg::msg!("result: {:?}", res);
         }
         CuLibraryInstruction::SaturatingAddU8 => {
-            let res = saturating_add_u8();
+            let res = saturating_math::saturating_add::add_u8();
             solana_msg::msg!("result: {:?}", res);
         }
         CuLibraryInstruction::SaturatingAddU16 => {
-            let res = saturating_add_u16();
+            let res = saturating_math::saturating_add::add_u16();
             solana_msg::msg!("result: {:?}", res);
         }
         CuLibraryInstruction::SaturatingAddU32 => {
-            let res = saturating_add_u32();
+            let res = saturating_math::saturating_add::add_u32();
             solana_msg::msg!("result: {:?}", res);
         }
         CuLibraryInstruction::SaturatingAddU64 => {
-            let res = saturating_add_u64();
+            let res = saturating_math::saturating_add::add_u64();
             solana_msg::msg!("result: {:?}", res);
         }
         CuLibraryInstruction::SaturatingAddU128 => {
-            let res = saturating_add_u128();
+            let res = saturating_math::saturating_add::add_u128();
             solana_msg::msg!("result: {:?}", res);
         }
         CuLibraryInstruction::SaturatingSubU8 => {
-            let res = saturating_sub_u8();
+            let res = saturating_math::saturating_sub::sub_u8();
             solana_msg::msg!("result: {:?}", res);
         }
         CuLibraryInstruction::SaturatingSubU16 => {
-            let res = saturating_sub_u16();
+            let res = saturating_math::saturating_sub::sub_u16();
             solana_msg::msg!("result: {:?}", res);
         }
         CuLibraryInstruction::SaturatingSubU32 => {
-            let res = saturating_sub_u32();
+            let res = saturating_math::saturating_sub::sub_u32();
             solana_msg::msg!("result: {:?}", res);
         }
         CuLibraryInstruction::SaturatingSubU64 => {
-            let res = saturating_sub_u64();
+            let res = saturating_math::saturating_sub::sub_u64();
             solana_msg::msg!("result: {:?}", res);
         }
         CuLibraryInstruction::SaturatingSubU128 => {
-            let res = saturating_sub_u128();
+            let res = saturating_math::saturating_sub::sub_u128();
             solana_msg::msg!("result: {:?}", res);
         }
         CuLibraryInstruction::SaturatingMulU8 => {
-            let res = saturating_mul_u8();
+            let res = saturating_math::saturating_mul::mul_u8();
             solana_msg::msg!("result: {:?}", res);
         }
         CuLibraryInstruction::SaturatingMulU16 => {
-            let res = saturating_mul_u16();
+            let res = saturating_math::saturating_mul::mul_u16();
             solana_msg::msg!("result: {:?}", res);
         }
         CuLibraryInstruction::SaturatingMulU32 => {
-            let res = saturating_mul_u32();
+            let res = saturating_math::saturating_mul::mul_u32();
             solana_msg::msg!("result: {:?}", res);
         }
         CuLibraryInstruction::SaturatingMulU64 => {
-            let res = saturating_mul_u64();
+            let res = saturating_math::saturating_mul::mul_u64();
             solana_msg::msg!("result: {:?}", res);
         }
         CuLibraryInstruction::SaturatingMulU128 => {
-            let res = saturating_mul_u128();
+            let res = saturating_math::saturating_mul::mul_u128();
             solana_msg::msg!("result: {:?}", res);
         }
         CuLibraryInstruction::StdAddU8 => {
-            let res = std_add_u8();
+            let res = std_math::std_add::add_u8();
             solana_msg::msg!("result: {:?}", res);
         }
         CuLibraryInstruction::StdAddU16 => {
-            let res = std_add_u16();
+            let res = std_math::std_add::add_u16();
             solana_msg::msg!("result: {:?}", res);
         }
         CuLibraryInstruction::StdAddU32 => {
-            let res = std_add_u32();
+            let res = std_math::std_add::add_u32();
             solana_msg::msg!("result: {:?}", res);
         }
         CuLibraryInstruction::StdAddU64 => {
-            let res = std_add_u64();
+            let res = std_math::std_add::add_u64();
             solana_msg::msg!("result: {:?}", res);
         }
         CuLibraryInstruction::StdAddU128 => {
-            let res = std_add_u128();
+            let res = std_math::std_add::add_u128();
             solana_msg::msg!("result: {:?}", res);
         }
         CuLibraryInstruction::StdSubU8 => {
-            let res = std_sub_u8();
+            let res = std_math::std_sub::sub_u8();
             solana_msg::msg!("result: {:?}", res);
         }
         CuLibraryInstruction::StdSubU16 => {
-            let res = std_sub_u16();
+            let res = std_math::std_sub::sub_u16();
             solana_msg::msg!("result: {:?}", res);
         }
         CuLibraryInstruction::StdSubU32 => {
-            let res = std_sub_u32();
+            let res = std_math::std_sub::sub_u32();
             solana_msg::msg!("result: {:?}", res);
         }
         CuLibraryInstruction::StdSubU64 => {
-            let res = std_sub_u64();
+            let res = std_math::std_sub::sub_u64();
             solana_msg::msg!("result: {:?}", res);
         }
         CuLibraryInstruction::StdSubU128 => {
-            let res = std_sub_u128();
+            let res = std_math::std_sub::sub_u128();
             solana_msg::msg!("result: {:?}", res);
         }
         CuLibraryInstruction::StdMulU8 => {
-            let res = std_mul_u8();
+            let res = std_math::std_mul::mul_u8();
             solana_msg::msg!("result: {:?}", res);
         }
         CuLibraryInstruction::StdMulU16 => {
-            let res = std_mul_u16();
+            let res = std_math::std_mul::mul_u16();
             solana_msg::msg!("result: {:?}", res);
         }
         CuLibraryInstruction::StdMulU32 => {
-            let res = std_mul_u32();
+            let res = std_math::std_mul::mul_u32();
             solana_msg::msg!("result: {:?}", res);
         }
         CuLibraryInstruction::StdMulU64 => {
-            let res = std_mul_u64();
+            let res = std_math::std_mul::mul_u64();
             solana_msg::msg!("result: {:?}", res);
         }
         CuLibraryInstruction::StdMulU128 => {
-            let res = std_mul_u128();
+            let res = std_math::std_mul::mul_u128();
             solana_msg::msg!("result: {:?}", res);
         }
         CuLibraryInstruction::StdDivU8 => {
-            let res = std_div_u8();
+            let res = std_math::std_div::div_u8();
             solana_msg::msg!("result: {:?}", res);
         }
         CuLibraryInstruction::StdDivU16 => {
-            let res = std_div_u16();
+            let res = std_math::std_div::div_u16();
             solana_msg::msg!("result: {:?}", res);
         }
         CuLibraryInstruction::StdDivU32 => {
-            let res = std_div_u32();
+            let res = std_math::std_div::div_u32();
             solana_msg::msg!("result: {:?}", res);
         }
         CuLibraryInstruction::StdDivU64 => {
-            let res = std_div_u64();
+            let res = std_math::std_div::div_u64();
             solana_msg::msg!("result: {:?}", res);
         }
         CuLibraryInstruction::StdDivU128 => {
-            let res = std_div_u128();
+            let res = std_math::std_div::div_u128();
             solana_msg::msg!("result: {:?}", res);
         }
         CuLibraryInstruction::AddAssignU8 => {
@@ -1168,195 +1081,195 @@ pub fn process_instruction(
             solana_msg::msg!("result: {:?}", res);
         }
         CuLibraryInstruction::VecPushU8WithCapacity => {
-            let res = vec_push_u8_with_capacity();
+            let res = vec::vec_push::push_u8_with_capacity();
             solana_msg::msg!("vec: {:?}", res);
         }
         CuLibraryInstruction::VecPushU64WithCapacity => {
-            let res = vec_push_u64_with_capacity();
+            let res = vec::vec_push::push_u64_with_capacity();
             solana_msg::msg!("vec: {:?}", res);
         }
         CuLibraryInstruction::VecPushPubkeyWithCapacity => {
-            let res = vec_push_pubkey_with_capacity(program_id);
+            let res = vec::vec_push::push_pubkey_with_capacity(program_id);
             solana_msg::msg!("vec: {:?}", res);
         }
         CuLibraryInstruction::VecPush10U8WithCapacity => {
-            let res = vec_push_10_u8_with_capacity();
+            let res = vec::vec_push::push_10_u8_with_capacity();
             solana_msg::msg!("vec: {:?}", res);
         }
         CuLibraryInstruction::VecPush10U64WithCapacity => {
-            let res = vec_push_10_u64_with_capacity();
+            let res = vec::vec_push::push_10_u64_with_capacity();
             solana_msg::msg!("vec: {:?}", res);
         }
         CuLibraryInstruction::VecPush10PubkeyWithCapacity => {
-            let res = vec_push_10_pubkey_with_capacity(program_id);
+            let res = vec::vec_push::push_10_pubkey_with_capacity(program_id);
             solana_msg::msg!("vec: {:?}", res);
         }
         CuLibraryInstruction::AccountInfoKey => {
             if accounts.is_empty() {
                 return Err(ProgramError::NotEnoughAccountKeys);
             }
-            let key = account_info_key(&accounts[0]);
+            let key = key(&accounts[0]);
             solana_msg::msg!("account key: {:?}", key);
         }
         CuLibraryInstruction::AccountInfoOwner => {
             if accounts.is_empty() {
                 return Err(ProgramError::NotEnoughAccountKeys);
             }
-            let owner = account_info_owner(&accounts[0]);
+            let owner = owner(&accounts[0]);
             solana_msg::msg!("account owner: {:?}", owner);
         }
         CuLibraryInstruction::AccountInfoIsSigner => {
             if accounts.is_empty() {
                 return Err(ProgramError::NotEnoughAccountKeys);
             }
-            let is_signer = account_info_is_signer(&accounts[0]);
+            let is_signer = is_signer(&accounts[0]);
             solana_msg::msg!("is_signer: {}", is_signer);
         }
         CuLibraryInstruction::AccountInfoIsWritable => {
             if accounts.is_empty() {
                 return Err(ProgramError::NotEnoughAccountKeys);
             }
-            let is_writable = account_info_is_writable(&accounts[0]);
+            let is_writable = is_writable(&accounts[0]);
             solana_msg::msg!("is_writable: {}", is_writable);
         }
         CuLibraryInstruction::AccountInfoExecutable => {
             if accounts.is_empty() {
                 return Err(ProgramError::NotEnoughAccountKeys);
             }
-            let executable = account_info_executable(&accounts[0]);
+            let executable = executable(&accounts[0]);
             solana_msg::msg!("executable: {}", executable);
         }
         CuLibraryInstruction::AccountInfoDataLen => {
             if accounts.is_empty() {
                 return Err(ProgramError::NotEnoughAccountKeys);
             }
-            let data_len = account_info_data_len(&accounts[0]);
+            let data_len = data_len(&accounts[0]);
             solana_msg::msg!("data_len: {}", data_len);
         }
         CuLibraryInstruction::AccountInfoLamports => {
             if accounts.is_empty() {
                 return Err(ProgramError::NotEnoughAccountKeys);
             }
-            let lamports = account_info_lamports(&accounts[0]);
+            let lamports = lamports(&accounts[0]);
             solana_msg::msg!("lamports: {}", lamports);
         }
         CuLibraryInstruction::AccountInfoDataIsEmpty => {
             if accounts.is_empty() {
                 return Err(ProgramError::NotEnoughAccountKeys);
             }
-            let is_empty = account_info_data_is_empty(&accounts[0]);
+            let is_empty = data_is_empty(&accounts[0]);
             solana_msg::msg!("data_is_empty: {}", is_empty);
         }
         CuLibraryInstruction::AccountInfoIsOwnedBy => {
             if accounts.is_empty() {
                 return Err(ProgramError::NotEnoughAccountKeys);
             }
-            let is_owned = account_info_is_owned_by(&accounts[0], program_id);
+            let is_owned = is_owned_by(&accounts[0], program_id);
             solana_msg::msg!("is_owned_by: {}", is_owned);
         }
         CuLibraryInstruction::AccountInfoAssign => {
             if accounts.is_empty() {
                 return Err(ProgramError::NotEnoughAccountKeys);
             }
-            account_info_assign(&accounts[0], program_id);
+            assign(&accounts[0], program_id);
             solana_msg::msg!("assigned");
         }
         CuLibraryInstruction::AccountInfoIsBorrowed => {
             if accounts.is_empty() {
                 return Err(ProgramError::NotEnoughAccountKeys);
             }
-            let is_borrowed = account_info_is_borrowed(&accounts[0]);
+            let is_borrowed = is_borrowed(&accounts[0]);
             solana_msg::msg!("is_borrowed: {}", is_borrowed);
         }
         CuLibraryInstruction::AccountInfoBorrowLamportsUnchecked => {
             if accounts.is_empty() {
                 return Err(ProgramError::NotEnoughAccountKeys);
             }
-            let lamports = account_info_borrow_lamports_unchecked(&accounts[0]);
+            let lamports = borrow_lamports_unchecked(&accounts[0]);
             solana_msg::msg!("lamports: {}", lamports);
         }
         CuLibraryInstruction::AccountInfoBorrowMutLamportsUnchecked => {
             if accounts.is_empty() {
                 return Err(ProgramError::NotEnoughAccountKeys);
             }
-            let lamports = account_info_borrow_mut_lamports_unchecked(&accounts[0]);
+            let lamports = borrow_mut_lamports_unchecked(&accounts[0]);
             solana_msg::msg!("lamports: {}", lamports);
         }
         CuLibraryInstruction::AccountInfoBorrowDataUnchecked => {
             if accounts.is_empty() {
                 return Err(ProgramError::NotEnoughAccountKeys);
             }
-            let data = account_info_borrow_data_unchecked(&accounts[0]);
+            let data = borrow_data_unchecked(&accounts[0]);
             solana_msg::msg!("data len: {}", data.len());
         }
         CuLibraryInstruction::AccountInfoBorrowMutDataUnchecked => {
             if accounts.is_empty() {
                 return Err(ProgramError::NotEnoughAccountKeys);
             }
-            let data = account_info_borrow_mut_data_unchecked(&accounts[0]);
+            let data = borrow_mut_data_unchecked(&accounts[0]);
             solana_msg::msg!("data len: {}", data.len());
         }
         CuLibraryInstruction::AccountInfoTryBorrowLamports => {
             if accounts.is_empty() {
                 return Err(ProgramError::NotEnoughAccountKeys);
             }
-            let _ = account_info_try_borrow_lamports(&accounts[0])?;
+            let _ = try_borrow_lamports(&accounts[0])?;
             solana_msg::msg!("borrowed lamports");
         }
         CuLibraryInstruction::AccountInfoTryBorrowMutLamports => {
             if accounts.is_empty() {
                 return Err(ProgramError::NotEnoughAccountKeys);
             }
-            let _ = account_info_try_borrow_mut_lamports(&accounts[0])?;
+            let _ = try_borrow_mut_lamports(&accounts[0])?;
             solana_msg::msg!("borrowed mut lamports");
         }
         CuLibraryInstruction::AccountInfoCanBorrowLamports => {
             if accounts.is_empty() {
                 return Err(ProgramError::NotEnoughAccountKeys);
             }
-            let _ = account_info_can_borrow_lamports(&accounts[0])?;
+            let _ = can_borrow_lamports(&accounts[0])?;
             solana_msg::msg!("can borrow lamports");
         }
         CuLibraryInstruction::AccountInfoCanBorrowMutLamports => {
             if accounts.is_empty() {
                 return Err(ProgramError::NotEnoughAccountKeys);
             }
-            let _ = account_info_can_borrow_mut_lamports(&accounts[0])?;
+            let _ = can_borrow_mut_lamports(&accounts[0])?;
             solana_msg::msg!("can borrow mut lamports");
         }
         CuLibraryInstruction::AccountInfoTryBorrowData => {
             if accounts.is_empty() {
                 return Err(ProgramError::NotEnoughAccountKeys);
             }
-            let _ = account_info_try_borrow_data(&accounts[0])?;
+            let _ = try_borrow_data(&accounts[0])?;
             solana_msg::msg!("borrowed data");
         }
         CuLibraryInstruction::AccountInfoTryBorrowMutData => {
             if accounts.is_empty() {
                 return Err(ProgramError::NotEnoughAccountKeys);
             }
-            let _ = account_info_try_borrow_mut_data(&accounts[0])?;
+            let _ = try_borrow_mut_data(&accounts[0])?;
             solana_msg::msg!("borrowed mut data");
         }
         CuLibraryInstruction::AccountInfoCanBorrowData => {
             if accounts.is_empty() {
                 return Err(ProgramError::NotEnoughAccountKeys);
             }
-            let _ = account_info_can_borrow_data(&accounts[0])?;
+            let _ = can_borrow_data(&accounts[0])?;
             solana_msg::msg!("can borrow data");
         }
         CuLibraryInstruction::AccountInfoCanBorrowMutData => {
             if accounts.is_empty() {
                 return Err(ProgramError::NotEnoughAccountKeys);
             }
-            let _ = account_info_can_borrow_mut_data(&accounts[0])?;
+            let _ = can_borrow_mut_data(&accounts[0])?;
             solana_msg::msg!("can borrow mut data");
         }
         CuLibraryInstruction::AccountInfoRealloc => {
             if accounts.is_empty() {
                 return Err(ProgramError::NotEnoughAccountKeys);
             }
-            let _ = account_info_realloc(&accounts[0], 1024)?; // Keep same size
+            let _ = realloc(&accounts[0], 1024)?; // Keep same size
             solana_msg::msg!("reallocated");
         }
         CuLibraryInstruction::AccountInfoClose => {
@@ -1379,7 +1292,7 @@ pub fn process_instruction(
                     *payer_lamports += lamports;
                 }
             }
-            let _ = account_info_close(account)?;
+            let _ = close(account)?;
             solana_msg::msg!("closed");
         }
         CuLibraryInstruction::AccountInfoCloseUnchecked => {
@@ -1400,42 +1313,42 @@ pub fn process_instruction(
                     *payer.borrow_mut_lamports_unchecked() += lamports;
                 }
             }
-            account_info_close_unchecked(account);
+            close_unchecked(account);
             solana_msg::msg!("closed unchecked");
         }
         CuLibraryInstruction::CpiAccountMetaArray10 => {
             if accounts.len() < 10 {
                 return Err(ProgramError::NotEnoughAccountKeys);
             }
-            let metas = cpi_account_meta_array_10(&accounts[0..10]);
+            let metas = account_meta_array_10(&accounts[0..10]);
             solana_msg::msg!("created {} account metas", metas.len());
         }
         CuLibraryInstruction::CpiAccountInfoArray10Ref => {
             if accounts.len() < 10 {
                 return Err(ProgramError::NotEnoughAccountKeys);
             }
-            let refs = cpi_account_info_array_10_ref(&accounts[0..10]);
+            let refs = account_info_array_10_ref(&accounts[0..10]);
             solana_msg::msg!("created {} account info refs", refs.len());
         }
         CuLibraryInstruction::CpiAccountInfoArray10Clone => {
             if accounts.len() < 10 {
                 return Err(ProgramError::NotEnoughAccountKeys);
             }
-            let clones = cpi_account_info_array_10_clone(&accounts[0..10]);
+            let clones = account_info_array_10_clone(&accounts[0..10]);
             solana_msg::msg!("cloned {} account infos", clones.len());
         }
         CuLibraryInstruction::CpiAccountInfoArray10Move => {
             if accounts.len() < 10 {
                 return Err(ProgramError::NotEnoughAccountKeys);
             }
-            let moved = cpi_account_info_array_10_move(&accounts[0..10]);
+            let moved = account_info_array_10_move(&accounts[0..10]);
             solana_msg::msg!("moved {} account infos", moved.len());
         }
         CuLibraryInstruction::CpiArrayvecPushAccountMeta10 => {
             if accounts.len() < 10 {
                 return Err(ProgramError::NotEnoughAccountKeys);
             }
-            let vec = cpi_arrayvec_push_account_meta_10(&accounts[0..10]);
+            let vec = arrayvec_push_account_meta_10(&accounts[0..10]);
             // Print first account meta to prevent optimization
             if let Some(first) = vec.first() {
                 solana_msg::msg!("first meta: {:?}", first.pubkey);
@@ -1445,7 +1358,7 @@ pub fn process_instruction(
             if accounts.len() < 10 {
                 return Err(ProgramError::NotEnoughAccountKeys);
             }
-            let vec = cpi_arrayvec_push_account_info_10_ref(&accounts[0..10]);
+            let vec = arrayvec_push_account_info_10_ref(&accounts[0..10]);
             // Print first account ref to prevent optimization
             if let Some(first) = vec.first() {
                 solana_msg::msg!("first ref: {:?}", first.key());
@@ -1455,7 +1368,7 @@ pub fn process_instruction(
             if accounts.len() < 10 {
                 return Err(ProgramError::NotEnoughAccountKeys);
             }
-            let vec = cpi_arrayvec_push_account_info_10_clone(&accounts[0..10]);
+            let vec = arrayvec_push_account_info_10_clone(&accounts[0..10]);
             // Print first cloned account to prevent optimization
             if let Some(first) = vec.first() {
                 solana_msg::msg!("first clone: {:?}", first.key());
@@ -1465,7 +1378,7 @@ pub fn process_instruction(
             if accounts.len() < 10 {
                 return Err(ProgramError::NotEnoughAccountKeys);
             }
-            let vec = cpi_arrayvec_push_account_info_10_move(&accounts[0..10]);
+            let vec = arrayvec_push_account_info_10_move(&accounts[0..10]);
             // Print first moved account to prevent optimization
             if let Some(first) = vec.first() {
                 solana_msg::msg!("first move: {:?}", first.key());
@@ -1475,44 +1388,44 @@ pub fn process_instruction(
             if accounts.len() < 10 {
                 return Err(ProgramError::NotEnoughAccountKeys);
             }
-            let metas = cpi_account_meta_array_10_loop(&accounts[0..10]);
+            let metas = account_meta_array_10_loop(&accounts[0..10]);
             solana_msg::msg!("first loop meta: {:?}", metas[0].pubkey);
         }
         CuLibraryInstruction::CpiAccountInfoArray10RefLoop => {
             if accounts.len() < 10 {
                 return Err(ProgramError::NotEnoughAccountKeys);
             }
-            let refs = cpi_account_info_array_10_ref_loop(&accounts[0..10]);
+            let refs = account_info_array_10_ref_loop(&accounts[0..10]);
             solana_msg::msg!("first loop ref: {:?}", refs[0].key());
         }
         CuLibraryInstruction::CpiAccountInfoArray10CloneLoop => {
             if accounts.len() < 10 {
                 return Err(ProgramError::NotEnoughAccountKeys);
             }
-            let clones = cpi_account_info_array_10_clone_loop(&accounts[0..10]);
+            let clones = account_info_array_10_clone_loop(&accounts[0..10]);
             solana_msg::msg!("first loop clone: {:?}", clones[0].key());
         }
         CuLibraryInstruction::CpiAccountInfoArray10MoveLoop => {
             if accounts.len() < 10 {
                 return Err(ProgramError::NotEnoughAccountKeys);
             }
-            let moved = cpi_account_info_array_10_move_loop(&accounts[0..10]);
+            let moved = account_info_array_10_move_loop(&accounts[0..10]);
             solana_msg::msg!("first loop move: {:?}", moved[0].key());
         }
         CuLibraryInstruction::PartialEqU8 => {
             let val = program_id[0];
-            let result = partial_eq_u8(val, val);
+            let result = u8(val, val);
             solana_msg::msg!("u8 eq: {}", result);
         }
         CuLibraryInstruction::PartialEqU16 => {
             let val = u16::from_le_bytes([program_id[0], program_id[1]]);
-            let result = partial_eq_u16(val, val);
+            let result = u16(val, val);
             solana_msg::msg!("u16 eq: {}", result);
         }
         CuLibraryInstruction::PartialEqU32 => {
             let val =
                 u32::from_le_bytes([program_id[0], program_id[1], program_id[2], program_id[3]]);
-            let result = partial_eq_u32(val, val);
+            let result = u32(val, val);
             solana_msg::msg!("u32 eq: {}", result);
         }
         CuLibraryInstruction::PartialEqU64 => {
@@ -1526,7 +1439,7 @@ pub fn process_instruction(
                 program_id[6],
                 program_id[7],
             ]);
-            let result = partial_eq_u64(val, val);
+            let result = u64(val, val);
             solana_msg::msg!("u64 eq: {}", result);
         }
         CuLibraryInstruction::PartialEqU128 => {
@@ -1548,21 +1461,21 @@ pub fn process_instruction(
                 program_id[14],
                 program_id[15],
             ]);
-            let result = partial_eq_u128(val, val);
+            let result = u128(val, val);
             solana_msg::msg!("u128 eq: {}", result);
         }
         CuLibraryInstruction::PartialEqArrayU8_32Ref => {
             // Reference version - just pass references
             let a: &[u8; 32] = program_id;
             let b: &[u8; 32] = program_id;
-            let result = partial_eq_array_u8_32_ref(a, b);
+            let result = array_u8_32_ref(a, b);
             solana_msg::msg!("array u8[32] ref eq: {}", result);
         }
         CuLibraryInstruction::PartialEqArrayU8_32 => {
             // Value version - copy the arrays
             let a: [u8; 32] = *program_id;
             let b: [u8; 32] = *program_id;
-            let result = partial_eq_array_u8_32(a, b);
+            let result = array_u8_32(a, b);
             solana_msg::msg!("array u8[32] eq: {}", result);
         }
         CuLibraryInstruction::PartialEqArrayU16_32 => {
@@ -1570,7 +1483,7 @@ pub fn process_instruction(
             let val = u16::from_le_bytes([program_id[0], program_id[1]]);
             let a: [u16; 32] = [val; 32];
             let b: [u16; 32] = [val; 32];
-            let result = partial_eq_array_u16_32(&a, &b);
+            let result = array_u16_32(&a, &b);
             solana_msg::msg!("array u16[32] eq: {}", result);
         }
         CuLibraryInstruction::PartialEqArrayU32_32 => {
@@ -1579,7 +1492,7 @@ pub fn process_instruction(
                 u32::from_le_bytes([program_id[0], program_id[1], program_id[2], program_id[3]]);
             let a: [u32; 32] = [val; 32];
             let b: [u32; 32] = [val; 32];
-            let result = partial_eq_array_u32_32(&a, &b);
+            let result = array_u32_32(&a, &b);
             solana_msg::msg!("array u32[32] eq: {}", result);
         }
         CuLibraryInstruction::PartialEqArrayU64_32 => {
@@ -1596,19 +1509,19 @@ pub fn process_instruction(
             ]);
             let a: [u64; 32] = [val; 32];
             let b: [u64; 32] = [val; 32];
-            let result = partial_eq_array_u64_32(&a, &b);
+            let result = array_u64_32(&a, &b);
             solana_msg::msg!("array u64[32] eq: {}", result);
         }
         CuLibraryInstruction::PartialEqU8Neq => {
             let val1 = program_id[0];
             let val2 = program_id[1];
-            let result = partial_eq_u8_neq(val1, val2);
+            let result = u8_neq(val1, val2);
             solana_msg::msg!("u8 neq: {}", result);
         }
         CuLibraryInstruction::PartialEqU16Neq => {
             let val1 = u16::from_le_bytes([program_id[0], program_id[1]]);
             let val2 = u16::from_le_bytes([program_id[2], program_id[3]]);
-            let result = partial_eq_u16_neq(val1, val2);
+            let result = u16_neq(val1, val2);
             solana_msg::msg!("u16 neq: {}", result);
         }
         CuLibraryInstruction::PartialEqU32Neq => {
@@ -1616,7 +1529,7 @@ pub fn process_instruction(
                 u32::from_le_bytes([program_id[0], program_id[1], program_id[2], program_id[3]]);
             let val2 =
                 u32::from_le_bytes([program_id[4], program_id[5], program_id[6], program_id[7]]);
-            let result = partial_eq_u32_neq(val1, val2);
+            let result = u32_neq(val1, val2);
             solana_msg::msg!("u32 neq: {}", result);
         }
         CuLibraryInstruction::PartialEqU64Neq => {
@@ -1640,7 +1553,7 @@ pub fn process_instruction(
                 program_id[14],
                 program_id[15],
             ]);
-            let result = partial_eq_u64_neq(val1, val2);
+            let result = u64_neq(val1, val2);
             solana_msg::msg!("u64 neq: {}", result);
         }
         CuLibraryInstruction::PartialEqU128Neq => {
@@ -1680,7 +1593,7 @@ pub fn process_instruction(
                 program_id[30],
                 program_id[31],
             ]);
-            let result = partial_eq_u128_neq(val1, val2);
+            let result = u128_neq(val1, val2);
             solana_msg::msg!("u128 neq: {}", result);
         }
         CuLibraryInstruction::PartialEqArrayU8_32NeqRef => {
@@ -1690,7 +1603,7 @@ pub fn process_instruction(
             let a: [u8; 32] = [val1; 32];
             let mut b: [u8; 32] = [val1; 32];
             b[31] = val2; // Make last element different
-            let result = partial_eq_array_u8_32_neq_ref(&a, &b);
+            let result = array_u8_32_neq_ref(&a, &b);
             solana_msg::msg!("array u8[32] neq ref: {}", result);
         }
         CuLibraryInstruction::PartialEqArrayU8_32Neq => {
@@ -1700,7 +1613,7 @@ pub fn process_instruction(
             let a: [u8; 32] = [val1; 32];
             let mut b: [u8; 32] = [val1; 32];
             b[31] = val2; // Make last element different
-            let result = partial_eq_array_u8_32_neq(a, b);
+            let result = array_u8_32_neq(a, b);
             solana_msg::msg!("array u8[32] neq: {}", result);
         }
         CuLibraryInstruction::PartialEqArrayU8_32NeqDeref => {
@@ -1710,7 +1623,7 @@ pub fn process_instruction(
             let a: [u8; 32] = [val1; 32];
             let mut b: [u8; 32] = [val1; 32];
             b[31] = val2; // Make last element different
-            let result = partial_eq_array_u8_32_neq_deref(&a, &b);
+            let result = array_u8_32_neq_deref(&a, &b);
             solana_msg::msg!("array u8[32] neq deref: {}", result);
         }
         CuLibraryInstruction::PartialEqArrayU16_32Neq => {
@@ -1720,7 +1633,7 @@ pub fn process_instruction(
             let a: [u16; 32] = [val1; 32];
             let mut b: [u16; 32] = [val1; 32];
             b[31] = val2; // Make last element different
-            let result = partial_eq_array_u16_32_neq(&a, &b);
+            let result = array_u16_32_neq(&a, &b);
             solana_msg::msg!("array u16[32] neq: {}", result);
         }
         CuLibraryInstruction::PartialEqArrayU32_32Neq => {
@@ -1732,7 +1645,7 @@ pub fn process_instruction(
             let a: [u32; 32] = [val1; 32];
             let mut b: [u32; 32] = [val1; 32];
             b[31] = val2; // Make last element different
-            let result = partial_eq_array_u32_32_neq(&a, &b);
+            let result = array_u32_32_neq(&a, &b);
             solana_msg::msg!("array u32[32] neq: {}", result);
         }
         CuLibraryInstruction::PartialEqArrayU64_32Neq => {
@@ -1760,149 +1673,149 @@ pub fn process_instruction(
             let a: [u64; 32] = [val1; 32];
             let mut b: [u64; 32] = [val1; 32];
             b[31] = val2; // Make last element different
-            let result = partial_eq_array_u64_32_neq(&a, &b);
+            let result = array_u64_32_neq(&a, &b);
             solana_msg::msg!("array u64[32] neq: {}", result);
         }
         // Conversion benchmarks
         CuLibraryInstruction::ConversionsSliceToArray32Unwrap => {
             let slice = &program_id[..32];
-            let arr = conversions_try_into_slice_to_array_32_unwrap(slice);
+            let arr = try_into_slice_to_array_32_unwrap(slice);
             solana_msg::msg!("slice to array unwrap: {:?}", arr[0]);
         }
         CuLibraryInstruction::ConversionsSliceToArray32MapErr => {
             let slice = &program_id[..32];
-            let result = conversions_try_into_slice_to_array_32_map_err(slice);
+            let result = try_into_slice_to_array_32_map_err(slice);
             solana_msg::msg!("slice to array map_err: {:?}", result.is_ok());
         }
         CuLibraryInstruction::ConversionsUsizeToU64Unwrap => {
             let val: usize = 42;
-            let result = conversions_try_into_usize_to_u64_unwrap(val);
+            let result = try_into_usize_to_u64_unwrap(val);
             solana_msg::msg!("usize to u64 unwrap: {}", result);
         }
         CuLibraryInstruction::ConversionsUsizeToU64MapErr => {
             let val: usize = 42;
-            let result = conversions_try_into_usize_to_u64_map_err(val);
+            let result = try_into_usize_to_u64_map_err(val);
             solana_msg::msg!("usize to u64 map_err: {:?}", result.is_ok());
         }
         CuLibraryInstruction::ConversionsU64ToUsizeUnwrap => {
             let val: u64 = 42;
-            let result = conversions_try_into_u64_to_usize_unwrap(val);
+            let result = try_into_u64_to_usize_unwrap(val);
             solana_msg::msg!("u64 to usize unwrap: {}", result);
         }
         CuLibraryInstruction::ConversionsU64ToUsizeMapErr => {
             let val: u64 = 42;
-            let result = conversions_try_into_u64_to_usize_map_err(val);
+            let result = try_into_u64_to_usize_map_err(val);
             solana_msg::msg!("u64 to usize map_err: {:?}", result.is_ok());
         }
         CuLibraryInstruction::ConversionsU32ToUsizeUnwrap => {
             let val: u32 = 42;
-            let result = conversions_try_into_u32_to_usize_unwrap(val);
+            let result = try_into_u32_to_usize_unwrap(val);
             solana_msg::msg!("u32 to usize unwrap: {}", result);
         }
         CuLibraryInstruction::ConversionsU32ToUsizeMapErr => {
             let val: u32 = 42;
-            let result = conversions_try_into_u32_to_usize_map_err(val);
+            let result = try_into_u32_to_usize_map_err(val);
             solana_msg::msg!("u32 to usize map_err: {:?}", result.is_ok());
         }
         CuLibraryInstruction::ConversionsU16ToUsizeUnwrap => {
             let val: u16 = 42;
-            let result = conversions_try_into_u16_to_usize_unwrap(val);
+            let result = try_into_u16_to_usize_unwrap(val);
             solana_msg::msg!("u16 to usize unwrap: {}", result);
         }
         CuLibraryInstruction::ConversionsU16ToUsizeMapErr => {
             let val: u16 = 42;
-            let result = conversions_try_into_u16_to_usize_map_err(val);
+            let result = try_into_u16_to_usize_map_err(val);
             solana_msg::msg!("u16 to usize map_err: {:?}", result.is_ok());
         }
         CuLibraryInstruction::ConversionsU8ToUsizeUnwrap => {
             let val: u8 = 42;
-            let result = conversions_try_into_u8_to_usize_unwrap(val);
+            let result = try_into_u8_to_usize_unwrap(val);
             solana_msg::msg!("u8 to usize unwrap: {}", result);
         }
         CuLibraryInstruction::ConversionsU8ToUsizeMapErr => {
             let val: u8 = 42;
-            let result = conversions_try_into_u8_to_usize_map_err(val);
+            let result = try_into_u8_to_usize_map_err(val);
             solana_msg::msg!("u8 to usize map_err: {:?}", result.is_ok());
         }
         // Cast conversions
         CuLibraryInstruction::ConversionsU8AsU16 => {
             let val: u8 = 42;
-            let result = conversions_u8_as_u16(val);
+            let result = u8_as_u16(val);
             solana_msg::msg!("u8 as u16: {}", result);
         }
         CuLibraryInstruction::ConversionsU8AsU32 => {
             let val: u8 = 42;
-            let result = conversions_u8_as_u32(val);
+            let result = u8_as_u32(val);
             solana_msg::msg!("u8 as u32: {}", result);
         }
         CuLibraryInstruction::ConversionsU8AsU64 => {
             let val: u8 = 42;
-            let result = conversions_u8_as_u64(val);
+            let result = u8_as_u64(val);
             solana_msg::msg!("u8 as u64: {}", result);
         }
         CuLibraryInstruction::ConversionsU8AsUsize => {
             let val: u8 = 42;
-            let result = conversions_u8_as_usize(val);
+            let result = u8_as_usize(val);
             solana_msg::msg!("u8 as usize: {}", result);
         }
         CuLibraryInstruction::ConversionsU16AsU8 => {
             let val: u16 = 300;
-            let result = conversions_u16_as_u8(val);
+            let result = u16_as_u8(val);
             solana_msg::msg!("u16 as u8: {}", result);
         }
         CuLibraryInstruction::ConversionsU16AsU32 => {
             let val: u16 = 300;
-            let result = conversions_u16_as_u32(val);
+            let result = u16_as_u32(val);
             solana_msg::msg!("u16 as u32: {}", result);
         }
         CuLibraryInstruction::ConversionsU16AsU64 => {
             let val: u16 = 300;
-            let result = conversions_u16_as_u64(val);
+            let result = u16_as_u64(val);
             solana_msg::msg!("u16 as u64: {}", result);
         }
         CuLibraryInstruction::ConversionsU16AsUsize => {
             let val: u16 = 300;
-            let result = conversions_u16_as_usize(val);
+            let result = u16_as_usize(val);
             solana_msg::msg!("u16 as usize: {}", result);
         }
         CuLibraryInstruction::ConversionsU32AsU8 => {
             let val: u32 = 70000;
-            let result = conversions_u32_as_u8(val);
+            let result = u32_as_u8(val);
             solana_msg::msg!("u32 as u8: {}", result);
         }
         CuLibraryInstruction::ConversionsU32AsU16 => {
             let val: u32 = 70000;
-            let result = conversions_u32_as_u16(val);
+            let result = u32_as_u16(val);
             solana_msg::msg!("u32 as u16: {}", result);
         }
         CuLibraryInstruction::ConversionsU32AsU64 => {
             let val: u32 = 70000;
-            let result = conversions_u32_as_u64(val);
+            let result = u32_as_u64(val);
             solana_msg::msg!("u32 as u64: {}", result);
         }
         CuLibraryInstruction::ConversionsU32AsUsize => {
             let val: u32 = 70000;
-            let result = conversions_u32_as_usize(val);
+            let result = u32_as_usize(val);
             solana_msg::msg!("u32 as usize: {}", result);
         }
         CuLibraryInstruction::ConversionsU64AsU8 => {
             let val: u64 = 70000;
-            let result = conversions_u64_as_u8(val);
+            let result = u64_as_u8(val);
             solana_msg::msg!("u64 as u8: {}", result);
         }
         CuLibraryInstruction::ConversionsU64AsU16 => {
             let val: u64 = 70000;
-            let result = conversions_u64_as_u16(val);
+            let result = u64_as_u16(val);
             solana_msg::msg!("u64 as u16: {}", result);
         }
         CuLibraryInstruction::ConversionsU64AsU32 => {
             let val: u64 = 70000;
-            let result = conversions_u64_as_u32(val);
+            let result = u64_as_u32(val);
             solana_msg::msg!("u64 as u32: {}", result);
         }
         CuLibraryInstruction::ConversionsU64AsUsize => {
             let val: u64 = 70000;
-            let result = conversions_u64_as_usize(val);
+            let result = u64_as_usize(val);
             solana_msg::msg!("u64 as usize: {}", result);
         }
         // Option handling
@@ -1913,7 +1826,7 @@ pub fn process_instruction(
             } else {
                 254u8 // Value that will overflow when adding 1
             };
-            let result = option_checked_add_u8_unwrap(val);
+            let result = checked_add_u8_unwrap(val);
             solana_msg::msg!("option checked_add unwrap: {}", result);
         }
         CuLibraryInstruction::OptionCheckedAddU8OkOr => {
@@ -1922,7 +1835,7 @@ pub fn process_instruction(
             } else {
                 254u8
             };
-            let result = option_checked_add_u8_ok_or(val);
+            let result = checked_add_u8_ok_or(val);
             solana_msg::msg!("option checked_add ok_or: {:?}", result.is_ok());
         }
         CuLibraryInstruction::OptionCheckedAddU8OkOrElse => {
@@ -1931,7 +1844,7 @@ pub fn process_instruction(
             } else {
                 254u8
             };
-            let result = option_checked_add_u8_ok_or_else(val);
+            let result = checked_add_u8_ok_or_else(val);
             solana_msg::msg!("option checked_add ok_or_else: {:?}", result.is_ok());
         }
         CuLibraryInstruction::OptionCheckedAddU8UnwrapOrDefault => {
@@ -1940,7 +1853,7 @@ pub fn process_instruction(
             } else {
                 255u8 // Will overflow
             };
-            let result = option_checked_add_u8_unwrap_or_default(val);
+            let result = checked_add_u8_unwrap_or_default(val);
             solana_msg::msg!("option checked_add unwrap_or_default: {}", result);
         }
         CuLibraryInstruction::OptionCheckedAddU8UnwrapOr => {
@@ -1949,42 +1862,42 @@ pub fn process_instruction(
             } else {
                 255u8 // Will overflow
             };
-            let result = option_checked_add_u8_unwrap_or(val);
+            let result = checked_add_u8_unwrap_or(val);
             solana_msg::msg!("option checked_add unwrap_or: {}", result);
         }
         CuLibraryInstruction::OptionSliceGetArrayUnwrap => {
             let arrays: [[u8; 32]; 2] = [*program_id, [2u8; 32]];
-            let result = option_slice_get_array_unwrap(&arrays);
+            let result = slice_get_array_unwrap(&arrays);
             solana_msg::msg!("option slice get unwrap: {:?}", result[0]);
         }
         CuLibraryInstruction::OptionSliceGetArrayOkOr => {
             let arrays: [[u8; 32]; 2] = [*program_id, [2u8; 32]];
-            let result = option_slice_get_array_ok_or(&arrays);
+            let result = slice_get_array_ok_or(&arrays);
             solana_msg::msg!("option slice get ok_or: {:?}", result.is_ok());
         }
         CuLibraryInstruction::OptionSliceGetArrayOkOrElse => {
             let arrays: [[u8; 32]; 2] = [*program_id, [2u8; 32]];
-            let result = option_slice_get_array_ok_or_else(&arrays);
+            let result = slice_get_array_ok_or_else(&arrays);
             solana_msg::msg!("option slice get ok_or_else: {:?}", result.is_ok());
         }
         CuLibraryInstruction::OptionSliceGetArrayUnwrapOrDefault => {
             let arrays: [[u8; 32]; 2] = [*program_id, [2u8; 32]];
-            let result = option_slice_get_array_unwrap_or_default(&arrays);
+            let result = slice_get_array_unwrap_or_default(&arrays);
             solana_msg::msg!("option slice get unwrap_or_default: {:?}", result[0]);
         }
         CuLibraryInstruction::OptionSliceGetArrayUnwrapOr => {
             let arrays: [[u8; 32]; 2] = [*program_id, [2u8; 32]];
-            let result = option_slice_get_array_unwrap_or(&arrays);
+            let result = slice_get_array_unwrap_or(&arrays);
             solana_msg::msg!("option slice get unwrap_or: {:?}", result[0]);
         }
         CuLibraryInstruction::OptionPubkeyRefMapDeref => {
             let pubkey_option: Option<&Pubkey> = Some(program_id);
-            let result = option_pubkey_ref_map_deref(pubkey_option);
+            let result = pubkey_ref_map_deref(pubkey_option);
             solana_msg::msg!("option pubkey ref map deref: {:?}", result.is_some());
         }
         CuLibraryInstruction::OptionPubkeyAsRefMapConvert => {
             let pubkey_bytes: Option<[u8; 32]> = Some(*program_id);
-            let result = option_pubkey_as_ref_map_convert(pubkey_bytes);
+            let result = pubkey_as_ref_map_convert(pubkey_bytes);
             solana_msg::msg!("option pubkey as_ref map convert: {:?}", result.is_some());
         }
         CuLibraryInstruction::OptionIfLetSomeU8 => {
@@ -1994,25 +1907,25 @@ pub fn process_instruction(
                 42u8
             };
             let option = Some(val);
-            let result = option_if_let_some_u8(option);
+            let result = if_let_some_u8(option);
             solana_msg::msg!("option if let some u8: {}", result);
         }
         CuLibraryInstruction::OptionIfLetSomeArray => {
             let array: [u8; 32] = *program_id;
             let option = Some(array);
-            let result = option_if_let_some_array(option);
+            let result = if_let_some_array(option);
             solana_msg::msg!("option if let some array: {:?}", result[0]);
         }
         CuLibraryInstruction::OptionIfLetSomePubkey => {
             let pubkey = *program_id;
             let option = Some(pubkey);
-            let result = option_if_let_some_pubkey(option);
+            let result = if_let_some_pubkey(option);
             solana_msg::msg!("option if let some pubkey: {:?}", result[0]);
         }
         CuLibraryInstruction::OptionIfLetSomeArrayRef => {
             let array: [u8; 32] = *program_id;
             let option = Some(&array);
-            let result = option_if_let_some_array_ref(option);
+            let result = if_let_some_array_ref(option);
             solana_msg::msg!("option if let some array ref: {:?}", result[0]);
         }
     }

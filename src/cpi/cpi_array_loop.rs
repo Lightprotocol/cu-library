@@ -2,7 +2,7 @@ use light_program_profiler::profile;
 use pinocchio::{account_info::AccountInfo, instruction::AccountMeta};
 
 #[profile]
-pub fn cpi_account_meta_array_10_loop(accounts: &[AccountInfo]) -> [AccountMeta<'_>; 10] {
+pub fn account_meta_array_10_loop(accounts: &[AccountInfo]) -> [AccountMeta<'_>; 10] {
     // Create a static default pubkey to use as reference
     static DEFAULT_PUBKEY: [u8; 32] = [0; 32];
 
@@ -25,7 +25,7 @@ pub fn cpi_account_meta_array_10_loop(accounts: &[AccountInfo]) -> [AccountMeta<
 }
 
 #[profile]
-pub fn cpi_account_info_array_10_ref_loop(accounts: &[AccountInfo]) -> [&AccountInfo; 10] {
+pub fn account_info_array_10_ref_loop(accounts: &[AccountInfo]) -> [&AccountInfo; 10] {
     // Create a reference to the first account as default
     let default_ref = &accounts[0];
     let mut refs = [default_ref; 10];
@@ -38,7 +38,7 @@ pub fn cpi_account_info_array_10_ref_loop(accounts: &[AccountInfo]) -> [&Account
 }
 
 #[profile]
-pub fn cpi_account_info_array_10_clone_loop(accounts: &[AccountInfo]) -> [AccountInfo; 10] {
+pub fn account_info_array_10_clone_loop(accounts: &[AccountInfo]) -> [AccountInfo; 10] {
     // Use array::from_fn to initialize with clones of first account
     let mut clones = core::array::from_fn(|_| accounts[0].clone());
 
@@ -51,7 +51,7 @@ pub fn cpi_account_info_array_10_clone_loop(accounts: &[AccountInfo]) -> [Accoun
 }
 
 #[profile]
-pub fn cpi_account_info_array_10_move_loop(accounts: &[AccountInfo]) -> [AccountInfo; 10] {
+pub fn account_info_array_10_move_loop(accounts: &[AccountInfo]) -> [AccountInfo; 10] {
     // Use array::from_fn to initialize with the first account
     let mut moved = core::array::from_fn(|_| accounts[0]);
 
