@@ -45,8 +45,9 @@ fn bench_cu_operations() {
         .unwrap();
     }
 
-    // Collect benchmark results by category
-    let mut results_by_category: BTreeMap<String, Vec<(String, String, String)>> = BTreeMap::new();
+    // Collect benchmark results by category and file
+    // Structure: folder -> file -> [(func_name, cu_value, file_location)]
+    let mut results_by_category: BTreeMap<String, BTreeMap<String, Vec<(String, String, String)>>> = BTreeMap::new();
 
     let instructions = vec![
         CuLibraryInstruction::Baseline,
@@ -380,10 +381,12 @@ fn bench_cu_operations() {
 
         // Parse benchmark results
         if let Some((func_name, cu_value, file_location)) = parse_benchmark_log(&meta.logs) {
-            // Determine category from function name prefix
-            let category = func_name.split('_').next().unwrap_or("other").to_string();
+            // Determine category (folder) and file from file path
+            let (category, filename) = extract_category_and_file_from_path(&file_location);
             results_by_category
                 .entry(category)
+                .or_insert_with(BTreeMap::new)
+                .entry(filename)
                 .or_insert_with(Vec::new)
                 .push((func_name, cu_value, file_location));
         }
@@ -393,6 +396,96 @@ fn bench_cu_operations() {
     write_categorized_readme(results_by_category);
 
     println!("Benchmark results written to README.md");
+}
+
+/// Extract category hierarchy from file path
+/// Returns (folder_name, file_stem) for grouping
+fn extract_category_and_file_from_path(file_location: &str) -> (String, String) {
+    // Handle special case: baseline functions in lib.rs
+    if file_location == "src/lib.rs" || file_location.starts_with("src/lib.rs:") {
+        return ("baseline".to_string(), "lib".to_string());
+    }
+
+    // Extract folder name and file from path
+    // Format: "src/folder_name/file.rs:line_number"
+    if file_location.starts_with("src/") {
+        let without_src = &file_location[4..]; // Remove "src/"
+        let path_parts: Vec<&str> = without_src.split('/').collect();
+
+        if path_parts.len() >= 2 {
+            // Get the folder name (first part)
+            let folder_name = path_parts[0];
+
+            // Get the file name (second part)
+            let file_part = path_parts[1];
+            // Remove .rs extension and line number
+            let file_stem = file_part
+                .split(':')
+                .next()
+                .unwrap_or(file_part)
+                .trim_end_matches(".rs");
+
+            return (folder_name.to_string(), file_stem.to_string());
+        } else if !path_parts.is_empty() {
+            // Only folder, no file (shouldn't happen but handle it)
+            let folder_name = path_parts[0];
+            let clean_folder = folder_name.split('.').next().unwrap_or(folder_name);
+            let clean_folder = clean_folder.split(':').next().unwrap_or(clean_folder);
+            return (clean_folder.to_string(), "unknown".to_string());
+        }
+    }
+
+    // Fallback
+    ("other".to_string(), "unknown".to_string())
+}
+
+/// Format folder name for display in README sections
+fn format_display_name(folder_name: &str) -> String {
+    match folder_name {
+        "account_info" => "Account Info".to_string(),
+        "pinocchio_ops" => "Pinocchio Ops".to_string(),
+        "solana_ops" => "Solana Ops".to_string(),
+        "checked_math" => "Checked Math".to_string(),
+        "saturating_math" => "Saturating Math".to_string(),
+        "std_math" => "Std Math".to_string(),
+        "partial_eq" => "Partial Eq".to_string(),
+        "vec_access" => "Vec Access".to_string(),
+        "baseline" => "Baseline".to_string(),
+        _ => {
+            // Default: capitalize first letter
+            let mut chars = folder_name.chars();
+            match chars.next() {
+                Some(first) => first.to_uppercase().chain(chars).collect(),
+                None => folder_name.to_string(),
+            }
+        }
+    }
+}
+
+/// Format file name for display in README subsections
+fn format_file_display_name(file_stem: &str) -> String {
+    // Convert snake_case to Title Case
+    file_stem
+        .split('_')
+        .map(|word| {
+            let mut chars = word.chars();
+            match chars.next() {
+                Some(first) => first.to_uppercase().chain(chars).collect::<String>(),
+                None => String::new(),
+            }
+        })
+        .collect::<Vec<String>>()
+        .join(" ")
+}
+
+/// Add indentation based on nesting level
+/// Level 0 (##): no indentation
+/// Level 1 (###): 2 non-breaking spaces
+/// Level 2 (**): 4 non-breaking spaces
+/// Uses &nbsp; to ensure indentation is visible in rendered markdown
+fn add_indentation(text: &str, level: usize) -> String {
+    let indent = "&nbsp;&nbsp;".repeat(level);
+    format!("{}{}", indent, text)
 }
 
 fn parse_benchmark_log(logs: &[String]) -> Option<(String, String, String)> {
@@ -462,7 +555,7 @@ fn parse_benchmark_log(logs: &[String]) -> Option<(String, String, String)> {
     None
 }
 
-fn write_categorized_readme(mut results_by_category: BTreeMap<String, Vec<(String, String, String)>>) {
+fn write_categorized_readme(mut results_by_category: BTreeMap<String, BTreeMap<String, Vec<(String, String, String)>>>) {
     let mut readme = OpenOptions::new()
         .create(true)
         .write(true)
@@ -473,25 +566,28 @@ fn write_categorized_readme(mut results_by_category: BTreeMap<String, Vec<(Strin
     // Write README header
     writeln!(readme, "# CU Library Benchmarks\n").unwrap();
     writeln!(readme, "Benchmark results for Solana runtime operations.\n").unwrap();
-    
-    // Generate table of contents
+
+    // Generate table of contents with numbering
     writeln!(readme, "## Table of Contents\n").unwrap();
-    
-    // Add Baseline to TOC if it exists
+
+    // Add Baseline to TOC first if it exists (number 1)
+    let mut section_number = 1;
+    let mut baseline_number = 0;
     if results_by_category.contains_key("baseline") {
-        writeln!(readme, "● **[Baseline](#baseline)**  ").unwrap();
+        writeln!(readme, "● **[{}. Baseline](#{}---baseline)**", section_number, section_number).unwrap();
+        baseline_number = section_number;
+        section_number += 1;
     }
-    
-    // Add all other categories to TOC
+
+    // Add all other categories to TOC with numbering
+    let mut category_numbers = BTreeMap::new();
     for category in results_by_category.keys() {
         if category != "baseline" {
-            // Format category name (capitalize first letter)
-            let category_name = format!(
-                "{}{}",
-                category.chars().next().unwrap().to_uppercase(),
-                &category[1..]
-            );
-            writeln!(readme, "● **[{}](#{})**  ", category_name, category).unwrap();
+            let display_name = format_display_name(category);
+            let anchor = format!("{}---{}", section_number, category.replace('_', "-"));
+            writeln!(readme, "● **[{}. {}](#{})**", section_number, display_name, anchor).unwrap();
+            category_numbers.insert(category.clone(), section_number);
+            section_number += 1;
         }
     }
     
@@ -517,104 +613,111 @@ fn write_categorized_readme(mut results_by_category: BTreeMap<String, Vec<(Strin
 
     // Get baseline CU value for adjustment
     let mut baseline_cu: u64 = 0;
-    if let Some(baseline_results) = results_by_category.get("baseline") {
-        if let Some((_, cu_str, _)) = baseline_results.first() {
-            baseline_cu = cu_str.parse::<u64>().unwrap_or(0);
+    if let Some(baseline_files) = results_by_category.get("baseline") {
+        // Get the first function from the first file
+        if let Some(first_file_results) = baseline_files.values().next() {
+            if let Some((_, cu_str, _)) = first_file_results.first() {
+                baseline_cu = cu_str.parse::<u64>().unwrap_or(0);
+            }
         }
     }
 
     // Write Baseline category first if it exists
-    if let Some(baseline_results) = results_by_category.remove("baseline") {
-        writeln!(readme, "## Baseline\n").unwrap();
+    if let Some(baseline_files) = results_by_category.remove("baseline") {
+        writeln!(readme, "## {}. Baseline\n", baseline_number).unwrap();
 
-        // Write table header
-        writeln!(
-            readme,
-            "| Function                                                                                                                                         | CU Consumed |"
-        )
-        .unwrap();
-        writeln!(
-            readme,
-            "|--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|"
-        )
-        .unwrap();
+        // Iterate through each file in baseline
+        let mut file_number = 1;
+        for (file_stem, results) in baseline_files {
+            let file_display_name = format_file_display_name(&file_stem);
+            let indented_header = add_indentation(&format!("### {}.{} {}", baseline_number, file_number, file_display_name), 1);
+            writeln!(readme, "{}\n", indented_header).unwrap();
 
-        // Write results
-        for (func_name, cu_value, file_location) in baseline_results {
-            // Create GitHub link
-            let github_link = if !file_location.is_empty() {
-                // Extract file path and line number (format: "src/path/file.rs:line")
-                let parts: Vec<&str> = file_location.split(':').collect();
-                if parts.len() >= 2 {
-                    let file_path = parts[0];
-                    let line_num = parts[1].trim().parse::<usize>().unwrap_or(0) + 1;
-                    format!("[{}](https://github.com/Lightprotocol/cu-library/blob/master/{}#L{})", 
-                            func_name, file_path, line_num)
+            // Write table header with indentation
+            let table_header = add_indentation("| Function                                                                                                                                         | CU Consumed |", 1);
+            let table_separator = add_indentation("|--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|", 1);
+            writeln!(readme, "{}", table_header).unwrap();
+            writeln!(readme, "{}", table_separator).unwrap();
+
+            // Write results
+            for (func_name, cu_value, file_location) in results {
+                // Create GitHub link without extra indentation
+                let github_link = if !file_location.is_empty() {
+                    // Extract file path and line number (format: "src/path/file.rs:line")
+                    let parts: Vec<&str> = file_location.split(':').collect();
+                    if parts.len() >= 2 {
+                        let file_path = parts[0];
+                        let line_num = parts[1].trim().parse::<usize>().unwrap_or(0) + 1;
+                        format!("[{}](https://github.com/Lightprotocol/cu-library/blob/master/{}#L{})",
+                                func_name, file_path, line_num)
+                    } else {
+                        func_name.clone()
+                    }
                 } else {
                     func_name.clone()
-                }
-            } else {
-                func_name.clone()
-            };
-            writeln!(readme, "| {:<144} | {:<11} |", github_link, cu_value).unwrap();
-        }
+                };
+                let table_row = add_indentation(&format!("| {:<144} | {:<11} |", github_link, cu_value), 1);
+                writeln!(readme, "{}", table_row).unwrap();
+            }
 
-        writeln!(readme).unwrap(); // Empty line after baseline
+            writeln!(readme).unwrap(); // Empty line after file section
+            file_number += 1;
+        }
     }
 
-    // Write remaining categories
-    for (category, results) in results_by_category {
-        // Format category name (capitalize first letter)
-        let category_name = format!(
-            "{}{}",
-            category.chars().next().unwrap().to_uppercase(),
-            &category[1..]
-        );
+    // Write remaining categories with numbering
+    for (category, files_map) in results_by_category {
+        let display_name = format_display_name(&category);
+        let number = category_numbers.get(&category).unwrap_or(&0);
 
-        writeln!(readme, "## {}\n", category_name).unwrap();
+        writeln!(readme, "## {}. {}\n", number, display_name).unwrap();
 
-        // Write table header with adjusted column
-        writeln!(
-            readme,
-            "| Function                                                                                                                                         | CU Consumed | CU Adjusted |"
-        )
-        .unwrap();
-        writeln!(
-            readme,
-            "|--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|"
-        )
-        .unwrap();
+        // Iterate through each file in the category
+        let mut file_number = 1;
+        for (file_stem, results) in files_map {
+            let file_display_name = format_file_display_name(&file_stem);
+            let indented_header = add_indentation(&format!("### {}.{} {}", number, file_number, file_display_name), 1);
+            writeln!(readme, "{}\n", indented_header).unwrap();
 
-        // Write results
-        for (func_name, cu_value, file_location) in results {
-            // Create GitHub link
-            let github_link = if !file_location.is_empty() {
-                // Extract file path and line number (format: "src/path/file.rs:line")
-                let parts: Vec<&str> = file_location.split(':').collect();
-                if parts.len() >= 2 {
-                    let file_path = parts[0];
-                    let line_num = parts[1].trim().parse::<usize>().unwrap_or(0) + 1;
-                    format!("[{}](https://github.com/Lightprotocol/cu-library/blob/master/{}#L{})", 
-                            func_name, file_path, line_num)
+            // Write table header with adjusted column and indentation
+            let table_header = add_indentation("| Function                                                                                                                                         | CU Consumed | CU Adjusted |", 1);
+            let table_separator = add_indentation("|--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|", 1);
+            writeln!(readme, "{}", table_header).unwrap();
+            writeln!(readme, "{}", table_separator).unwrap();
+
+            // Write results
+            for (func_name, cu_value, file_location) in results {
+                // Create GitHub link without extra indentation
+                let github_link = if !file_location.is_empty() {
+                    // Extract file path and line number (format: "src/path/file.rs:line")
+                    let parts: Vec<&str> = file_location.split(':').collect();
+                    if parts.len() >= 2 {
+                        let file_path = parts[0];
+                        let line_num = parts[1].trim().parse::<usize>().unwrap_or(0) + 1;
+                        format!("[{}](https://github.com/Lightprotocol/cu-library/blob/master/{}#L{})",
+                                func_name, file_path, line_num)
+                    } else {
+                        func_name.clone()
+                    }
                 } else {
                     func_name.clone()
-                }
-            } else {
-                func_name.clone()
-            };
-            
-            // Calculate adjusted CU value
-            let cu_consumed = cu_value.parse::<u64>().unwrap_or(0);
-            let cu_adjusted = if cu_consumed >= baseline_cu {
-                (cu_consumed - baseline_cu).to_string()
-            } else {
-                "0".to_string()
-            };
-            
-            writeln!(readme, "| {:<144} | {:<11} | {:<11} |", github_link, cu_value, cu_adjusted).unwrap();
-        }
+                };
 
-        writeln!(readme).unwrap(); // Empty line between categories
+                // Calculate adjusted CU value
+                let cu_consumed = cu_value.parse::<u64>().unwrap_or(0);
+                let cu_adjusted = if cu_consumed >= baseline_cu {
+                    (cu_consumed - baseline_cu).to_string()
+                } else {
+                    "0".to_string()
+                };
+
+                let table_row = add_indentation(&format!("| {:<144} | {:<11} | {:<11} |", github_link, cu_value, cu_adjusted), 1);
+                writeln!(readme, "{}", table_row).unwrap();
+            }
+
+            writeln!(readme).unwrap(); // Empty line after file section
+            file_number += 1;
+        }
     }
 }
 
