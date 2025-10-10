@@ -4,23 +4,24 @@ Benchmark results for Solana runtime operations.
 
 ## Table of Contents
 
-● **[Baseline](#baseline)**  
-● **[Access](#access)**  
-● **[Account](#account)**  
-● **[Add](#add)**  
-● **[Array](#array)**  
-● **[Arrayvec](#arrayvec)**  
-● **[Checked](#checked)**  
-● **[Conversions](#conversions)**  
-● **[Cpi](#cpi)**  
-● **[Option](#option)**  
-● **[Partial](#partial)**  
-● **[Pinocchio](#pinocchio)**  
-● **[Saturating](#saturating)**  
-● **[Solana](#solana)**  
-● **[Std](#std)**  
-● **[Sub](#sub)**  
-● **[Vec](#vec)**  
+● **[Baseline](#baseline)**
+● **[Access](#access)**
+● **[Account](#account)**
+● **[Add](#add)**
+● **[Array](#array)**
+● **[Arrayvec](#arrayvec)**
+● **[Checked](#checked)**
+● **[Conversions](#conversions)**
+● **[Cpi](#cpi)**
+● **[Option](#option)**
+● **[Partial](#partial)**
+● **[Pinocchio](#pinocchio)**
+● **[Saturating](#saturating)**
+● **[Serialize](#serialize)**
+● **[Solana](#solana)**
+● **[Std](#std)**
+● **[Sub](#sub)**
+● **[Vec](#vec)**
 
 ## Definitions
 
@@ -32,7 +33,7 @@ Benchmark results for Solana runtime operations.
 
 | Function                                                                                                                                         | CU Consumed |
 |--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|
-| [baseline_empty_function](https://github.com/Lightprotocol/cu-library/blob/master/src/lib.rs#L188)                                               | 6           |
+| [baseline_empty_function](https://github.com/Lightprotocol/cu-library/blob/master/src/lib.rs#L189)                                               | 6           |
 
 ## Access
 
@@ -272,6 +273,14 @@ Benchmark results for Solana runtime operations.
 | [saturating_mul_u64](https://github.com/Lightprotocol/cu-library/blob/master/src/saturating_math/saturating_mul.rs#L25)                          | 7           | 1           |
 | [saturating_mul_u128](https://github.com/Lightprotocol/cu-library/blob/master/src/saturating_math/saturating_mul.rs#L32)                         | 8           | 2           |
 
+## Serialize
+
+| Function                                                                                                                                         | CU Consumed | CU Adjusted |
+|--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
+| [serialize_compressed_account_info_borsh_deserialize](https://github.com/Lightprotocol/cu-library/blob/master/src/serialization/compressed_account_info.rs#L145) | 427         | 421         |
+| [serialize_compressed_account_info_zero_copy_deserialize](https://github.com/Lightprotocol/cu-library/blob/master/src/serialization/compressed_account_info.rs#L153) | 130         | 124         |
+| [serialize_compressed_account_info_wincode_deserialize](https://github.com/Lightprotocol/cu-library/blob/master/src/serialization/compressed_account_info.rs#L162) | 1408        | 1402        |
+
 ## Solana
 
 | Function                                                                                                                                         | CU Consumed | CU Adjusted |
@@ -335,4 +344,3 @@ Benchmark results for Solana runtime operations.
 | [vec_push_10_u8_with_capacity](https://github.com/Lightprotocol/cu-library/blob/master/src/vec/vec_push.rs#L74)                                  | 153         | 147         |
 | [vec_push_10_u64_with_capacity](https://github.com/Lightprotocol/cu-library/blob/master/src/vec/vec_push.rs#L83)                                 | 149         | 143         |
 | [vec_push_10_pubkey_with_capacity](https://github.com/Lightprotocol/cu-library/blob/master/src/vec/vec_push.rs#L92)                              | 218         | 212         |
-

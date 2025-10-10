@@ -2,7 +2,7 @@ use light_program_profiler::profile;
 use pinocchio::{account_info::AccountInfo, instruction::AccountMeta};
 
 #[profile]
-pub fn cpi_account_meta_array_10(accounts: &[AccountInfo]) -> [AccountMeta; 10] {
+pub fn cpi_account_meta_array_10(accounts: &[AccountInfo]) -> [AccountMeta<'_>; 10] {
     [
         AccountMeta {
             pubkey: accounts[0].key(),

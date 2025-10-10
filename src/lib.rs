@@ -1,16 +1,20 @@
 use pinocchio::{account_info::AccountInfo, program_error::ProgramError, pubkey::Pubkey};
 
-use crate::access::array_u8_32::{
-    access_array_u8_32_get, access_array_u8_32_get_ok_or, access_array_u8_32_if_let_get, access_array_u8_32_index,
-};
 use crate::access::array_u64_10::{
-    access_array_u64_10_get, access_array_u64_10_get_ok_or, access_array_u64_10_if_let_get, access_array_u64_10_index,
+    access_array_u64_10_get, access_array_u64_10_get_ok_or, access_array_u64_10_if_let_get,
+    access_array_u64_10_index,
 };
-use crate::access::vec_u8_32::{
-    access_vec_u8_32_get, access_vec_u8_32_get_ok_or, access_vec_u8_32_if_let_get, access_vec_u8_32_index,
+use crate::access::array_u8_32::{
+    access_array_u8_32_get, access_array_u8_32_get_ok_or, access_array_u8_32_if_let_get,
+    access_array_u8_32_index,
 };
 use crate::access::vec_u64_10::{
-    access_vec_u64_10_get, access_vec_u64_10_get_ok_or, access_vec_u64_10_if_let_get, access_vec_u64_10_index,
+    access_vec_u64_10_get, access_vec_u64_10_get_ok_or, access_vec_u64_10_if_let_get,
+    access_vec_u64_10_index,
+};
+use crate::access::vec_u8_32::{
+    access_vec_u8_32_get, access_vec_u8_32_get_ok_or, access_vec_u8_32_if_let_get,
+    access_vec_u8_32_index,
 };
 use crate::account_info::account_borrows::{
     account_info_borrow_data_unchecked, account_info_borrow_lamports_unchecked,
@@ -58,37 +62,28 @@ use crate::checked_math::checked_sub::{
     checked_sub_u128, checked_sub_u16, checked_sub_u32, checked_sub_u64, checked_sub_u8,
 };
 use crate::conversions::cast_u16::{
-    conversions_u16_as_u32, conversions_u16_as_u64,
-    conversions_u16_as_u8, conversions_u16_as_usize,
+    conversions_u16_as_u32, conversions_u16_as_u64, conversions_u16_as_u8, conversions_u16_as_usize,
 };
 use crate::conversions::cast_u32::{
-    conversions_u32_as_u16, conversions_u32_as_u64,
-    conversions_u32_as_u8, conversions_u32_as_usize,
+    conversions_u32_as_u16, conversions_u32_as_u64, conversions_u32_as_u8, conversions_u32_as_usize,
 };
 use crate::conversions::cast_u64::{
-    conversions_u64_as_u16, conversions_u64_as_u32,
-    conversions_u64_as_u8, conversions_u64_as_usize,
+    conversions_u64_as_u16, conversions_u64_as_u32, conversions_u64_as_u8, conversions_u64_as_usize,
 };
 use crate::conversions::cast_u8::{
-    conversions_u8_as_u16, conversions_u8_as_u32, conversions_u8_as_u64,
-    conversions_u8_as_usize,
+    conversions_u8_as_u16, conversions_u8_as_u32, conversions_u8_as_u64, conversions_u8_as_usize,
 };
 use crate::conversions::from_usize::{
     conversions_try_into_usize_to_u64_map_err, conversions_try_into_usize_to_u64_unwrap,
 };
 use crate::conversions::slice_to_array::{
-    conversions_try_into_slice_to_array_32_map_err,
-    conversions_try_into_slice_to_array_32_unwrap,
+    conversions_try_into_slice_to_array_32_map_err, conversions_try_into_slice_to_array_32_unwrap,
 };
 use crate::conversions::to_usize::{
-    conversions_try_into_u16_to_usize_map_err,
-    conversions_try_into_u16_to_usize_unwrap,
-    conversions_try_into_u32_to_usize_map_err,
-    conversions_try_into_u32_to_usize_unwrap,
-    conversions_try_into_u64_to_usize_map_err,
-    conversions_try_into_u64_to_usize_unwrap,
-    conversions_try_into_u8_to_usize_map_err,
-    conversions_try_into_u8_to_usize_unwrap,
+    conversions_try_into_u16_to_usize_map_err, conversions_try_into_u16_to_usize_unwrap,
+    conversions_try_into_u32_to_usize_map_err, conversions_try_into_u32_to_usize_unwrap,
+    conversions_try_into_u64_to_usize_map_err, conversions_try_into_u64_to_usize_unwrap,
+    conversions_try_into_u8_to_usize_map_err, conversions_try_into_u8_to_usize_unwrap,
 };
 use crate::cpi::cpi_array_loop::{
     cpi_account_info_array_10_clone_loop, cpi_account_info_array_10_move_loop,
@@ -103,19 +98,19 @@ use crate::cpi::cpi_arrayvec::{
     cpi_arrayvec_push_account_info_10_ref, cpi_arrayvec_push_account_meta_10,
 };
 use crate::option::option_checked_add::{
-    option_checked_add_u8_unwrap, option_checked_add_u8_ok_or, option_checked_add_u8_ok_or_else,
-    option_checked_add_u8_unwrap_or_default, option_checked_add_u8_unwrap_or,
-};
-use crate::option::option_slice_get::{
-    option_slice_get_array_unwrap, option_slice_get_array_ok_or, option_slice_get_array_ok_or_else,
-    option_slice_get_array_unwrap_or_default, option_slice_get_array_unwrap_or,
-};
-use crate::option::option_pubkey_ref::{
-    option_pubkey_ref_map_deref, option_pubkey_as_ref_map_convert,
+    option_checked_add_u8_ok_or, option_checked_add_u8_ok_or_else, option_checked_add_u8_unwrap,
+    option_checked_add_u8_unwrap_or, option_checked_add_u8_unwrap_or_default,
 };
 use crate::option::option_if_let::{
-    option_if_let_some_u8, option_if_let_some_array, option_if_let_some_pubkey,
-    option_if_let_some_array_ref,
+    option_if_let_some_array, option_if_let_some_array_ref, option_if_let_some_pubkey,
+    option_if_let_some_u8,
+};
+use crate::option::option_pubkey_ref::{
+    option_pubkey_as_ref_map_convert, option_pubkey_ref_map_deref,
+};
+use crate::option::option_slice_get::{
+    option_slice_get_array_ok_or, option_slice_get_array_ok_or_else, option_slice_get_array_unwrap,
+    option_slice_get_array_unwrap_or, option_slice_get_array_unwrap_or_default,
 };
 use crate::partial_eq::partial_eq_arrays::{
     partial_eq_array_u16_32, partial_eq_array_u32_32, partial_eq_array_u64_32,
@@ -144,6 +139,11 @@ use crate::saturating_math::saturating_mul::{
 use crate::saturating_math::saturating_sub::{
     saturating_sub_u128, saturating_sub_u16, saturating_sub_u32, saturating_sub_u64,
     saturating_sub_u8,
+};
+use crate::serialization::compressed_account_info::{
+    serialize_compressed_account_info, serialize_compressed_account_info_borsh_deserialize,
+    serialize_compressed_account_info_wincode, serialize_compressed_account_info_wincode_deserialize,
+    serialize_compressed_account_info_zero_copy_deserialize,
 };
 use crate::solana_ops::msg::solana_msg10_chars;
 use crate::solana_ops::msg_program_id::solana_msg_program_id;
@@ -180,6 +180,7 @@ pub mod option;
 pub mod partial_eq;
 pub mod pinocchio_ops;
 pub mod saturating_math;
+pub mod serialization;
 pub mod solana_ops;
 pub mod std_math;
 pub mod vec;
@@ -212,6 +213,9 @@ pub enum CuLibraryInstruction {
     VecU64_10Get = 227,
     VecU64_10GetOkOr = 228,
     VecU64_10IfLetGet = 229,
+    SerializationCompressedAccountInfoBorshDeserialize = 230,
+    SerializationCompressedAccountInfoZeroCopyDeserialize = 231,
+    SerializationCompressedAccountInfoWincodeDeserialize = 232,
     PinocchioSysvarRentExemption165 = 5,
     PinocchioClockGetSlot = 6,
     ArrayvecNew = 7,
@@ -657,6 +661,9 @@ impl TryFrom<&[u8]> for CuLibraryInstruction {
             227 => Ok(CuLibraryInstruction::VecU64_10Get),
             228 => Ok(CuLibraryInstruction::VecU64_10GetOkOr),
             229 => Ok(CuLibraryInstruction::VecU64_10IfLetGet),
+            230 => Ok(CuLibraryInstruction::SerializationCompressedAccountInfoBorshDeserialize),
+            231 => Ok(CuLibraryInstruction::SerializationCompressedAccountInfoZeroCopyDeserialize),
+            232 => Ok(CuLibraryInstruction::SerializationCompressedAccountInfoWincodeDeserialize),
             _ => Err(ProgramError::InvalidInstructionData),
         }
     }
@@ -772,6 +779,21 @@ pub fn process_instruction(
             let vec: Vec<u64> = vec![100; 10];
             let res = access_vec_u64_10_if_let_get(&vec);
             solana_msg::msg!("{}", res);
+        }
+        CuLibraryInstruction::SerializationCompressedAccountInfoBorshDeserialize => {
+            let data = serialize_compressed_account_info();
+            let res = serialize_compressed_account_info_borsh_deserialize(data.as_slice())?;
+            solana_msg::msg!("Borsh deserialized: {:?}", res.address.is_some());
+        }
+        CuLibraryInstruction::SerializationCompressedAccountInfoZeroCopyDeserialize => {
+            let data = serialize_compressed_account_info();
+            let res = serialize_compressed_account_info_zero_copy_deserialize(data.as_slice())?;
+            solana_msg::msg!("Zerocopy deserialized: {:?}", res.address.is_some());
+        }
+        CuLibraryInstruction::SerializationCompressedAccountInfoWincodeDeserialize => {
+            let data = serialize_compressed_account_info_wincode();
+            let res = serialize_compressed_account_info_wincode_deserialize(data.as_slice())?;
+            solana_msg::msg!("Wincode deserialized: {:?}", res.address.is_some());
         }
         CuLibraryInstruction::PinocchioSysvarRentExemption165 => {
             let _ = pinocchio_sysvar_rent_exemption_165();
@@ -1889,7 +1911,7 @@ pub fn process_instruction(
             let val = if instruction_data.len() > 2 {
                 instruction_data[2]
             } else {
-                254u8  // Value that will overflow when adding 1
+                254u8 // Value that will overflow when adding 1
             };
             let result = option_checked_add_u8_unwrap(val);
             solana_msg::msg!("option checked_add unwrap: {}", result);
@@ -1916,7 +1938,7 @@ pub fn process_instruction(
             let val = if instruction_data.len() > 2 {
                 instruction_data[2]
             } else {
-                255u8  // Will overflow
+                255u8 // Will overflow
             };
             let result = option_checked_add_u8_unwrap_or_default(val);
             solana_msg::msg!("option checked_add unwrap_or_default: {}", result);
@@ -1925,7 +1947,7 @@ pub fn process_instruction(
             let val = if instruction_data.len() > 2 {
                 instruction_data[2]
             } else {
-                255u8  // Will overflow
+                255u8 // Will overflow
             };
             let result = option_checked_add_u8_unwrap_or(val);
             solana_msg::msg!("option checked_add unwrap_or: {}", result);

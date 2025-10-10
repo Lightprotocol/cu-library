@@ -2,7 +2,7 @@ use light_program_profiler::profile;
 use pinocchio::{account_info::AccountInfo, instruction::AccountMeta};
 
 #[profile]
-pub fn cpi_account_meta_array_10_loop(accounts: &[AccountInfo]) -> [AccountMeta; 10] {
+pub fn cpi_account_meta_array_10_loop(accounts: &[AccountInfo]) -> [AccountMeta<'_>; 10] {
     // Create a static default pubkey to use as reference
     static DEFAULT_PUBKEY: [u8; 32] = [0; 32];
 

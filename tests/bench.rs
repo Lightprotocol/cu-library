@@ -278,6 +278,10 @@ fn bench_cu_operations() {
         CuLibraryInstruction::VecU64_10Get,
         CuLibraryInstruction::VecU64_10GetOkOr,
         CuLibraryInstruction::VecU64_10IfLetGet,
+        // Serialization benchmarks
+        CuLibraryInstruction::SerializationCompressedAccountInfoBorshDeserialize,
+        CuLibraryInstruction::SerializationCompressedAccountInfoZeroCopyDeserialize,
+        CuLibraryInstruction::SerializationCompressedAccountInfoWincodeDeserialize,
     ];
 
     for instruction_type in instructions.into_iter() {

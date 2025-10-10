@@ -3,7 +3,7 @@ use light_program_profiler::profile;
 use pinocchio::{account_info::AccountInfo, instruction::AccountMeta};
 
 #[profile]
-pub fn cpi_arrayvec_push_account_meta_10(accounts: &[AccountInfo]) -> ArrayVec<AccountMeta, 10> {
+pub fn cpi_arrayvec_push_account_meta_10(accounts: &[AccountInfo]) -> ArrayVec<AccountMeta<'_>, 10> {
     let mut vec = ArrayVec::new();
     for i in 0..10 {
         vec.push(AccountMeta {
