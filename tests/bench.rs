@@ -573,7 +573,7 @@ fn write_categorized_readme(mut results_by_category: BTreeMap<String, BTreeMap<S
     let mut section_number = 1;
     let mut baseline_number = 0;
     if results_by_category.contains_key("baseline") {
-        writeln!(readme, "**[{}. Baseline](#{}---baseline)**\n", section_number, section_number).unwrap();
+        writeln!(readme, "**[{}. Baseline](#{}-baseline)**\n", section_number, section_number).unwrap();
         baseline_number = section_number;
         section_number += 1;
     }
@@ -583,7 +583,7 @@ fn write_categorized_readme(mut results_by_category: BTreeMap<String, BTreeMap<S
     for category in results_by_category.keys() {
         if category != "baseline" {
             let display_name = format_display_name(category);
-            let anchor = format!("{}---{}", section_number, category.replace('_', "-"));
+            let anchor = format!("{}-{}", section_number, category.replace('_', "-"));
             writeln!(readme, "**[{}. {}](#{})**\n", section_number, display_name, anchor).unwrap();
             category_numbers.insert(category.clone(), section_number);
             section_number += 1;

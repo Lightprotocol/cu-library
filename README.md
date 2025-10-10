@@ -4,37 +4,37 @@ Benchmark results for Solana runtime operations.
 
 ## Table of Contents
 
-**[1. Baseline](#1---baseline)**
+**[1. Baseline](#1-baseline)**
 
-**[2. Access](#2---access)**
+**[2. Access](#2-access)**
 
-**[3. Account Info](#3---account-info)**
+**[3. Account Info](#3-account-info)**
 
-**[4. Array](#4---array)**
+**[4. Array](#4-array)**
 
-**[5. Arrayvec](#5---arrayvec)**
+**[5. Arrayvec](#5-arrayvec)**
 
-**[6. Checked Math](#6---checked-math)**
+**[6. Checked Math](#6-checked-math)**
 
-**[7. Conversions](#7---conversions)**
+**[7. Conversions](#7-conversions)**
 
-**[8. Cpi](#8---cpi)**
+**[8. Cpi](#8-cpi)**
 
-**[9. Option](#9---option)**
+**[9. Option](#9-option)**
 
-**[10. Partial Eq](#10---partial-eq)**
+**[10. Partial Eq](#10-partial-eq)**
 
-**[11. Pinocchio Ops](#11---pinocchio-ops)**
+**[11. Pinocchio Ops](#11-pinocchio-ops)**
 
-**[12. Saturating Math](#12---saturating-math)**
+**[12. Saturating Math](#12-saturating-math)**
 
-**[13. Serialization](#13---serialization)**
+**[13. Serialization](#13-serialization)**
 
-**[14. Solana Ops](#14---solana-ops)**
+**[14. Solana Ops](#14-solana-ops)**
 
-**[15. Std Math](#15---std-math)**
+**[15. Std Math](#15-std-math)**
 
-**[16. Vec](#16---vec)**
+**[16. Vec](#16-vec)**
 
 
 ## Definitions
