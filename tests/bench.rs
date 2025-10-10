@@ -573,7 +573,7 @@ fn write_categorized_readme(mut results_by_category: BTreeMap<String, BTreeMap<S
     let mut section_number = 1;
     let mut baseline_number = 0;
     if results_by_category.contains_key("baseline") {
-        writeln!(readme, "● **[{}. Baseline](#{}---baseline)**", section_number, section_number).unwrap();
+        writeln!(readme, "**[{}. Baseline](#{}---baseline)**\n", section_number, section_number).unwrap();
         baseline_number = section_number;
         section_number += 1;
     }
@@ -584,7 +584,7 @@ fn write_categorized_readme(mut results_by_category: BTreeMap<String, BTreeMap<S
         if category != "baseline" {
             let display_name = format_display_name(category);
             let anchor = format!("{}---{}", section_number, category.replace('_', "-"));
-            writeln!(readme, "● **[{}. {}](#{})**", section_number, display_name, anchor).unwrap();
+            writeln!(readme, "**[{}. {}](#{})**\n", section_number, display_name, anchor).unwrap();
             category_numbers.insert(category.clone(), section_number);
             section_number += 1;
         }
@@ -632,9 +632,9 @@ fn write_categorized_readme(mut results_by_category: BTreeMap<String, BTreeMap<S
             let indented_header = add_indentation(&format!("### {}.{} {}", baseline_number, file_number, file_display_name), 1);
             writeln!(readme, "{}\n", indented_header).unwrap();
 
-            // Write table header with indentation
-            let table_header = add_indentation("| Function                                                                                                                                         | CU Consumed |", 1);
-            let table_separator = add_indentation("|--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|", 1);
+            // Write table header with indentation (same width as other tables)
+            let table_header = add_indentation("| Function                                                                                                                                                                                                                | CU Consumed | CU Adjusted |", 1);
+            let table_separator = add_indentation("|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|", 1);
             writeln!(readme, "{}", table_header).unwrap();
             writeln!(readme, "{}", table_separator).unwrap();
 
@@ -655,7 +655,8 @@ fn write_categorized_readme(mut results_by_category: BTreeMap<String, BTreeMap<S
                 } else {
                     func_name.clone()
                 };
-                let table_row = add_indentation(&format!("| {:<144} | {:<11} |", github_link, cu_value), 1);
+                // Baseline has no adjustment, show N/A
+                let table_row = add_indentation(&format!("| {:<180} | {:<11} | {:<11} |", github_link, cu_value, "N/A"), 1);
                 writeln!(readme, "{}", table_row).unwrap();
             }
 
@@ -679,8 +680,8 @@ fn write_categorized_readme(mut results_by_category: BTreeMap<String, BTreeMap<S
             writeln!(readme, "{}\n", indented_header).unwrap();
 
             // Write table header with indentation
-            let table_header = add_indentation("| Function                                                                                                                                         | CU Consumed | CU Adjusted |", 1);
-            let table_separator = add_indentation("|--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|", 1);
+            let table_header = add_indentation("| Function                                                                                                                                                                                                                | CU Consumed | CU Adjusted |", 1);
+            let table_separator = add_indentation("|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|", 1);
             writeln!(readme, "{}", table_header).unwrap();
             writeln!(readme, "{}", table_separator).unwrap();
 
@@ -710,7 +711,7 @@ fn write_categorized_readme(mut results_by_category: BTreeMap<String, BTreeMap<S
                     "0".to_string()
                 };
 
-                let table_row = add_indentation(&format!("| {:<144} | {:<11} | {:<11} |", github_link, cu_value, cu_adjusted), 1);
+                let table_row = add_indentation(&format!("| {:<180} | {:<11} | {:<11} |", github_link, cu_value, cu_adjusted), 1);
                 writeln!(readme, "{}", table_row).unwrap();
             }
 
