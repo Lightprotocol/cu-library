@@ -29,554 +29,554 @@ Benchmark results for Solana runtime operations.
 
 ## 1. Baseline
 
-&nbsp;&nbsp;### 1.1 Lib
+  ### 1.1 Lib
 
-&nbsp;&nbsp;| Function                                                                                                                                         | CU Consumed |
-&nbsp;&nbsp;|--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|
-&nbsp;&nbsp;| [baseline_empty_function](https://github.com/Lightprotocol/cu-library/blob/master/src/lib.rs#L102)                                               | 6           |
+  | Function                                                                                                                                         | CU Consumed |
+  |--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|
+  | [baseline_empty_function](https://github.com/Lightprotocol/cu-library/blob/master/src/lib.rs#L102)                                               | 6           |
 
 ## 2. Access
 
-&nbsp;&nbsp;### 2.1 Array U64 10
+  ### 2.1 Array U64 10
 
-&nbsp;&nbsp;| Function                                                                                                                                         | CU Consumed | CU Adjusted |
-&nbsp;&nbsp;|--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
-&nbsp;&nbsp;| [array_u64_10_index](https://github.com/Lightprotocol/cu-library/blob/master/src/access/array_u64_10.rs#L4)                                      | 9           | 3           |
-&nbsp;&nbsp;| [array_u64_10_get](https://github.com/Lightprotocol/cu-library/blob/master/src/access/array_u64_10.rs#L9)                                        | 6           | 0           |
-&nbsp;&nbsp;| [array_u64_10_get_ok_or](https://github.com/Lightprotocol/cu-library/blob/master/src/access/array_u64_10.rs#L14)                                 | 6           | 0           |
-&nbsp;&nbsp;| [array_u64_10_if_let_get](https://github.com/Lightprotocol/cu-library/blob/master/src/access/array_u64_10.rs#L19)                                | 9           | 3           |
+  | Function                                                                                                                                         | CU Consumed | CU Adjusted |
+  |--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
+  | [array_u64_10_index](https://github.com/Lightprotocol/cu-library/blob/master/src/access/array_u64_10.rs#L4)                                      | 9           | 3           |
+  | [array_u64_10_get](https://github.com/Lightprotocol/cu-library/blob/master/src/access/array_u64_10.rs#L9)                                        | 6           | 0           |
+  | [array_u64_10_get_ok_or](https://github.com/Lightprotocol/cu-library/blob/master/src/access/array_u64_10.rs#L14)                                 | 6           | 0           |
+  | [array_u64_10_if_let_get](https://github.com/Lightprotocol/cu-library/blob/master/src/access/array_u64_10.rs#L19)                                | 9           | 3           |
 
-&nbsp;&nbsp;### 2.2 Array U8 32
+  ### 2.2 Array U8 32
 
-&nbsp;&nbsp;| Function                                                                                                                                         | CU Consumed | CU Adjusted |
-&nbsp;&nbsp;|--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
-&nbsp;&nbsp;| [array_u8_32_index](https://github.com/Lightprotocol/cu-library/blob/master/src/access/array_u8_32.rs#L4)                                        | 9           | 3           |
-&nbsp;&nbsp;| [array_u8_32_get](https://github.com/Lightprotocol/cu-library/blob/master/src/access/array_u8_32.rs#L9)                                          | 6           | 0           |
-&nbsp;&nbsp;| [array_u8_32_get_ok_or](https://github.com/Lightprotocol/cu-library/blob/master/src/access/array_u8_32.rs#L14)                                   | 6           | 0           |
-&nbsp;&nbsp;| [array_u8_32_if_let_get](https://github.com/Lightprotocol/cu-library/blob/master/src/access/array_u8_32.rs#L19)                                  | 9           | 3           |
+  | Function                                                                                                                                         | CU Consumed | CU Adjusted |
+  |--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
+  | [array_u8_32_index](https://github.com/Lightprotocol/cu-library/blob/master/src/access/array_u8_32.rs#L4)                                        | 9           | 3           |
+  | [array_u8_32_get](https://github.com/Lightprotocol/cu-library/blob/master/src/access/array_u8_32.rs#L9)                                          | 6           | 0           |
+  | [array_u8_32_get_ok_or](https://github.com/Lightprotocol/cu-library/blob/master/src/access/array_u8_32.rs#L14)                                   | 6           | 0           |
+  | [array_u8_32_if_let_get](https://github.com/Lightprotocol/cu-library/blob/master/src/access/array_u8_32.rs#L19)                                  | 9           | 3           |
 
-&nbsp;&nbsp;### 2.3 Vec U64 10
+  ### 2.3 Vec U64 10
 
-&nbsp;&nbsp;| Function                                                                                                                                         | CU Consumed | CU Adjusted |
-&nbsp;&nbsp;|--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
-&nbsp;&nbsp;| [vec_u64_10_index](https://github.com/Lightprotocol/cu-library/blob/master/src/access/vec_u64_10.rs#L4)                                          | 9           | 3           |
-&nbsp;&nbsp;| [vec_u64_10_get](https://github.com/Lightprotocol/cu-library/blob/master/src/access/vec_u64_10.rs#L9)                                            | 8           | 2           |
-&nbsp;&nbsp;| [vec_u64_10_get_ok_or](https://github.com/Lightprotocol/cu-library/blob/master/src/access/vec_u64_10.rs#L14)                                     | 8           | 2           |
-&nbsp;&nbsp;| [vec_u64_10_if_let_get](https://github.com/Lightprotocol/cu-library/blob/master/src/access/vec_u64_10.rs#L19)                                    | 9           | 3           |
+  | Function                                                                                                                                         | CU Consumed | CU Adjusted |
+  |--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
+  | [vec_u64_10_index](https://github.com/Lightprotocol/cu-library/blob/master/src/access/vec_u64_10.rs#L4)                                          | 9           | 3           |
+  | [vec_u64_10_get](https://github.com/Lightprotocol/cu-library/blob/master/src/access/vec_u64_10.rs#L9)                                            | 8           | 2           |
+  | [vec_u64_10_get_ok_or](https://github.com/Lightprotocol/cu-library/blob/master/src/access/vec_u64_10.rs#L14)                                     | 8           | 2           |
+  | [vec_u64_10_if_let_get](https://github.com/Lightprotocol/cu-library/blob/master/src/access/vec_u64_10.rs#L19)                                    | 9           | 3           |
 
-&nbsp;&nbsp;### 2.4 Vec U8 32
+  ### 2.4 Vec U8 32
 
-&nbsp;&nbsp;| Function                                                                                                                                         | CU Consumed | CU Adjusted |
-&nbsp;&nbsp;|--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
-&nbsp;&nbsp;| [vec_u8_32_index](https://github.com/Lightprotocol/cu-library/blob/master/src/access/vec_u8_32.rs#L4)                                            | 9           | 3           |
-&nbsp;&nbsp;| [vec_u8_32_get](https://github.com/Lightprotocol/cu-library/blob/master/src/access/vec_u8_32.rs#L9)                                              | 8           | 2           |
-&nbsp;&nbsp;| [vec_u8_32_get_ok_or](https://github.com/Lightprotocol/cu-library/blob/master/src/access/vec_u8_32.rs#L14)                                       | 8           | 2           |
-&nbsp;&nbsp;| [vec_u8_32_if_let_get](https://github.com/Lightprotocol/cu-library/blob/master/src/access/vec_u8_32.rs#L19)                                      | 9           | 3           |
+  | Function                                                                                                                                         | CU Consumed | CU Adjusted |
+  |--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
+  | [vec_u8_32_index](https://github.com/Lightprotocol/cu-library/blob/master/src/access/vec_u8_32.rs#L4)                                            | 9           | 3           |
+  | [vec_u8_32_get](https://github.com/Lightprotocol/cu-library/blob/master/src/access/vec_u8_32.rs#L9)                                              | 8           | 2           |
+  | [vec_u8_32_get_ok_or](https://github.com/Lightprotocol/cu-library/blob/master/src/access/vec_u8_32.rs#L14)                                       | 8           | 2           |
+  | [vec_u8_32_if_let_get](https://github.com/Lightprotocol/cu-library/blob/master/src/access/vec_u8_32.rs#L19)                                      | 9           | 3           |
 
 ## 3. Account Info
 
-&nbsp;&nbsp;### 3.1 Account Borrows
+  ### 3.1 Account Borrows
 
-&nbsp;&nbsp;| Function                                                                                                                                         | CU Consumed | CU Adjusted |
-&nbsp;&nbsp;|--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
-&nbsp;&nbsp;| [is_borrowed](https://github.com/Lightprotocol/cu-library/blob/master/src/account_info/account_borrows.rs#L5)                                    | 13          | 7           |
-&nbsp;&nbsp;| [borrow_lamports_unchecked](https://github.com/Lightprotocol/cu-library/blob/master/src/account_info/account_borrows.rs#L10)                     | 10          | 4           |
-&nbsp;&nbsp;| [borrow_mut_lamports_unchecked](https://github.com/Lightprotocol/cu-library/blob/master/src/account_info/account_borrows.rs#L15)                 | 10          | 4           |
-&nbsp;&nbsp;| [borrow_data_unchecked](https://github.com/Lightprotocol/cu-library/blob/master/src/account_info/account_borrows.rs#L20)                         | 9           | 3           |
-&nbsp;&nbsp;| [borrow_mut_data_unchecked](https://github.com/Lightprotocol/cu-library/blob/master/src/account_info/account_borrows.rs#L25)                     | 9           | 3           |
-&nbsp;&nbsp;| [try_borrow_lamports](https://github.com/Lightprotocol/cu-library/blob/master/src/account_info/account_borrows.rs#L30)                           | 16          | 10          |
-&nbsp;&nbsp;| [try_borrow_mut_lamports](https://github.com/Lightprotocol/cu-library/blob/master/src/account_info/account_borrows.rs#L36)                       | 11          | 5           |
-&nbsp;&nbsp;| [can_borrow_lamports](https://github.com/Lightprotocol/cu-library/blob/master/src/account_info/account_borrows.rs#L42)                           | 9           | 3           |
-&nbsp;&nbsp;| [can_borrow_mut_lamports](https://github.com/Lightprotocol/cu-library/blob/master/src/account_info/account_borrows.rs#L47)                       | 9           | 3           |
-&nbsp;&nbsp;| [try_borrow_data](https://github.com/Lightprotocol/cu-library/blob/master/src/account_info/account_borrows.rs#L52)                               | 15          | 9           |
-&nbsp;&nbsp;| [try_borrow_mut_data](https://github.com/Lightprotocol/cu-library/blob/master/src/account_info/account_borrows.rs#L58)                           | 12          | 6           |
-&nbsp;&nbsp;| [can_borrow_data](https://github.com/Lightprotocol/cu-library/blob/master/src/account_info/account_borrows.rs#L64)                               | 9           | 3           |
-&nbsp;&nbsp;| [can_borrow_mut_data](https://github.com/Lightprotocol/cu-library/blob/master/src/account_info/account_borrows.rs#L69)                           | 9           | 3           |
+  | Function                                                                                                                                         | CU Consumed | CU Adjusted |
+  |--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
+  | [is_borrowed](https://github.com/Lightprotocol/cu-library/blob/master/src/account_info/account_borrows.rs#L5)                                    | 13          | 7           |
+  | [borrow_lamports_unchecked](https://github.com/Lightprotocol/cu-library/blob/master/src/account_info/account_borrows.rs#L10)                     | 10          | 4           |
+  | [borrow_mut_lamports_unchecked](https://github.com/Lightprotocol/cu-library/blob/master/src/account_info/account_borrows.rs#L15)                 | 10          | 4           |
+  | [borrow_data_unchecked](https://github.com/Lightprotocol/cu-library/blob/master/src/account_info/account_borrows.rs#L20)                         | 9           | 3           |
+  | [borrow_mut_data_unchecked](https://github.com/Lightprotocol/cu-library/blob/master/src/account_info/account_borrows.rs#L25)                     | 9           | 3           |
+  | [try_borrow_lamports](https://github.com/Lightprotocol/cu-library/blob/master/src/account_info/account_borrows.rs#L30)                           | 16          | 10          |
+  | [try_borrow_mut_lamports](https://github.com/Lightprotocol/cu-library/blob/master/src/account_info/account_borrows.rs#L36)                       | 11          | 5           |
+  | [can_borrow_lamports](https://github.com/Lightprotocol/cu-library/blob/master/src/account_info/account_borrows.rs#L42)                           | 9           | 3           |
+  | [can_borrow_mut_lamports](https://github.com/Lightprotocol/cu-library/blob/master/src/account_info/account_borrows.rs#L47)                       | 9           | 3           |
+  | [try_borrow_data](https://github.com/Lightprotocol/cu-library/blob/master/src/account_info/account_borrows.rs#L52)                               | 15          | 9           |
+  | [try_borrow_mut_data](https://github.com/Lightprotocol/cu-library/blob/master/src/account_info/account_borrows.rs#L58)                           | 12          | 6           |
+  | [can_borrow_data](https://github.com/Lightprotocol/cu-library/blob/master/src/account_info/account_borrows.rs#L64)                               | 9           | 3           |
+  | [can_borrow_mut_data](https://github.com/Lightprotocol/cu-library/blob/master/src/account_info/account_borrows.rs#L69)                           | 9           | 3           |
 
-&nbsp;&nbsp;### 3.2 Account Checks
+  ### 3.2 Account Checks
 
-&nbsp;&nbsp;| Function                                                                                                                                         | CU Consumed | CU Adjusted |
-&nbsp;&nbsp;|--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
-&nbsp;&nbsp;| [is_signer](https://github.com/Lightprotocol/cu-library/blob/master/src/account_info/account_checks.rs#L5)                                       | 13          | 7           |
-&nbsp;&nbsp;| [is_writable](https://github.com/Lightprotocol/cu-library/blob/master/src/account_info/account_checks.rs#L10)                                    | 12          | 6           |
-&nbsp;&nbsp;| [executable](https://github.com/Lightprotocol/cu-library/blob/master/src/account_info/account_checks.rs#L15)                                     | 13          | 7           |
-&nbsp;&nbsp;| [data_is_empty](https://github.com/Lightprotocol/cu-library/blob/master/src/account_info/account_checks.rs#L20)                                  | 13          | 7           |
+  | Function                                                                                                                                         | CU Consumed | CU Adjusted |
+  |--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
+  | [is_signer](https://github.com/Lightprotocol/cu-library/blob/master/src/account_info/account_checks.rs#L5)                                       | 13          | 7           |
+  | [is_writable](https://github.com/Lightprotocol/cu-library/blob/master/src/account_info/account_checks.rs#L10)                                    | 12          | 6           |
+  | [executable](https://github.com/Lightprotocol/cu-library/blob/master/src/account_info/account_checks.rs#L15)                                     | 13          | 7           |
+  | [data_is_empty](https://github.com/Lightprotocol/cu-library/blob/master/src/account_info/account_checks.rs#L20)                                  | 13          | 7           |
 
-&nbsp;&nbsp;### 3.3 Account Data
+  ### 3.3 Account Data
 
-&nbsp;&nbsp;| Function                                                                                                                                         | CU Consumed | CU Adjusted |
-&nbsp;&nbsp;|--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
-&nbsp;&nbsp;| [data_len](https://github.com/Lightprotocol/cu-library/blob/master/src/account_info/account_data.rs#L5)                                          | 10          | 4           |
-&nbsp;&nbsp;| [lamports](https://github.com/Lightprotocol/cu-library/blob/master/src/account_info/account_data.rs#L10)                                         | 10          | 4           |
+  | Function                                                                                                                                         | CU Consumed | CU Adjusted |
+  |--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
+  | [data_len](https://github.com/Lightprotocol/cu-library/blob/master/src/account_info/account_data.rs#L5)                                          | 10          | 4           |
+  | [lamports](https://github.com/Lightprotocol/cu-library/blob/master/src/account_info/account_data.rs#L10)                                         | 10          | 4           |
 
-&nbsp;&nbsp;### 3.4 Account Key
+  ### 3.4 Account Key
 
-&nbsp;&nbsp;| Function                                                                                                                                         | CU Consumed | CU Adjusted |
-&nbsp;&nbsp;|--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
-&nbsp;&nbsp;| [key](https://github.com/Lightprotocol/cu-library/blob/master/src/account_info/account_key.rs#L5)                                                | 10          | 4           |
+  | Function                                                                                                                                         | CU Consumed | CU Adjusted |
+  |--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
+  | [key](https://github.com/Lightprotocol/cu-library/blob/master/src/account_info/account_key.rs#L5)                                                | 10          | 4           |
 
-&nbsp;&nbsp;### 3.5 Account Owner
+  ### 3.5 Account Owner
 
-&nbsp;&nbsp;| Function                                                                                                                                         | CU Consumed | CU Adjusted |
-&nbsp;&nbsp;|--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
-&nbsp;&nbsp;| [owner](https://github.com/Lightprotocol/cu-library/blob/master/src/account_info/account_owner.rs#L5)                                            | 10          | 4           |
+  | Function                                                                                                                                         | CU Consumed | CU Adjusted |
+  |--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
+  | [owner](https://github.com/Lightprotocol/cu-library/blob/master/src/account_info/account_owner.rs#L5)                                            | 10          | 4           |
 
-&nbsp;&nbsp;### 3.6 Account Ownership
+  ### 3.6 Account Ownership
 
-&nbsp;&nbsp;| Function                                                                                                                                         | CU Consumed | CU Adjusted |
-&nbsp;&nbsp;|--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
-&nbsp;&nbsp;| [is_owned_by](https://github.com/Lightprotocol/cu-library/blob/master/src/account_info/account_ownership.rs#L5)                                  | 31          | 25          |
-&nbsp;&nbsp;| [assign](https://github.com/Lightprotocol/cu-library/blob/master/src/account_info/account_ownership.rs#L10)                                      | 17          | 11          |
+  | Function                                                                                                                                         | CU Consumed | CU Adjusted |
+  |--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
+  | [is_owned_by](https://github.com/Lightprotocol/cu-library/blob/master/src/account_info/account_ownership.rs#L5)                                  | 31          | 25          |
+  | [assign](https://github.com/Lightprotocol/cu-library/blob/master/src/account_info/account_ownership.rs#L10)                                      | 17          | 11          |
 
-&nbsp;&nbsp;### 3.7 Account Realloc
+  ### 3.7 Account Realloc
 
-&nbsp;&nbsp;| Function                                                                                                                                         | CU Consumed | CU Adjusted |
-&nbsp;&nbsp;|--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
-&nbsp;&nbsp;| [realloc](https://github.com/Lightprotocol/cu-library/blob/master/src/account_info/account_realloc.rs#L5)                                        | 17          | 11          |
+  | Function                                                                                                                                         | CU Consumed | CU Adjusted |
+  |--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
+  | [realloc](https://github.com/Lightprotocol/cu-library/blob/master/src/account_info/account_realloc.rs#L5)                                        | 17          | 11          |
 
 ## 4. Array
 
-&nbsp;&nbsp;### 4.1 Array Assign
+  ### 4.1 Array Assign
 
-&nbsp;&nbsp;| Function                                                                                                                                         | CU Consumed | CU Adjusted |
-&nbsp;&nbsp;|--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
-&nbsp;&nbsp;| [assign_u8](https://github.com/Lightprotocol/cu-library/blob/master/src/array/array_assign.rs#L5)                                                | 9           | 3           |
-&nbsp;&nbsp;| [assign_u64](https://github.com/Lightprotocol/cu-library/blob/master/src/array/array_assign.rs#L12)                                              | 16          | 10          |
-&nbsp;&nbsp;| [assign_pubkey](https://github.com/Lightprotocol/cu-library/blob/master/src/array/array_assign.rs#L19)                                           | 108         | 102         |
-&nbsp;&nbsp;| [assign_10_u8](https://github.com/Lightprotocol/cu-library/blob/master/src/array/array_assign.rs#L26)                                            | 9           | 3           |
-&nbsp;&nbsp;| [assign_10_u64](https://github.com/Lightprotocol/cu-library/blob/master/src/array/array_assign.rs#L35)                                           | 16          | 10          |
-&nbsp;&nbsp;| [assign_10_pubkey](https://github.com/Lightprotocol/cu-library/blob/master/src/array/array_assign.rs#L44)                                        | 108         | 102         |
+  | Function                                                                                                                                         | CU Consumed | CU Adjusted |
+  |--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
+  | [assign_u8](https://github.com/Lightprotocol/cu-library/blob/master/src/array/array_assign.rs#L5)                                                | 9           | 3           |
+  | [assign_u64](https://github.com/Lightprotocol/cu-library/blob/master/src/array/array_assign.rs#L12)                                              | 16          | 10          |
+  | [assign_pubkey](https://github.com/Lightprotocol/cu-library/blob/master/src/array/array_assign.rs#L19)                                           | 108         | 102         |
+  | [assign_10_u8](https://github.com/Lightprotocol/cu-library/blob/master/src/array/array_assign.rs#L26)                                            | 9           | 3           |
+  | [assign_10_u64](https://github.com/Lightprotocol/cu-library/blob/master/src/array/array_assign.rs#L35)                                           | 16          | 10          |
+  | [assign_10_pubkey](https://github.com/Lightprotocol/cu-library/blob/master/src/array/array_assign.rs#L44)                                        | 108         | 102         |
 
-&nbsp;&nbsp;### 4.2 Array New
+  ### 4.2 Array New
 
-&nbsp;&nbsp;| Function                                                                                                                                         | CU Consumed | CU Adjusted |
-&nbsp;&nbsp;|--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
-&nbsp;&nbsp;| [new](https://github.com/Lightprotocol/cu-library/blob/master/src/array/array_new.rs#L4)                                                         | 10          | 4           |
+  | Function                                                                                                                                         | CU Consumed | CU Adjusted |
+  |--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
+  | [new](https://github.com/Lightprotocol/cu-library/blob/master/src/array/array_new.rs#L4)                                                         | 10          | 4           |
 
-&nbsp;&nbsp;### 4.3 Array With Capacity
+  ### 4.3 Array With Capacity
 
-&nbsp;&nbsp;| Function                                                                                                                                         | CU Consumed | CU Adjusted |
-&nbsp;&nbsp;|--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
-&nbsp;&nbsp;| [with_capacity_10](https://github.com/Lightprotocol/cu-library/blob/master/src/array/array_with_capacity.rs#L4)                                  | 8           | 2           |
-&nbsp;&nbsp;| [with_capacity_100](https://github.com/Lightprotocol/cu-library/blob/master/src/array/array_with_capacity.rs#L9)                                 | 27          | 21          |
+  | Function                                                                                                                                         | CU Consumed | CU Adjusted |
+  |--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
+  | [with_capacity_10](https://github.com/Lightprotocol/cu-library/blob/master/src/array/array_with_capacity.rs#L4)                                  | 8           | 2           |
+  | [with_capacity_100](https://github.com/Lightprotocol/cu-library/blob/master/src/array/array_with_capacity.rs#L9)                                 | 27          | 21          |
 
 ## 5. Arrayvec
 
-&nbsp;&nbsp;### 5.1 Vec New
+  ### 5.1 Vec New
 
-&nbsp;&nbsp;| Function                                                                                                                                         | CU Consumed | CU Adjusted |
-&nbsp;&nbsp;|--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
-&nbsp;&nbsp;| [u8_new](https://github.com/Lightprotocol/cu-library/blob/master/src/arrayvec/vec_new.rs#L5)                                                     | 7           | 1           |
+  | Function                                                                                                                                         | CU Consumed | CU Adjusted |
+  |--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
+  | [u8_new](https://github.com/Lightprotocol/cu-library/blob/master/src/arrayvec/vec_new.rs#L5)                                                     | 7           | 1           |
 
-&nbsp;&nbsp;### 5.2 Vec Push
+  ### 5.2 Vec Push
 
-&nbsp;&nbsp;| Function                                                                                                                                         | CU Consumed | CU Adjusted |
-&nbsp;&nbsp;|--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
-&nbsp;&nbsp;| [push_pubkey](https://github.com/Lightprotocol/cu-library/blob/master/src/arrayvec/vec_push.rs#L20)                                              | 50          | 44          |
-&nbsp;&nbsp;| [push_u64](https://github.com/Lightprotocol/cu-library/blob/master/src/arrayvec/vec_push.rs#L13)                                                 | 43          | 37          |
-&nbsp;&nbsp;| [push_u8](https://github.com/Lightprotocol/cu-library/blob/master/src/arrayvec/vec_push.rs#L6)                                                   | 25          | 19          |
-&nbsp;&nbsp;| [push_10_u8](https://github.com/Lightprotocol/cu-library/blob/master/src/arrayvec/vec_push.rs#L27)                                               | 10          | 4           |
-&nbsp;&nbsp;| [push_10_u64](https://github.com/Lightprotocol/cu-library/blob/master/src/arrayvec/vec_push.rs#L36)                                              | 17          | 11          |
-&nbsp;&nbsp;| [push_10_pubkey](https://github.com/Lightprotocol/cu-library/blob/master/src/arrayvec/vec_push.rs#L45)                                           | 88          | 82          |
+  | Function                                                                                                                                         | CU Consumed | CU Adjusted |
+  |--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
+  | [push_pubkey](https://github.com/Lightprotocol/cu-library/blob/master/src/arrayvec/vec_push.rs#L20)                                              | 50          | 44          |
+  | [push_u64](https://github.com/Lightprotocol/cu-library/blob/master/src/arrayvec/vec_push.rs#L13)                                                 | 43          | 37          |
+  | [push_u8](https://github.com/Lightprotocol/cu-library/blob/master/src/arrayvec/vec_push.rs#L6)                                                   | 25          | 19          |
+  | [push_10_u8](https://github.com/Lightprotocol/cu-library/blob/master/src/arrayvec/vec_push.rs#L27)                                               | 10          | 4           |
+  | [push_10_u64](https://github.com/Lightprotocol/cu-library/blob/master/src/arrayvec/vec_push.rs#L36)                                              | 17          | 11          |
+  | [push_10_pubkey](https://github.com/Lightprotocol/cu-library/blob/master/src/arrayvec/vec_push.rs#L45)                                           | 88          | 82          |
 
-&nbsp;&nbsp;### 5.3 Vec With Capacity
+  ### 5.3 Vec With Capacity
 
-&nbsp;&nbsp;| Function                                                                                                                                         | CU Consumed | CU Adjusted |
-&nbsp;&nbsp;|--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
-&nbsp;&nbsp;| [u8_with_capacity_10](https://github.com/Lightprotocol/cu-library/blob/master/src/arrayvec/vec_with_capacity.rs#L5)                              | 7           | 1           |
-&nbsp;&nbsp;| [u8_with_capacity_100](https://github.com/Lightprotocol/cu-library/blob/master/src/arrayvec/vec_with_capacity.rs#L10)                            | 7           | 1           |
+  | Function                                                                                                                                         | CU Consumed | CU Adjusted |
+  |--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
+  | [u8_with_capacity_10](https://github.com/Lightprotocol/cu-library/blob/master/src/arrayvec/vec_with_capacity.rs#L5)                              | 7           | 1           |
+  | [u8_with_capacity_100](https://github.com/Lightprotocol/cu-library/blob/master/src/arrayvec/vec_with_capacity.rs#L10)                            | 7           | 1           |
 
 ## 6. Checked Math
 
-&nbsp;&nbsp;### 6.1 Checked Add
+  ### 6.1 Checked Add
 
-&nbsp;&nbsp;| Function                                                                                                                                         | CU Consumed | CU Adjusted |
-&nbsp;&nbsp;|--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
-&nbsp;&nbsp;| [add_u8](https://github.com/Lightprotocol/cu-library/blob/master/src/checked_math/checked_add.rs#L4)                                             | 7           | 1           |
-&nbsp;&nbsp;| [add_u16](https://github.com/Lightprotocol/cu-library/blob/master/src/checked_math/checked_add.rs#L11)                                           | 7           | 1           |
-&nbsp;&nbsp;| [add_u32](https://github.com/Lightprotocol/cu-library/blob/master/src/checked_math/checked_add.rs#L18)                                           | 8           | 2           |
-&nbsp;&nbsp;| [add_u64](https://github.com/Lightprotocol/cu-library/blob/master/src/checked_math/checked_add.rs#L25)                                           | 8           | 2           |
-&nbsp;&nbsp;| [add_u128](https://github.com/Lightprotocol/cu-library/blob/master/src/checked_math/checked_add.rs#L32)                                          | 10          | 4           |
+  | Function                                                                                                                                         | CU Consumed | CU Adjusted |
+  |--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
+  | [add_u8](https://github.com/Lightprotocol/cu-library/blob/master/src/checked_math/checked_add.rs#L4)                                             | 7           | 1           |
+  | [add_u16](https://github.com/Lightprotocol/cu-library/blob/master/src/checked_math/checked_add.rs#L11)                                           | 7           | 1           |
+  | [add_u32](https://github.com/Lightprotocol/cu-library/blob/master/src/checked_math/checked_add.rs#L18)                                           | 8           | 2           |
+  | [add_u64](https://github.com/Lightprotocol/cu-library/blob/master/src/checked_math/checked_add.rs#L25)                                           | 8           | 2           |
+  | [add_u128](https://github.com/Lightprotocol/cu-library/blob/master/src/checked_math/checked_add.rs#L32)                                          | 10          | 4           |
 
-&nbsp;&nbsp;### 6.2 Checked Div
+  ### 6.2 Checked Div
 
-&nbsp;&nbsp;| Function                                                                                                                                         | CU Consumed | CU Adjusted |
-&nbsp;&nbsp;|--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
-&nbsp;&nbsp;| [div_u8](https://github.com/Lightprotocol/cu-library/blob/master/src/checked_math/checked_div.rs#L4)                                             | 7           | 1           |
-&nbsp;&nbsp;| [div_u16](https://github.com/Lightprotocol/cu-library/blob/master/src/checked_math/checked_div.rs#L11)                                           | 7           | 1           |
-&nbsp;&nbsp;| [div_u32](https://github.com/Lightprotocol/cu-library/blob/master/src/checked_math/checked_div.rs#L18)                                           | 8           | 2           |
-&nbsp;&nbsp;| [div_u64](https://github.com/Lightprotocol/cu-library/blob/master/src/checked_math/checked_div.rs#L25)                                           | 8           | 2           |
-&nbsp;&nbsp;| [div_u128](https://github.com/Lightprotocol/cu-library/blob/master/src/checked_math/checked_div.rs#L32)                                          | 10          | 4           |
+  | Function                                                                                                                                         | CU Consumed | CU Adjusted |
+  |--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
+  | [div_u8](https://github.com/Lightprotocol/cu-library/blob/master/src/checked_math/checked_div.rs#L4)                                             | 7           | 1           |
+  | [div_u16](https://github.com/Lightprotocol/cu-library/blob/master/src/checked_math/checked_div.rs#L11)                                           | 7           | 1           |
+  | [div_u32](https://github.com/Lightprotocol/cu-library/blob/master/src/checked_math/checked_div.rs#L18)                                           | 8           | 2           |
+  | [div_u64](https://github.com/Lightprotocol/cu-library/blob/master/src/checked_math/checked_div.rs#L25)                                           | 8           | 2           |
+  | [div_u128](https://github.com/Lightprotocol/cu-library/blob/master/src/checked_math/checked_div.rs#L32)                                          | 10          | 4           |
 
-&nbsp;&nbsp;### 6.3 Checked Mul
+  ### 6.3 Checked Mul
 
-&nbsp;&nbsp;| Function                                                                                                                                         | CU Consumed | CU Adjusted |
-&nbsp;&nbsp;|--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
-&nbsp;&nbsp;| [mul_u8](https://github.com/Lightprotocol/cu-library/blob/master/src/checked_math/checked_mul.rs#L4)                                             | 7           | 1           |
-&nbsp;&nbsp;| [mul_u16](https://github.com/Lightprotocol/cu-library/blob/master/src/checked_math/checked_mul.rs#L11)                                           | 7           | 1           |
-&nbsp;&nbsp;| [mul_u32](https://github.com/Lightprotocol/cu-library/blob/master/src/checked_math/checked_mul.rs#L18)                                           | 8           | 2           |
-&nbsp;&nbsp;| [mul_u64](https://github.com/Lightprotocol/cu-library/blob/master/src/checked_math/checked_mul.rs#L25)                                           | 8           | 2           |
-&nbsp;&nbsp;| [mul_u128](https://github.com/Lightprotocol/cu-library/blob/master/src/checked_math/checked_mul.rs#L32)                                          | 10          | 4           |
+  | Function                                                                                                                                         | CU Consumed | CU Adjusted |
+  |--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
+  | [mul_u8](https://github.com/Lightprotocol/cu-library/blob/master/src/checked_math/checked_mul.rs#L4)                                             | 7           | 1           |
+  | [mul_u16](https://github.com/Lightprotocol/cu-library/blob/master/src/checked_math/checked_mul.rs#L11)                                           | 7           | 1           |
+  | [mul_u32](https://github.com/Lightprotocol/cu-library/blob/master/src/checked_math/checked_mul.rs#L18)                                           | 8           | 2           |
+  | [mul_u64](https://github.com/Lightprotocol/cu-library/blob/master/src/checked_math/checked_mul.rs#L25)                                           | 8           | 2           |
+  | [mul_u128](https://github.com/Lightprotocol/cu-library/blob/master/src/checked_math/checked_mul.rs#L32)                                          | 10          | 4           |
 
-&nbsp;&nbsp;### 6.4 Checked Sub
+  ### 6.4 Checked Sub
 
-&nbsp;&nbsp;| Function                                                                                                                                         | CU Consumed | CU Adjusted |
-&nbsp;&nbsp;|--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
-&nbsp;&nbsp;| [sub_u8](https://github.com/Lightprotocol/cu-library/blob/master/src/checked_math/checked_sub.rs#L4)                                             | 7           | 1           |
-&nbsp;&nbsp;| [sub_u16](https://github.com/Lightprotocol/cu-library/blob/master/src/checked_math/checked_sub.rs#L11)                                           | 7           | 1           |
-&nbsp;&nbsp;| [sub_u32](https://github.com/Lightprotocol/cu-library/blob/master/src/checked_math/checked_sub.rs#L18)                                           | 8           | 2           |
-&nbsp;&nbsp;| [sub_u64](https://github.com/Lightprotocol/cu-library/blob/master/src/checked_math/checked_sub.rs#L25)                                           | 8           | 2           |
-&nbsp;&nbsp;| [sub_u128](https://github.com/Lightprotocol/cu-library/blob/master/src/checked_math/checked_sub.rs#L32)                                          | 10          | 4           |
+  | Function                                                                                                                                         | CU Consumed | CU Adjusted |
+  |--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
+  | [sub_u8](https://github.com/Lightprotocol/cu-library/blob/master/src/checked_math/checked_sub.rs#L4)                                             | 7           | 1           |
+  | [sub_u16](https://github.com/Lightprotocol/cu-library/blob/master/src/checked_math/checked_sub.rs#L11)                                           | 7           | 1           |
+  | [sub_u32](https://github.com/Lightprotocol/cu-library/blob/master/src/checked_math/checked_sub.rs#L18)                                           | 8           | 2           |
+  | [sub_u64](https://github.com/Lightprotocol/cu-library/blob/master/src/checked_math/checked_sub.rs#L25)                                           | 8           | 2           |
+  | [sub_u128](https://github.com/Lightprotocol/cu-library/blob/master/src/checked_math/checked_sub.rs#L32)                                          | 10          | 4           |
 
 ## 7. Conversions
 
-&nbsp;&nbsp;### 7.1 Cast U16
+  ### 7.1 Cast U16
 
-&nbsp;&nbsp;| Function                                                                                                                                         | CU Consumed | CU Adjusted |
-&nbsp;&nbsp;|--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
-&nbsp;&nbsp;| [u16_as_u8](https://github.com/Lightprotocol/cu-library/blob/master/src/conversions/cast_u16.rs#L5)                                              | 7           | 1           |
-&nbsp;&nbsp;| [u16_as_u32](https://github.com/Lightprotocol/cu-library/blob/master/src/conversions/cast_u16.rs#L10)                                            | 7           | 1           |
-&nbsp;&nbsp;| [u16_as_u64](https://github.com/Lightprotocol/cu-library/blob/master/src/conversions/cast_u16.rs#L15)                                            | 7           | 1           |
-&nbsp;&nbsp;| [u16_as_usize](https://github.com/Lightprotocol/cu-library/blob/master/src/conversions/cast_u16.rs#L20)                                          | 7           | 1           |
+  | Function                                                                                                                                         | CU Consumed | CU Adjusted |
+  |--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
+  | [u16_as_u8](https://github.com/Lightprotocol/cu-library/blob/master/src/conversions/cast_u16.rs#L5)                                              | 7           | 1           |
+  | [u16_as_u32](https://github.com/Lightprotocol/cu-library/blob/master/src/conversions/cast_u16.rs#L10)                                            | 7           | 1           |
+  | [u16_as_u64](https://github.com/Lightprotocol/cu-library/blob/master/src/conversions/cast_u16.rs#L15)                                            | 7           | 1           |
+  | [u16_as_usize](https://github.com/Lightprotocol/cu-library/blob/master/src/conversions/cast_u16.rs#L20)                                          | 7           | 1           |
 
-&nbsp;&nbsp;### 7.2 Cast U32
+  ### 7.2 Cast U32
 
-&nbsp;&nbsp;| Function                                                                                                                                         | CU Consumed | CU Adjusted |
-&nbsp;&nbsp;|--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
-&nbsp;&nbsp;| [u32_as_u8](https://github.com/Lightprotocol/cu-library/blob/master/src/conversions/cast_u32.rs#L5)                                              | 7           | 1           |
-&nbsp;&nbsp;| [u32_as_u16](https://github.com/Lightprotocol/cu-library/blob/master/src/conversions/cast_u32.rs#L10)                                            | 7           | 1           |
-&nbsp;&nbsp;| [u32_as_u64](https://github.com/Lightprotocol/cu-library/blob/master/src/conversions/cast_u32.rs#L15)                                            | 7           | 1           |
-&nbsp;&nbsp;| [u32_as_usize](https://github.com/Lightprotocol/cu-library/blob/master/src/conversions/cast_u32.rs#L20)                                          | 7           | 1           |
+  | Function                                                                                                                                         | CU Consumed | CU Adjusted |
+  |--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
+  | [u32_as_u8](https://github.com/Lightprotocol/cu-library/blob/master/src/conversions/cast_u32.rs#L5)                                              | 7           | 1           |
+  | [u32_as_u16](https://github.com/Lightprotocol/cu-library/blob/master/src/conversions/cast_u32.rs#L10)                                            | 7           | 1           |
+  | [u32_as_u64](https://github.com/Lightprotocol/cu-library/blob/master/src/conversions/cast_u32.rs#L15)                                            | 7           | 1           |
+  | [u32_as_usize](https://github.com/Lightprotocol/cu-library/blob/master/src/conversions/cast_u32.rs#L20)                                          | 7           | 1           |
 
-&nbsp;&nbsp;### 7.3 Cast U64
+  ### 7.3 Cast U64
 
-&nbsp;&nbsp;| Function                                                                                                                                         | CU Consumed | CU Adjusted |
-&nbsp;&nbsp;|--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
-&nbsp;&nbsp;| [u64_as_u8](https://github.com/Lightprotocol/cu-library/blob/master/src/conversions/cast_u64.rs#L5)                                              | 7           | 1           |
-&nbsp;&nbsp;| [u64_as_u16](https://github.com/Lightprotocol/cu-library/blob/master/src/conversions/cast_u64.rs#L10)                                            | 7           | 1           |
-&nbsp;&nbsp;| [u64_as_u32](https://github.com/Lightprotocol/cu-library/blob/master/src/conversions/cast_u64.rs#L15)                                            | 7           | 1           |
-&nbsp;&nbsp;| [u64_as_usize](https://github.com/Lightprotocol/cu-library/blob/master/src/conversions/cast_u64.rs#L20)                                          | 7           | 1           |
+  | Function                                                                                                                                         | CU Consumed | CU Adjusted |
+  |--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
+  | [u64_as_u8](https://github.com/Lightprotocol/cu-library/blob/master/src/conversions/cast_u64.rs#L5)                                              | 7           | 1           |
+  | [u64_as_u16](https://github.com/Lightprotocol/cu-library/blob/master/src/conversions/cast_u64.rs#L10)                                            | 7           | 1           |
+  | [u64_as_u32](https://github.com/Lightprotocol/cu-library/blob/master/src/conversions/cast_u64.rs#L15)                                            | 7           | 1           |
+  | [u64_as_usize](https://github.com/Lightprotocol/cu-library/blob/master/src/conversions/cast_u64.rs#L20)                                          | 7           | 1           |
 
-&nbsp;&nbsp;### 7.4 Cast U8
+  ### 7.4 Cast U8
 
-&nbsp;&nbsp;| Function                                                                                                                                         | CU Consumed | CU Adjusted |
-&nbsp;&nbsp;|--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
-&nbsp;&nbsp;| [u8_as_u16](https://github.com/Lightprotocol/cu-library/blob/master/src/conversions/cast_u8.rs#L5)                                               | 7           | 1           |
-&nbsp;&nbsp;| [u8_as_u32](https://github.com/Lightprotocol/cu-library/blob/master/src/conversions/cast_u8.rs#L10)                                              | 7           | 1           |
-&nbsp;&nbsp;| [u8_as_u64](https://github.com/Lightprotocol/cu-library/blob/master/src/conversions/cast_u8.rs#L15)                                              | 7           | 1           |
-&nbsp;&nbsp;| [u8_as_usize](https://github.com/Lightprotocol/cu-library/blob/master/src/conversions/cast_u8.rs#L20)                                            | 7           | 1           |
+  | Function                                                                                                                                         | CU Consumed | CU Adjusted |
+  |--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
+  | [u8_as_u16](https://github.com/Lightprotocol/cu-library/blob/master/src/conversions/cast_u8.rs#L5)                                               | 7           | 1           |
+  | [u8_as_u32](https://github.com/Lightprotocol/cu-library/blob/master/src/conversions/cast_u8.rs#L10)                                              | 7           | 1           |
+  | [u8_as_u64](https://github.com/Lightprotocol/cu-library/blob/master/src/conversions/cast_u8.rs#L15)                                              | 7           | 1           |
+  | [u8_as_usize](https://github.com/Lightprotocol/cu-library/blob/master/src/conversions/cast_u8.rs#L20)                                            | 7           | 1           |
 
-&nbsp;&nbsp;### 7.5 From Usize
+  ### 7.5 From Usize
 
-&nbsp;&nbsp;| Function                                                                                                                                         | CU Consumed | CU Adjusted |
-&nbsp;&nbsp;|--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
-&nbsp;&nbsp;| [try_into_usize_to_u64_unwrap](https://github.com/Lightprotocol/cu-library/blob/master/src/conversions/from_usize.rs#L6)                         | 7           | 1           |
-&nbsp;&nbsp;| [try_into_usize_to_u64_map_err](https://github.com/Lightprotocol/cu-library/blob/master/src/conversions/from_usize.rs#L11)                       | 6           | 0           |
+  | Function                                                                                                                                         | CU Consumed | CU Adjusted |
+  |--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
+  | [try_into_usize_to_u64_unwrap](https://github.com/Lightprotocol/cu-library/blob/master/src/conversions/from_usize.rs#L6)                         | 7           | 1           |
+  | [try_into_usize_to_u64_map_err](https://github.com/Lightprotocol/cu-library/blob/master/src/conversions/from_usize.rs#L11)                       | 6           | 0           |
 
-&nbsp;&nbsp;### 7.6 Slice To Array
+  ### 7.6 Slice To Array
 
-&nbsp;&nbsp;| Function                                                                                                                                         | CU Consumed | CU Adjusted |
-&nbsp;&nbsp;|--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
-&nbsp;&nbsp;| [try_into_slice_to_array_32_unwrap](https://github.com/Lightprotocol/cu-library/blob/master/src/conversions/slice_to_array.rs#L7)                | 15          | 9           |
-&nbsp;&nbsp;| [try_into_slice_to_array_32_map_err](https://github.com/Lightprotocol/cu-library/blob/master/src/conversions/slice_to_array.rs#L12)              | 6           | 0           |
+  | Function                                                                                                                                         | CU Consumed | CU Adjusted |
+  |--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
+  | [try_into_slice_to_array_32_unwrap](https://github.com/Lightprotocol/cu-library/blob/master/src/conversions/slice_to_array.rs#L7)                | 15          | 9           |
+  | [try_into_slice_to_array_32_map_err](https://github.com/Lightprotocol/cu-library/blob/master/src/conversions/slice_to_array.rs#L12)              | 6           | 0           |
 
-&nbsp;&nbsp;### 7.7 To Usize
+  ### 7.7 To Usize
 
-&nbsp;&nbsp;| Function                                                                                                                                         | CU Consumed | CU Adjusted |
-&nbsp;&nbsp;|--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
-&nbsp;&nbsp;| [try_into_u64_to_usize_unwrap](https://github.com/Lightprotocol/cu-library/blob/master/src/conversions/to_usize.rs#L6)                           | 7           | 1           |
-&nbsp;&nbsp;| [try_into_u64_to_usize_map_err](https://github.com/Lightprotocol/cu-library/blob/master/src/conversions/to_usize.rs#L11)                         | 6           | 0           |
-&nbsp;&nbsp;| [try_into_u32_to_usize_unwrap](https://github.com/Lightprotocol/cu-library/blob/master/src/conversions/to_usize.rs#L17)                          | 7           | 1           |
-&nbsp;&nbsp;| [try_into_u32_to_usize_map_err](https://github.com/Lightprotocol/cu-library/blob/master/src/conversions/to_usize.rs#L22)                         | 6           | 0           |
-&nbsp;&nbsp;| [try_into_u16_to_usize_unwrap](https://github.com/Lightprotocol/cu-library/blob/master/src/conversions/to_usize.rs#L28)                          | 7           | 1           |
-&nbsp;&nbsp;| [try_into_u16_to_usize_map_err](https://github.com/Lightprotocol/cu-library/blob/master/src/conversions/to_usize.rs#L33)                         | 6           | 0           |
-&nbsp;&nbsp;| [try_into_u8_to_usize_unwrap](https://github.com/Lightprotocol/cu-library/blob/master/src/conversions/to_usize.rs#L39)                           | 7           | 1           |
-&nbsp;&nbsp;| [try_into_u8_to_usize_map_err](https://github.com/Lightprotocol/cu-library/blob/master/src/conversions/to_usize.rs#L44)                          | 6           | 0           |
+  | Function                                                                                                                                         | CU Consumed | CU Adjusted |
+  |--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
+  | [try_into_u64_to_usize_unwrap](https://github.com/Lightprotocol/cu-library/blob/master/src/conversions/to_usize.rs#L6)                           | 7           | 1           |
+  | [try_into_u64_to_usize_map_err](https://github.com/Lightprotocol/cu-library/blob/master/src/conversions/to_usize.rs#L11)                         | 6           | 0           |
+  | [try_into_u32_to_usize_unwrap](https://github.com/Lightprotocol/cu-library/blob/master/src/conversions/to_usize.rs#L17)                          | 7           | 1           |
+  | [try_into_u32_to_usize_map_err](https://github.com/Lightprotocol/cu-library/blob/master/src/conversions/to_usize.rs#L22)                         | 6           | 0           |
+  | [try_into_u16_to_usize_unwrap](https://github.com/Lightprotocol/cu-library/blob/master/src/conversions/to_usize.rs#L28)                          | 7           | 1           |
+  | [try_into_u16_to_usize_map_err](https://github.com/Lightprotocol/cu-library/blob/master/src/conversions/to_usize.rs#L33)                         | 6           | 0           |
+  | [try_into_u8_to_usize_unwrap](https://github.com/Lightprotocol/cu-library/blob/master/src/conversions/to_usize.rs#L39)                           | 7           | 1           |
+  | [try_into_u8_to_usize_map_err](https://github.com/Lightprotocol/cu-library/blob/master/src/conversions/to_usize.rs#L44)                          | 6           | 0           |
 
 ## 8. Cpi
 
-&nbsp;&nbsp;### 8.1 Cpi Array Loop
+  ### 8.1 Cpi Array Loop
 
-&nbsp;&nbsp;| Function                                                                                                                                         | CU Consumed | CU Adjusted |
-&nbsp;&nbsp;|--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
-&nbsp;&nbsp;| [account_meta_array_10_loop](https://github.com/Lightprotocol/cu-library/blob/master/src/cpi/cpi_array_loop.rs#L5)                               | 201         | 195         |
-&nbsp;&nbsp;| [account_info_array_10_ref_loop](https://github.com/Lightprotocol/cu-library/blob/master/src/cpi/cpi_array_loop.rs#L28)                          | 6           | 0           |
-&nbsp;&nbsp;| [account_info_array_10_clone_loop](https://github.com/Lightprotocol/cu-library/blob/master/src/cpi/cpi_array_loop.rs#L41)                        | 8           | 2           |
-&nbsp;&nbsp;| [account_info_array_10_move_loop](https://github.com/Lightprotocol/cu-library/blob/master/src/cpi/cpi_array_loop.rs#L54)                         | 8           | 2           |
+  | Function                                                                                                                                         | CU Consumed | CU Adjusted |
+  |--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
+  | [account_meta_array_10_loop](https://github.com/Lightprotocol/cu-library/blob/master/src/cpi/cpi_array_loop.rs#L5)                               | 201         | 195         |
+  | [account_info_array_10_ref_loop](https://github.com/Lightprotocol/cu-library/blob/master/src/cpi/cpi_array_loop.rs#L28)                          | 6           | 0           |
+  | [account_info_array_10_clone_loop](https://github.com/Lightprotocol/cu-library/blob/master/src/cpi/cpi_array_loop.rs#L41)                        | 8           | 2           |
+  | [account_info_array_10_move_loop](https://github.com/Lightprotocol/cu-library/blob/master/src/cpi/cpi_array_loop.rs#L54)                         | 8           | 2           |
 
-&nbsp;&nbsp;### 8.2 Cpi Arrays
+  ### 8.2 Cpi Arrays
 
-&nbsp;&nbsp;| Function                                                                                                                                         | CU Consumed | CU Adjusted |
-&nbsp;&nbsp;|--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
-&nbsp;&nbsp;| [account_meta_array_10](https://github.com/Lightprotocol/cu-library/blob/master/src/cpi/cpi_arrays.rs#L5)                                        | 6           | 0           |
-&nbsp;&nbsp;| [account_info_array_10_ref](https://github.com/Lightprotocol/cu-library/blob/master/src/cpi/cpi_arrays.rs#L61)                                   | 6           | 0           |
-&nbsp;&nbsp;| [account_info_array_10_clone](https://github.com/Lightprotocol/cu-library/blob/master/src/cpi/cpi_arrays.rs#L77)                                 | 6           | 0           |
-&nbsp;&nbsp;| [account_info_array_10_move](https://github.com/Lightprotocol/cu-library/blob/master/src/cpi/cpi_arrays.rs#L93)                                  | 6           | 0           |
+  | Function                                                                                                                                         | CU Consumed | CU Adjusted |
+  |--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
+  | [account_meta_array_10](https://github.com/Lightprotocol/cu-library/blob/master/src/cpi/cpi_arrays.rs#L5)                                        | 6           | 0           |
+  | [account_info_array_10_ref](https://github.com/Lightprotocol/cu-library/blob/master/src/cpi/cpi_arrays.rs#L61)                                   | 6           | 0           |
+  | [account_info_array_10_clone](https://github.com/Lightprotocol/cu-library/blob/master/src/cpi/cpi_arrays.rs#L77)                                 | 6           | 0           |
+  | [account_info_array_10_move](https://github.com/Lightprotocol/cu-library/blob/master/src/cpi/cpi_arrays.rs#L93)                                  | 6           | 0           |
 
-&nbsp;&nbsp;### 8.3 Cpi Arrayvec
+  ### 8.3 Cpi Arrayvec
 
-&nbsp;&nbsp;| Function                                                                                                                                         | CU Consumed | CU Adjusted |
-&nbsp;&nbsp;|--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
-&nbsp;&nbsp;| [arrayvec_push_account_meta_10](https://github.com/Lightprotocol/cu-library/blob/master/src/cpi/cpi_arrayvec.rs#L6)                              | 182         | 176         |
-&nbsp;&nbsp;| [arrayvec_push_account_info_10_ref](https://github.com/Lightprotocol/cu-library/blob/master/src/cpi/cpi_arrayvec.rs#L19)                         | 6           | 0           |
-&nbsp;&nbsp;| [arrayvec_push_account_info_10_clone](https://github.com/Lightprotocol/cu-library/blob/master/src/cpi/cpi_arrayvec.rs#L30)                       | 8           | 2           |
-&nbsp;&nbsp;| [arrayvec_push_account_info_10_move](https://github.com/Lightprotocol/cu-library/blob/master/src/cpi/cpi_arrayvec.rs#L41)                        | 8           | 2           |
+  | Function                                                                                                                                         | CU Consumed | CU Adjusted |
+  |--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
+  | [arrayvec_push_account_meta_10](https://github.com/Lightprotocol/cu-library/blob/master/src/cpi/cpi_arrayvec.rs#L6)                              | 182         | 176         |
+  | [arrayvec_push_account_info_10_ref](https://github.com/Lightprotocol/cu-library/blob/master/src/cpi/cpi_arrayvec.rs#L19)                         | 6           | 0           |
+  | [arrayvec_push_account_info_10_clone](https://github.com/Lightprotocol/cu-library/blob/master/src/cpi/cpi_arrayvec.rs#L30)                       | 8           | 2           |
+  | [arrayvec_push_account_info_10_move](https://github.com/Lightprotocol/cu-library/blob/master/src/cpi/cpi_arrayvec.rs#L41)                        | 8           | 2           |
 
 ## 9. Option
 
-&nbsp;&nbsp;### 9.1 Option Checked Add
+  ### 9.1 Option Checked Add
 
-&nbsp;&nbsp;| Function                                                                                                                                         | CU Consumed | CU Adjusted |
-&nbsp;&nbsp;|--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
-&nbsp;&nbsp;| [checked_add_u8_unwrap](https://github.com/Lightprotocol/cu-library/blob/master/src/option/option_checked_add.rs#L7)                             | 7           | 1           |
-&nbsp;&nbsp;| [checked_add_u8_ok_or](https://github.com/Lightprotocol/cu-library/blob/master/src/option/option_checked_add.rs#L13)                             | 6           | 0           |
-&nbsp;&nbsp;| [checked_add_u8_ok_or_else](https://github.com/Lightprotocol/cu-library/blob/master/src/option/option_checked_add.rs#L19)                        | 6           | 0           |
-&nbsp;&nbsp;| [checked_add_u8_unwrap_or_default](https://github.com/Lightprotocol/cu-library/blob/master/src/option/option_checked_add.rs#L25)                 | 8           | 2           |
-&nbsp;&nbsp;| [checked_add_u8_unwrap_or](https://github.com/Lightprotocol/cu-library/blob/master/src/option/option_checked_add.rs#L31)                         | 8           | 2           |
+  | Function                                                                                                                                         | CU Consumed | CU Adjusted |
+  |--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
+  | [checked_add_u8_unwrap](https://github.com/Lightprotocol/cu-library/blob/master/src/option/option_checked_add.rs#L7)                             | 7           | 1           |
+  | [checked_add_u8_ok_or](https://github.com/Lightprotocol/cu-library/blob/master/src/option/option_checked_add.rs#L13)                             | 6           | 0           |
+  | [checked_add_u8_ok_or_else](https://github.com/Lightprotocol/cu-library/blob/master/src/option/option_checked_add.rs#L19)                        | 6           | 0           |
+  | [checked_add_u8_unwrap_or_default](https://github.com/Lightprotocol/cu-library/blob/master/src/option/option_checked_add.rs#L25)                 | 8           | 2           |
+  | [checked_add_u8_unwrap_or](https://github.com/Lightprotocol/cu-library/blob/master/src/option/option_checked_add.rs#L31)                         | 8           | 2           |
 
-&nbsp;&nbsp;### 9.2 Option If Let
+  ### 9.2 Option If Let
 
-&nbsp;&nbsp;| Function                                                                                                                                         | CU Consumed | CU Adjusted |
-&nbsp;&nbsp;|--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
-&nbsp;&nbsp;| [if_let_some_u8](https://github.com/Lightprotocol/cu-library/blob/master/src/option/option_if_let.rs#L7)                                         | 6           | 0           |
-&nbsp;&nbsp;| [if_let_some_array](https://github.com/Lightprotocol/cu-library/blob/master/src/option/option_if_let.rs#L16)                                     | 15          | 9           |
-&nbsp;&nbsp;| [if_let_some_pubkey](https://github.com/Lightprotocol/cu-library/blob/master/src/option/option_if_let.rs#L25)                                    | 15          | 9           |
-&nbsp;&nbsp;| [if_let_some_array_ref](https://github.com/Lightprotocol/cu-library/blob/master/src/option/option_if_let.rs#L34)                                 | 6           | 0           |
+  | Function                                                                                                                                         | CU Consumed | CU Adjusted |
+  |--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
+  | [if_let_some_u8](https://github.com/Lightprotocol/cu-library/blob/master/src/option/option_if_let.rs#L7)                                         | 6           | 0           |
+  | [if_let_some_array](https://github.com/Lightprotocol/cu-library/blob/master/src/option/option_if_let.rs#L16)                                     | 15          | 9           |
+  | [if_let_some_pubkey](https://github.com/Lightprotocol/cu-library/blob/master/src/option/option_if_let.rs#L25)                                    | 15          | 9           |
+  | [if_let_some_array_ref](https://github.com/Lightprotocol/cu-library/blob/master/src/option/option_if_let.rs#L34)                                 | 6           | 0           |
 
-&nbsp;&nbsp;### 9.3 Option Pubkey Ref
+  ### 9.3 Option Pubkey Ref
 
-&nbsp;&nbsp;| Function                                                                                                                                         | CU Consumed | CU Adjusted |
-&nbsp;&nbsp;|--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
-&nbsp;&nbsp;| [pubkey_ref_map_deref](https://github.com/Lightprotocol/cu-library/blob/master/src/option/option_pubkey_ref.rs#L7)                               | 6           | 0           |
-&nbsp;&nbsp;| [pubkey_as_ref_map_convert](https://github.com/Lightprotocol/cu-library/blob/master/src/option/option_pubkey_ref.rs#L12)                         | 6           | 0           |
+  | Function                                                                                                                                         | CU Consumed | CU Adjusted |
+  |--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
+  | [pubkey_ref_map_deref](https://github.com/Lightprotocol/cu-library/blob/master/src/option/option_pubkey_ref.rs#L7)                               | 6           | 0           |
+  | [pubkey_as_ref_map_convert](https://github.com/Lightprotocol/cu-library/blob/master/src/option/option_pubkey_ref.rs#L12)                         | 6           | 0           |
 
-&nbsp;&nbsp;### 9.4 Option Slice Get
+  ### 9.4 Option Slice Get
 
-&nbsp;&nbsp;| Function                                                                                                                                         | CU Consumed | CU Adjusted |
-&nbsp;&nbsp;|--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
-&nbsp;&nbsp;| [slice_get_array_unwrap](https://github.com/Lightprotocol/cu-library/blob/master/src/option/option_slice_get.rs#L7)                              | 15          | 9           |
-&nbsp;&nbsp;| [slice_get_array_ok_or](https://github.com/Lightprotocol/cu-library/blob/master/src/option/option_slice_get.rs#L13)                              | 6           | 0           |
-&nbsp;&nbsp;| [slice_get_array_ok_or_else](https://github.com/Lightprotocol/cu-library/blob/master/src/option/option_slice_get.rs#L19)                         | 6           | 0           |
-&nbsp;&nbsp;| [slice_get_array_unwrap_or_default](https://github.com/Lightprotocol/cu-library/blob/master/src/option/option_slice_get.rs#L25)                  | 15          | 9           |
-&nbsp;&nbsp;| [slice_get_array_unwrap_or](https://github.com/Lightprotocol/cu-library/blob/master/src/option/option_slice_get.rs#L31)                          | 15          | 9           |
+  | Function                                                                                                                                         | CU Consumed | CU Adjusted |
+  |--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
+  | [slice_get_array_unwrap](https://github.com/Lightprotocol/cu-library/blob/master/src/option/option_slice_get.rs#L7)                              | 15          | 9           |
+  | [slice_get_array_ok_or](https://github.com/Lightprotocol/cu-library/blob/master/src/option/option_slice_get.rs#L13)                              | 6           | 0           |
+  | [slice_get_array_ok_or_else](https://github.com/Lightprotocol/cu-library/blob/master/src/option/option_slice_get.rs#L19)                         | 6           | 0           |
+  | [slice_get_array_unwrap_or_default](https://github.com/Lightprotocol/cu-library/blob/master/src/option/option_slice_get.rs#L25)                  | 15          | 9           |
+  | [slice_get_array_unwrap_or](https://github.com/Lightprotocol/cu-library/blob/master/src/option/option_slice_get.rs#L31)                          | 15          | 9           |
 
 ## 10. Partial Eq
 
-&nbsp;&nbsp;### 10.1 Partial Eq Arrays
+  ### 10.1 Partial Eq Arrays
 
-&nbsp;&nbsp;| Function                                                                                                                                         | CU Consumed | CU Adjusted |
-&nbsp;&nbsp;|--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
-&nbsp;&nbsp;| [array_u8_32_ref](https://github.com/Lightprotocol/cu-library/blob/master/src/partial_eq/partial_eq_arrays.rs#L5)                                | 7           | 1           |
-&nbsp;&nbsp;| [array_u8_32](https://github.com/Lightprotocol/cu-library/blob/master/src/partial_eq/partial_eq_arrays.rs#L11)                                   | 6           | 0           |
-&nbsp;&nbsp;| [array_u16_32](https://github.com/Lightprotocol/cu-library/blob/master/src/partial_eq/partial_eq_arrays.rs#L16)                                  | 7           | 1           |
-&nbsp;&nbsp;| [array_u32_32](https://github.com/Lightprotocol/cu-library/blob/master/src/partial_eq/partial_eq_arrays.rs#L21)                                  | 7           | 1           |
-&nbsp;&nbsp;| [array_u64_32](https://github.com/Lightprotocol/cu-library/blob/master/src/partial_eq/partial_eq_arrays.rs#L26)                                  | 7           | 1           |
+  | Function                                                                                                                                         | CU Consumed | CU Adjusted |
+  |--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
+  | [array_u8_32_ref](https://github.com/Lightprotocol/cu-library/blob/master/src/partial_eq/partial_eq_arrays.rs#L5)                                | 7           | 1           |
+  | [array_u8_32](https://github.com/Lightprotocol/cu-library/blob/master/src/partial_eq/partial_eq_arrays.rs#L11)                                   | 6           | 0           |
+  | [array_u16_32](https://github.com/Lightprotocol/cu-library/blob/master/src/partial_eq/partial_eq_arrays.rs#L16)                                  | 7           | 1           |
+  | [array_u32_32](https://github.com/Lightprotocol/cu-library/blob/master/src/partial_eq/partial_eq_arrays.rs#L21)                                  | 7           | 1           |
+  | [array_u64_32](https://github.com/Lightprotocol/cu-library/blob/master/src/partial_eq/partial_eq_arrays.rs#L26)                                  | 7           | 1           |
 
-&nbsp;&nbsp;### 10.2 Partial Eq Neq
+  ### 10.2 Partial Eq Neq
 
-&nbsp;&nbsp;| Function                                                                                                                                         | CU Consumed | CU Adjusted |
-&nbsp;&nbsp;|--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
-&nbsp;&nbsp;| [u8_neq](https://github.com/Lightprotocol/cu-library/blob/master/src/partial_eq/partial_eq_neq.rs#L5)                                            | 9           | 3           |
-&nbsp;&nbsp;| [u16_neq](https://github.com/Lightprotocol/cu-library/blob/master/src/partial_eq/partial_eq_neq.rs#L10)                                          | 9           | 3           |
-&nbsp;&nbsp;| [u32_neq](https://github.com/Lightprotocol/cu-library/blob/master/src/partial_eq/partial_eq_neq.rs#L15)                                          | 10          | 4           |
-&nbsp;&nbsp;| [u64_neq](https://github.com/Lightprotocol/cu-library/blob/master/src/partial_eq/partial_eq_neq.rs#L20)                                          | 10          | 4           |
-&nbsp;&nbsp;| [u128_neq](https://github.com/Lightprotocol/cu-library/blob/master/src/partial_eq/partial_eq_neq.rs#L25)                                         | 13          | 7           |
-&nbsp;&nbsp;| [array_u8_32_neq_ref](https://github.com/Lightprotocol/cu-library/blob/master/src/partial_eq/partial_eq_neq.rs#L32)                              | 35          | 29          |
-&nbsp;&nbsp;| [array_u8_32_neq](https://github.com/Lightprotocol/cu-library/blob/master/src/partial_eq/partial_eq_neq.rs#L38)                                  | 31          | 25          |
-&nbsp;&nbsp;| [array_u8_32_neq_deref](https://github.com/Lightprotocol/cu-library/blob/master/src/partial_eq/partial_eq_neq.rs#L44)                            | 35          | 29          |
-&nbsp;&nbsp;| [array_u16_32_neq](https://github.com/Lightprotocol/cu-library/blob/master/src/partial_eq/partial_eq_neq.rs#L49)                                 | 33          | 27          |
-&nbsp;&nbsp;| [array_u32_32_neq](https://github.com/Lightprotocol/cu-library/blob/master/src/partial_eq/partial_eq_neq.rs#L54)                                 | 34          | 28          |
-&nbsp;&nbsp;| [array_u64_32_neq](https://github.com/Lightprotocol/cu-library/blob/master/src/partial_eq/partial_eq_neq.rs#L59)                                 | 34          | 28          |
+  | Function                                                                                                                                         | CU Consumed | CU Adjusted |
+  |--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
+  | [u8_neq](https://github.com/Lightprotocol/cu-library/blob/master/src/partial_eq/partial_eq_neq.rs#L5)                                            | 9           | 3           |
+  | [u16_neq](https://github.com/Lightprotocol/cu-library/blob/master/src/partial_eq/partial_eq_neq.rs#L10)                                          | 9           | 3           |
+  | [u32_neq](https://github.com/Lightprotocol/cu-library/blob/master/src/partial_eq/partial_eq_neq.rs#L15)                                          | 10          | 4           |
+  | [u64_neq](https://github.com/Lightprotocol/cu-library/blob/master/src/partial_eq/partial_eq_neq.rs#L20)                                          | 10          | 4           |
+  | [u128_neq](https://github.com/Lightprotocol/cu-library/blob/master/src/partial_eq/partial_eq_neq.rs#L25)                                         | 13          | 7           |
+  | [array_u8_32_neq_ref](https://github.com/Lightprotocol/cu-library/blob/master/src/partial_eq/partial_eq_neq.rs#L32)                              | 35          | 29          |
+  | [array_u8_32_neq](https://github.com/Lightprotocol/cu-library/blob/master/src/partial_eq/partial_eq_neq.rs#L38)                                  | 31          | 25          |
+  | [array_u8_32_neq_deref](https://github.com/Lightprotocol/cu-library/blob/master/src/partial_eq/partial_eq_neq.rs#L44)                            | 35          | 29          |
+  | [array_u16_32_neq](https://github.com/Lightprotocol/cu-library/blob/master/src/partial_eq/partial_eq_neq.rs#L49)                                 | 33          | 27          |
+  | [array_u32_32_neq](https://github.com/Lightprotocol/cu-library/blob/master/src/partial_eq/partial_eq_neq.rs#L54)                                 | 34          | 28          |
+  | [array_u64_32_neq](https://github.com/Lightprotocol/cu-library/blob/master/src/partial_eq/partial_eq_neq.rs#L59)                                 | 34          | 28          |
 
-&nbsp;&nbsp;### 10.3 Partial Eq Primitives
+  ### 10.3 Partial Eq Primitives
 
-&nbsp;&nbsp;| Function                                                                                                                                         | CU Consumed | CU Adjusted |
-&nbsp;&nbsp;|--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
-&nbsp;&nbsp;| [u8](https://github.com/Lightprotocol/cu-library/blob/master/src/partial_eq/partial_eq_primitives.rs#L4)                                         | 7           | 1           |
-&nbsp;&nbsp;| [u16](https://github.com/Lightprotocol/cu-library/blob/master/src/partial_eq/partial_eq_primitives.rs#L9)                                        | 7           | 1           |
-&nbsp;&nbsp;| [u32](https://github.com/Lightprotocol/cu-library/blob/master/src/partial_eq/partial_eq_primitives.rs#L14)                                       | 7           | 1           |
-&nbsp;&nbsp;| [u64](https://github.com/Lightprotocol/cu-library/blob/master/src/partial_eq/partial_eq_primitives.rs#L19)                                       | 7           | 1           |
-&nbsp;&nbsp;| [u128](https://github.com/Lightprotocol/cu-library/blob/master/src/partial_eq/partial_eq_primitives.rs#L24)                                      | 7           | 1           |
+  | Function                                                                                                                                         | CU Consumed | CU Adjusted |
+  |--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
+  | [u8](https://github.com/Lightprotocol/cu-library/blob/master/src/partial_eq/partial_eq_primitives.rs#L4)                                         | 7           | 1           |
+  | [u16](https://github.com/Lightprotocol/cu-library/blob/master/src/partial_eq/partial_eq_primitives.rs#L9)                                        | 7           | 1           |
+  | [u32](https://github.com/Lightprotocol/cu-library/blob/master/src/partial_eq/partial_eq_primitives.rs#L14)                                       | 7           | 1           |
+  | [u64](https://github.com/Lightprotocol/cu-library/blob/master/src/partial_eq/partial_eq_primitives.rs#L19)                                       | 7           | 1           |
+  | [u128](https://github.com/Lightprotocol/cu-library/blob/master/src/partial_eq/partial_eq_primitives.rs#L24)                                      | 7           | 1           |
 
 ## 11. Pinocchio Ops
 
-&nbsp;&nbsp;### 11.1 Msg
+  ### 11.1 Msg
 
-&nbsp;&nbsp;| Function                                                                                                                                         | CU Consumed | CU Adjusted |
-&nbsp;&nbsp;|--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
-&nbsp;&nbsp;| [msg10_chars](https://github.com/Lightprotocol/cu-library/blob/master/src/pinocchio_ops/msg.rs#L5)                                               | 110         | 104         |
+  | Function                                                                                                                                         | CU Consumed | CU Adjusted |
+  |--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
+  | [msg10_chars](https://github.com/Lightprotocol/cu-library/blob/master/src/pinocchio_ops/msg.rs#L5)                                               | 110         | 104         |
 
-&nbsp;&nbsp;### 11.2 Sysvar Clock
+  ### 11.2 Sysvar Clock
 
-&nbsp;&nbsp;| Function                                                                                                                                         | CU Consumed | CU Adjusted |
-&nbsp;&nbsp;|--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
-&nbsp;&nbsp;| [clock_get_slot](https://github.com/Lightprotocol/cu-library/blob/master/src/pinocchio_ops/sysvar_clock.rs#L5)                                   | 171         | 165         |
+  | Function                                                                                                                                         | CU Consumed | CU Adjusted |
+  |--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
+  | [clock_get_slot](https://github.com/Lightprotocol/cu-library/blob/master/src/pinocchio_ops/sysvar_clock.rs#L5)                                   | 171         | 165         |
 
-&nbsp;&nbsp;### 11.3 Sysvar Rent
+  ### 11.3 Sysvar Rent
 
-&nbsp;&nbsp;| Function                                                                                                                                         | CU Consumed | CU Adjusted |
-&nbsp;&nbsp;|--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
-&nbsp;&nbsp;| [sysvar_rent_exemption_165](https://github.com/Lightprotocol/cu-library/blob/master/src/pinocchio_ops/sysvar_rent.rs#L5)                         | 151         | 145         |
+  | Function                                                                                                                                         | CU Consumed | CU Adjusted |
+  |--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
+  | [sysvar_rent_exemption_165](https://github.com/Lightprotocol/cu-library/blob/master/src/pinocchio_ops/sysvar_rent.rs#L5)                         | 151         | 145         |
 
 ## 12. Saturating Math
 
-&nbsp;&nbsp;### 12.1 Saturating Add
+  ### 12.1 Saturating Add
 
-&nbsp;&nbsp;| Function                                                                                                                                         | CU Consumed | CU Adjusted |
-&nbsp;&nbsp;|--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
-&nbsp;&nbsp;| [add_u8](https://github.com/Lightprotocol/cu-library/blob/master/src/saturating_math/saturating_add.rs#L4)                                       | 7           | 1           |
-&nbsp;&nbsp;| [add_u16](https://github.com/Lightprotocol/cu-library/blob/master/src/saturating_math/saturating_add.rs#L11)                                     | 7           | 1           |
-&nbsp;&nbsp;| [add_u32](https://github.com/Lightprotocol/cu-library/blob/master/src/saturating_math/saturating_add.rs#L18)                                     | 7           | 1           |
-&nbsp;&nbsp;| [add_u64](https://github.com/Lightprotocol/cu-library/blob/master/src/saturating_math/saturating_add.rs#L25)                                     | 7           | 1           |
-&nbsp;&nbsp;| [add_u128](https://github.com/Lightprotocol/cu-library/blob/master/src/saturating_math/saturating_add.rs#L32)                                    | 8           | 2           |
+  | Function                                                                                                                                         | CU Consumed | CU Adjusted |
+  |--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
+  | [add_u8](https://github.com/Lightprotocol/cu-library/blob/master/src/saturating_math/saturating_add.rs#L4)                                       | 7           | 1           |
+  | [add_u16](https://github.com/Lightprotocol/cu-library/blob/master/src/saturating_math/saturating_add.rs#L11)                                     | 7           | 1           |
+  | [add_u32](https://github.com/Lightprotocol/cu-library/blob/master/src/saturating_math/saturating_add.rs#L18)                                     | 7           | 1           |
+  | [add_u64](https://github.com/Lightprotocol/cu-library/blob/master/src/saturating_math/saturating_add.rs#L25)                                     | 7           | 1           |
+  | [add_u128](https://github.com/Lightprotocol/cu-library/blob/master/src/saturating_math/saturating_add.rs#L32)                                    | 8           | 2           |
 
-&nbsp;&nbsp;### 12.2 Saturating Mul
+  ### 12.2 Saturating Mul
 
-&nbsp;&nbsp;| Function                                                                                                                                         | CU Consumed | CU Adjusted |
-&nbsp;&nbsp;|--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
-&nbsp;&nbsp;| [mul_u8](https://github.com/Lightprotocol/cu-library/blob/master/src/saturating_math/saturating_mul.rs#L4)                                       | 7           | 1           |
-&nbsp;&nbsp;| [mul_u16](https://github.com/Lightprotocol/cu-library/blob/master/src/saturating_math/saturating_mul.rs#L11)                                     | 7           | 1           |
-&nbsp;&nbsp;| [mul_u32](https://github.com/Lightprotocol/cu-library/blob/master/src/saturating_math/saturating_mul.rs#L18)                                     | 7           | 1           |
-&nbsp;&nbsp;| [mul_u64](https://github.com/Lightprotocol/cu-library/blob/master/src/saturating_math/saturating_mul.rs#L25)                                     | 7           | 1           |
-&nbsp;&nbsp;| [mul_u128](https://github.com/Lightprotocol/cu-library/blob/master/src/saturating_math/saturating_mul.rs#L32)                                    | 8           | 2           |
+  | Function                                                                                                                                         | CU Consumed | CU Adjusted |
+  |--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
+  | [mul_u8](https://github.com/Lightprotocol/cu-library/blob/master/src/saturating_math/saturating_mul.rs#L4)                                       | 7           | 1           |
+  | [mul_u16](https://github.com/Lightprotocol/cu-library/blob/master/src/saturating_math/saturating_mul.rs#L11)                                     | 7           | 1           |
+  | [mul_u32](https://github.com/Lightprotocol/cu-library/blob/master/src/saturating_math/saturating_mul.rs#L18)                                     | 7           | 1           |
+  | [mul_u64](https://github.com/Lightprotocol/cu-library/blob/master/src/saturating_math/saturating_mul.rs#L25)                                     | 7           | 1           |
+  | [mul_u128](https://github.com/Lightprotocol/cu-library/blob/master/src/saturating_math/saturating_mul.rs#L32)                                    | 8           | 2           |
 
-&nbsp;&nbsp;### 12.3 Saturating Sub
+  ### 12.3 Saturating Sub
 
-&nbsp;&nbsp;| Function                                                                                                                                         | CU Consumed | CU Adjusted |
-&nbsp;&nbsp;|--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
-&nbsp;&nbsp;| [sub_u8](https://github.com/Lightprotocol/cu-library/blob/master/src/saturating_math/saturating_sub.rs#L4)                                       | 7           | 1           |
-&nbsp;&nbsp;| [sub_u16](https://github.com/Lightprotocol/cu-library/blob/master/src/saturating_math/saturating_sub.rs#L11)                                     | 7           | 1           |
-&nbsp;&nbsp;| [sub_u32](https://github.com/Lightprotocol/cu-library/blob/master/src/saturating_math/saturating_sub.rs#L18)                                     | 7           | 1           |
-&nbsp;&nbsp;| [sub_u64](https://github.com/Lightprotocol/cu-library/blob/master/src/saturating_math/saturating_sub.rs#L25)                                     | 7           | 1           |
-&nbsp;&nbsp;| [sub_u128](https://github.com/Lightprotocol/cu-library/blob/master/src/saturating_math/saturating_sub.rs#L32)                                    | 8           | 2           |
+  | Function                                                                                                                                         | CU Consumed | CU Adjusted |
+  |--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
+  | [sub_u8](https://github.com/Lightprotocol/cu-library/blob/master/src/saturating_math/saturating_sub.rs#L4)                                       | 7           | 1           |
+  | [sub_u16](https://github.com/Lightprotocol/cu-library/blob/master/src/saturating_math/saturating_sub.rs#L11)                                     | 7           | 1           |
+  | [sub_u32](https://github.com/Lightprotocol/cu-library/blob/master/src/saturating_math/saturating_sub.rs#L18)                                     | 7           | 1           |
+  | [sub_u64](https://github.com/Lightprotocol/cu-library/blob/master/src/saturating_math/saturating_sub.rs#L25)                                     | 7           | 1           |
+  | [sub_u128](https://github.com/Lightprotocol/cu-library/blob/master/src/saturating_math/saturating_sub.rs#L32)                                    | 8           | 2           |
 
 ## 13. Serialization
 
-&nbsp;&nbsp;### 13.1 Compressed Account Info
+  ### 13.1 Compressed Account Info
 
-&nbsp;&nbsp;| Function                                                                                                                                         | CU Consumed | CU Adjusted |
-&nbsp;&nbsp;|--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
-&nbsp;&nbsp;| [borsh_deserialize](https://github.com/Lightprotocol/cu-library/blob/master/src/serialization/compressed_account_info.rs#L145)                   | 427         | 421         |
-&nbsp;&nbsp;| [zero_copy_deserialize](https://github.com/Lightprotocol/cu-library/blob/master/src/serialization/compressed_account_info.rs#L153)               | 130         | 124         |
-&nbsp;&nbsp;| [wincode_deserialize](https://github.com/Lightprotocol/cu-library/blob/master/src/serialization/compressed_account_info.rs#L162)                 | 1408        | 1402        |
+  | Function                                                                                                                                         | CU Consumed | CU Adjusted |
+  |--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
+  | [borsh_deserialize](https://github.com/Lightprotocol/cu-library/blob/master/src/serialization/compressed_account_info.rs#L145)                   | 427         | 421         |
+  | [zero_copy_deserialize](https://github.com/Lightprotocol/cu-library/blob/master/src/serialization/compressed_account_info.rs#L153)               | 130         | 124         |
+  | [wincode_deserialize](https://github.com/Lightprotocol/cu-library/blob/master/src/serialization/compressed_account_info.rs#L162)                 | 1408        | 1402        |
 
 ## 14. Solana Ops
 
-&nbsp;&nbsp;### 14.1 Msg
+  ### 14.1 Msg
 
-&nbsp;&nbsp;| Function                                                                                                                                         | CU Consumed | CU Adjusted |
-&nbsp;&nbsp;|--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
-&nbsp;&nbsp;| [msg10_chars](https://github.com/Lightprotocol/cu-library/blob/master/src/solana_ops/msg.rs#L5)                                                  | 110         | 104         |
+  | Function                                                                                                                                         | CU Consumed | CU Adjusted |
+  |--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
+  | [msg10_chars](https://github.com/Lightprotocol/cu-library/blob/master/src/solana_ops/msg.rs#L5)                                                  | 110         | 104         |
 
-&nbsp;&nbsp;### 14.2 Msg Program Id
+  ### 14.2 Msg Program Id
 
-&nbsp;&nbsp;| Function                                                                                                                                         | CU Consumed | CU Adjusted |
-&nbsp;&nbsp;|--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
-&nbsp;&nbsp;| [msg_program_id](https://github.com/Lightprotocol/cu-library/blob/master/src/solana_ops/msg_program_id.rs#L5)                                    | 6954        | 6948        |
+  | Function                                                                                                                                         | CU Consumed | CU Adjusted |
+  |--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
+  | [msg_program_id](https://github.com/Lightprotocol/cu-library/blob/master/src/solana_ops/msg_program_id.rs#L5)                                    | 6954        | 6948        |
 
-&nbsp;&nbsp;### 14.3 Pubkey New From Array
+  ### 14.3 Pubkey New From Array
 
-&nbsp;&nbsp;| Function                                                                                                                                         | CU Consumed | CU Adjusted |
-&nbsp;&nbsp;|--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
-&nbsp;&nbsp;| [pubkey_new_from_array](https://github.com/Lightprotocol/cu-library/blob/master/src/solana_ops/pubkey_new_from_array.rs#L5)                      | 15          | 9           |
+  | Function                                                                                                                                         | CU Consumed | CU Adjusted |
+  |--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
+  | [pubkey_new_from_array](https://github.com/Lightprotocol/cu-library/blob/master/src/solana_ops/pubkey_new_from_array.rs#L5)                      | 15          | 9           |
 
-&nbsp;&nbsp;### 14.4 Pubkey To Bytes
+  ### 14.4 Pubkey To Bytes
 
-&nbsp;&nbsp;| Function                                                                                                                                         | CU Consumed | CU Adjusted |
-&nbsp;&nbsp;|--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
-&nbsp;&nbsp;| [pubkey_to_bytes](https://github.com/Lightprotocol/cu-library/blob/master/src/solana_ops/pubkey_to_bytes.rs#L6)                                  | 15          | 9           |
+  | Function                                                                                                                                         | CU Consumed | CU Adjusted |
+  |--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
+  | [pubkey_to_bytes](https://github.com/Lightprotocol/cu-library/blob/master/src/solana_ops/pubkey_to_bytes.rs#L6)                                  | 15          | 9           |
 
 ## 15. Std Math
 
-&nbsp;&nbsp;### 15.1 Add Assign
+  ### 15.1 Add Assign
 
-&nbsp;&nbsp;| Function                                                                                                                                         | CU Consumed | CU Adjusted |
-&nbsp;&nbsp;|--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
-&nbsp;&nbsp;| [add_assign_u8](https://github.com/Lightprotocol/cu-library/blob/master/src/std_math/add_assign.rs#L4)                                           | 7           | 1           |
-&nbsp;&nbsp;| [add_assign_u16](https://github.com/Lightprotocol/cu-library/blob/master/src/std_math/add_assign.rs#L12)                                         | 7           | 1           |
-&nbsp;&nbsp;| [add_assign_u32](https://github.com/Lightprotocol/cu-library/blob/master/src/std_math/add_assign.rs#L20)                                         | 7           | 1           |
-&nbsp;&nbsp;| [add_assign_u64](https://github.com/Lightprotocol/cu-library/blob/master/src/std_math/add_assign.rs#L28)                                         | 7           | 1           |
-&nbsp;&nbsp;| [add_assign_u128](https://github.com/Lightprotocol/cu-library/blob/master/src/std_math/add_assign.rs#L36)                                        | 9           | 3           |
+  | Function                                                                                                                                         | CU Consumed | CU Adjusted |
+  |--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
+  | [add_assign_u8](https://github.com/Lightprotocol/cu-library/blob/master/src/std_math/add_assign.rs#L4)                                           | 7           | 1           |
+  | [add_assign_u16](https://github.com/Lightprotocol/cu-library/blob/master/src/std_math/add_assign.rs#L12)                                         | 7           | 1           |
+  | [add_assign_u32](https://github.com/Lightprotocol/cu-library/blob/master/src/std_math/add_assign.rs#L20)                                         | 7           | 1           |
+  | [add_assign_u64](https://github.com/Lightprotocol/cu-library/blob/master/src/std_math/add_assign.rs#L28)                                         | 7           | 1           |
+  | [add_assign_u128](https://github.com/Lightprotocol/cu-library/blob/master/src/std_math/add_assign.rs#L36)                                        | 9           | 3           |
 
-&nbsp;&nbsp;### 15.2 Std Add
+  ### 15.2 Std Add
 
-&nbsp;&nbsp;| Function                                                                                                                                         | CU Consumed | CU Adjusted |
-&nbsp;&nbsp;|--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
-&nbsp;&nbsp;| [add_u8](https://github.com/Lightprotocol/cu-library/blob/master/src/std_math/std_add.rs#L4)                                                     | 6           | 0           |
-&nbsp;&nbsp;| [add_u16](https://github.com/Lightprotocol/cu-library/blob/master/src/std_math/std_add.rs#L11)                                                   | 6           | 0           |
-&nbsp;&nbsp;| [add_u32](https://github.com/Lightprotocol/cu-library/blob/master/src/std_math/std_add.rs#L18)                                                   | 6           | 0           |
-&nbsp;&nbsp;| [add_u64](https://github.com/Lightprotocol/cu-library/blob/master/src/std_math/std_add.rs#L25)                                                   | 6           | 0           |
-&nbsp;&nbsp;| [add_u128](https://github.com/Lightprotocol/cu-library/blob/master/src/std_math/std_add.rs#L32)                                                  | 6           | 0           |
+  | Function                                                                                                                                         | CU Consumed | CU Adjusted |
+  |--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
+  | [add_u8](https://github.com/Lightprotocol/cu-library/blob/master/src/std_math/std_add.rs#L4)                                                     | 6           | 0           |
+  | [add_u16](https://github.com/Lightprotocol/cu-library/blob/master/src/std_math/std_add.rs#L11)                                                   | 6           | 0           |
+  | [add_u32](https://github.com/Lightprotocol/cu-library/blob/master/src/std_math/std_add.rs#L18)                                                   | 6           | 0           |
+  | [add_u64](https://github.com/Lightprotocol/cu-library/blob/master/src/std_math/std_add.rs#L25)                                                   | 6           | 0           |
+  | [add_u128](https://github.com/Lightprotocol/cu-library/blob/master/src/std_math/std_add.rs#L32)                                                  | 6           | 0           |
 
-&nbsp;&nbsp;### 15.3 Std Div
+  ### 15.3 Std Div
 
-&nbsp;&nbsp;| Function                                                                                                                                         | CU Consumed | CU Adjusted |
-&nbsp;&nbsp;|--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
-&nbsp;&nbsp;| [div_u8](https://github.com/Lightprotocol/cu-library/blob/master/src/std_math/std_div.rs#L4)                                                     | 6           | 0           |
-&nbsp;&nbsp;| [div_u16](https://github.com/Lightprotocol/cu-library/blob/master/src/std_math/std_div.rs#L11)                                                   | 6           | 0           |
-&nbsp;&nbsp;| [div_u32](https://github.com/Lightprotocol/cu-library/blob/master/src/std_math/std_div.rs#L18)                                                   | 6           | 0           |
-&nbsp;&nbsp;| [div_u64](https://github.com/Lightprotocol/cu-library/blob/master/src/std_math/std_div.rs#L25)                                                   | 6           | 0           |
-&nbsp;&nbsp;| [div_u128](https://github.com/Lightprotocol/cu-library/blob/master/src/std_math/std_div.rs#L32)                                                  | 6           | 0           |
+  | Function                                                                                                                                         | CU Consumed | CU Adjusted |
+  |--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
+  | [div_u8](https://github.com/Lightprotocol/cu-library/blob/master/src/std_math/std_div.rs#L4)                                                     | 6           | 0           |
+  | [div_u16](https://github.com/Lightprotocol/cu-library/blob/master/src/std_math/std_div.rs#L11)                                                   | 6           | 0           |
+  | [div_u32](https://github.com/Lightprotocol/cu-library/blob/master/src/std_math/std_div.rs#L18)                                                   | 6           | 0           |
+  | [div_u64](https://github.com/Lightprotocol/cu-library/blob/master/src/std_math/std_div.rs#L25)                                                   | 6           | 0           |
+  | [div_u128](https://github.com/Lightprotocol/cu-library/blob/master/src/std_math/std_div.rs#L32)                                                  | 6           | 0           |
 
-&nbsp;&nbsp;### 15.4 Std Mul
+  ### 15.4 Std Mul
 
-&nbsp;&nbsp;| Function                                                                                                                                         | CU Consumed | CU Adjusted |
-&nbsp;&nbsp;|--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
-&nbsp;&nbsp;| [mul_u8](https://github.com/Lightprotocol/cu-library/blob/master/src/std_math/std_mul.rs#L4)                                                     | 6           | 0           |
-&nbsp;&nbsp;| [mul_u16](https://github.com/Lightprotocol/cu-library/blob/master/src/std_math/std_mul.rs#L11)                                                   | 6           | 0           |
-&nbsp;&nbsp;| [mul_u32](https://github.com/Lightprotocol/cu-library/blob/master/src/std_math/std_mul.rs#L18)                                                   | 6           | 0           |
-&nbsp;&nbsp;| [mul_u64](https://github.com/Lightprotocol/cu-library/blob/master/src/std_math/std_mul.rs#L25)                                                   | 6           | 0           |
-&nbsp;&nbsp;| [mul_u128](https://github.com/Lightprotocol/cu-library/blob/master/src/std_math/std_mul.rs#L32)                                                  | 6           | 0           |
+  | Function                                                                                                                                         | CU Consumed | CU Adjusted |
+  |--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
+  | [mul_u8](https://github.com/Lightprotocol/cu-library/blob/master/src/std_math/std_mul.rs#L4)                                                     | 6           | 0           |
+  | [mul_u16](https://github.com/Lightprotocol/cu-library/blob/master/src/std_math/std_mul.rs#L11)                                                   | 6           | 0           |
+  | [mul_u32](https://github.com/Lightprotocol/cu-library/blob/master/src/std_math/std_mul.rs#L18)                                                   | 6           | 0           |
+  | [mul_u64](https://github.com/Lightprotocol/cu-library/blob/master/src/std_math/std_mul.rs#L25)                                                   | 6           | 0           |
+  | [mul_u128](https://github.com/Lightprotocol/cu-library/blob/master/src/std_math/std_mul.rs#L32)                                                  | 6           | 0           |
 
-&nbsp;&nbsp;### 15.5 Std Sub
+  ### 15.5 Std Sub
 
-&nbsp;&nbsp;| Function                                                                                                                                         | CU Consumed | CU Adjusted |
-&nbsp;&nbsp;|--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
-&nbsp;&nbsp;| [sub_u8](https://github.com/Lightprotocol/cu-library/blob/master/src/std_math/std_sub.rs#L4)                                                     | 6           | 0           |
-&nbsp;&nbsp;| [sub_u16](https://github.com/Lightprotocol/cu-library/blob/master/src/std_math/std_sub.rs#L11)                                                   | 6           | 0           |
-&nbsp;&nbsp;| [sub_u32](https://github.com/Lightprotocol/cu-library/blob/master/src/std_math/std_sub.rs#L18)                                                   | 6           | 0           |
-&nbsp;&nbsp;| [sub_u64](https://github.com/Lightprotocol/cu-library/blob/master/src/std_math/std_sub.rs#L25)                                                   | 6           | 0           |
-&nbsp;&nbsp;| [sub_u128](https://github.com/Lightprotocol/cu-library/blob/master/src/std_math/std_sub.rs#L32)                                                  | 6           | 0           |
+  | Function                                                                                                                                         | CU Consumed | CU Adjusted |
+  |--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
+  | [sub_u8](https://github.com/Lightprotocol/cu-library/blob/master/src/std_math/std_sub.rs#L4)                                                     | 6           | 0           |
+  | [sub_u16](https://github.com/Lightprotocol/cu-library/blob/master/src/std_math/std_sub.rs#L11)                                                   | 6           | 0           |
+  | [sub_u32](https://github.com/Lightprotocol/cu-library/blob/master/src/std_math/std_sub.rs#L18)                                                   | 6           | 0           |
+  | [sub_u64](https://github.com/Lightprotocol/cu-library/blob/master/src/std_math/std_sub.rs#L25)                                                   | 6           | 0           |
+  | [sub_u128](https://github.com/Lightprotocol/cu-library/blob/master/src/std_math/std_sub.rs#L32)                                                  | 6           | 0           |
 
-&nbsp;&nbsp;### 15.6 Sub Assign
+  ### 15.6 Sub Assign
 
-&nbsp;&nbsp;| Function                                                                                                                                         | CU Consumed | CU Adjusted |
-&nbsp;&nbsp;|--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
-&nbsp;&nbsp;| [sub_assign_u8](https://github.com/Lightprotocol/cu-library/blob/master/src/std_math/sub_assign.rs#L4)                                           | 7           | 1           |
-&nbsp;&nbsp;| [sub_assign_u16](https://github.com/Lightprotocol/cu-library/blob/master/src/std_math/sub_assign.rs#L12)                                         | 7           | 1           |
-&nbsp;&nbsp;| [sub_assign_u32](https://github.com/Lightprotocol/cu-library/blob/master/src/std_math/sub_assign.rs#L20)                                         | 7           | 1           |
-&nbsp;&nbsp;| [sub_assign_u64](https://github.com/Lightprotocol/cu-library/blob/master/src/std_math/sub_assign.rs#L28)                                         | 7           | 1           |
-&nbsp;&nbsp;| [sub_assign_u128](https://github.com/Lightprotocol/cu-library/blob/master/src/std_math/sub_assign.rs#L36)                                        | 9           | 3           |
+  | Function                                                                                                                                         | CU Consumed | CU Adjusted |
+  |--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
+  | [sub_assign_u8](https://github.com/Lightprotocol/cu-library/blob/master/src/std_math/sub_assign.rs#L4)                                           | 7           | 1           |
+  | [sub_assign_u16](https://github.com/Lightprotocol/cu-library/blob/master/src/std_math/sub_assign.rs#L12)                                         | 7           | 1           |
+  | [sub_assign_u32](https://github.com/Lightprotocol/cu-library/blob/master/src/std_math/sub_assign.rs#L20)                                         | 7           | 1           |
+  | [sub_assign_u64](https://github.com/Lightprotocol/cu-library/blob/master/src/std_math/sub_assign.rs#L28)                                         | 7           | 1           |
+  | [sub_assign_u128](https://github.com/Lightprotocol/cu-library/blob/master/src/std_math/sub_assign.rs#L36)                                        | 9           | 3           |
 
 ## 16. Vec
 
-&nbsp;&nbsp;### 16.1 Vec New
+  ### 16.1 Vec New
 
-&nbsp;&nbsp;| Function                                                                                                                                         | CU Consumed | CU Adjusted |
-&nbsp;&nbsp;|--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
-&nbsp;&nbsp;| [u8_new](https://github.com/Lightprotocol/cu-library/blob/master/src/vec/vec_new.rs#L4)                                                          | 9           | 3           |
+  | Function                                                                                                                                         | CU Consumed | CU Adjusted |
+  |--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
+  | [u8_new](https://github.com/Lightprotocol/cu-library/blob/master/src/vec/vec_new.rs#L4)                                                          | 9           | 3           |
 
-&nbsp;&nbsp;### 16.2 Vec Push
+  ### 16.2 Vec Push
 
-&nbsp;&nbsp;| Function                                                                                                                                         | CU Consumed | CU Adjusted |
-&nbsp;&nbsp;|--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
-&nbsp;&nbsp;| [push_u8](https://github.com/Lightprotocol/cu-library/blob/master/src/vec/vec_push.rs#L5)                                                        | 73          | 67          |
-&nbsp;&nbsp;| [push_u64](https://github.com/Lightprotocol/cu-library/blob/master/src/vec/vec_push.rs#L12)                                                      | 78          | 72          |
-&nbsp;&nbsp;| [push_pubkey](https://github.com/Lightprotocol/cu-library/blob/master/src/vec/vec_push.rs#L19)                                                   | 85          | 79          |
-&nbsp;&nbsp;| [push_10_u8](https://github.com/Lightprotocol/cu-library/blob/master/src/vec/vec_push.rs#L26)                                                    | 202         | 196         |
-&nbsp;&nbsp;| [push_10_u64](https://github.com/Lightprotocol/cu-library/blob/master/src/vec/vec_push.rs#L35)                                                   | 313         | 307         |
-&nbsp;&nbsp;| [push_10_pubkey](https://github.com/Lightprotocol/cu-library/blob/master/src/vec/vec_push.rs#L44)                                                | 380         | 374         |
-&nbsp;&nbsp;| [push_u8_with_capacity](https://github.com/Lightprotocol/cu-library/blob/master/src/vec/vec_push.rs#L53)                                         | 120         | 114         |
-&nbsp;&nbsp;| [push_u64_with_capacity](https://github.com/Lightprotocol/cu-library/blob/master/src/vec/vec_push.rs#L60)                                        | 120         | 114         |
-&nbsp;&nbsp;| [push_pubkey_with_capacity](https://github.com/Lightprotocol/cu-library/blob/master/src/vec/vec_push.rs#L67)                                     | 128         | 122         |
-&nbsp;&nbsp;| [push_10_u8_with_capacity](https://github.com/Lightprotocol/cu-library/blob/master/src/vec/vec_push.rs#L74)                                      | 153         | 147         |
-&nbsp;&nbsp;| [push_10_u64_with_capacity](https://github.com/Lightprotocol/cu-library/blob/master/src/vec/vec_push.rs#L83)                                     | 149         | 143         |
-&nbsp;&nbsp;| [push_10_pubkey_with_capacity](https://github.com/Lightprotocol/cu-library/blob/master/src/vec/vec_push.rs#L92)                                  | 218         | 212         |
+  | Function                                                                                                                                         | CU Consumed | CU Adjusted |
+  |--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
+  | [push_u8](https://github.com/Lightprotocol/cu-library/blob/master/src/vec/vec_push.rs#L5)                                                        | 73          | 67          |
+  | [push_u64](https://github.com/Lightprotocol/cu-library/blob/master/src/vec/vec_push.rs#L12)                                                      | 78          | 72          |
+  | [push_pubkey](https://github.com/Lightprotocol/cu-library/blob/master/src/vec/vec_push.rs#L19)                                                   | 85          | 79          |
+  | [push_10_u8](https://github.com/Lightprotocol/cu-library/blob/master/src/vec/vec_push.rs#L26)                                                    | 202         | 196         |
+  | [push_10_u64](https://github.com/Lightprotocol/cu-library/blob/master/src/vec/vec_push.rs#L35)                                                   | 313         | 307         |
+  | [push_10_pubkey](https://github.com/Lightprotocol/cu-library/blob/master/src/vec/vec_push.rs#L44)                                                | 380         | 374         |
+  | [push_u8_with_capacity](https://github.com/Lightprotocol/cu-library/blob/master/src/vec/vec_push.rs#L53)                                         | 120         | 114         |
+  | [push_u64_with_capacity](https://github.com/Lightprotocol/cu-library/blob/master/src/vec/vec_push.rs#L60)                                        | 120         | 114         |
+  | [push_pubkey_with_capacity](https://github.com/Lightprotocol/cu-library/blob/master/src/vec/vec_push.rs#L67)                                     | 128         | 122         |
+  | [push_10_u8_with_capacity](https://github.com/Lightprotocol/cu-library/blob/master/src/vec/vec_push.rs#L74)                                      | 153         | 147         |
+  | [push_10_u64_with_capacity](https://github.com/Lightprotocol/cu-library/blob/master/src/vec/vec_push.rs#L83)                                     | 149         | 143         |
+  | [push_10_pubkey_with_capacity](https://github.com/Lightprotocol/cu-library/blob/master/src/vec/vec_push.rs#L92)                                  | 218         | 212         |
 
-&nbsp;&nbsp;### 16.3 Vec With Capacity
+  ### 16.3 Vec With Capacity
 
-&nbsp;&nbsp;| Function                                                                                                                                         | CU Consumed | CU Adjusted |
-&nbsp;&nbsp;|--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
-&nbsp;&nbsp;| [u8_with_capacity_10](https://github.com/Lightprotocol/cu-library/blob/master/src/vec/vec_with_capacity.rs#L4)                                   | 113         | 107         |
-&nbsp;&nbsp;| [u8_with_capacity_100](https://github.com/Lightprotocol/cu-library/blob/master/src/vec/vec_with_capacity.rs#L9)                                  | 113         | 107         |
+  | Function                                                                                                                                         | CU Consumed | CU Adjusted |
+  |--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
+  | [u8_with_capacity_10](https://github.com/Lightprotocol/cu-library/blob/master/src/vec/vec_with_capacity.rs#L4)                                   | 113         | 107         |
+  | [u8_with_capacity_100](https://github.com/Lightprotocol/cu-library/blob/master/src/vec/vec_with_capacity.rs#L9)                                  | 113         | 107         |
 

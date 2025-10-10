@@ -480,11 +480,10 @@ fn format_file_display_name(file_stem: &str) -> String {
 
 /// Add indentation based on nesting level
 /// Level 0 (##): no indentation
-/// Level 1 (###): 2 non-breaking spaces
-/// Level 2 (**): 4 non-breaking spaces
-/// Uses &nbsp; to ensure indentation is visible in rendered markdown
+/// Level 1 (###): 2 spaces
+/// Uses normal spaces for indentation
 fn add_indentation(text: &str, level: usize) -> String {
-    let indent = "&nbsp;&nbsp;".repeat(level);
+    let indent = "  ".repeat(level);
     format!("{}{}", indent, text)
 }
 
@@ -679,7 +678,7 @@ fn write_categorized_readme(mut results_by_category: BTreeMap<String, BTreeMap<S
             let indented_header = add_indentation(&format!("### {}.{} {}", number, file_number, file_display_name), 1);
             writeln!(readme, "{}\n", indented_header).unwrap();
 
-            // Write table header with adjusted column and indentation
+            // Write table header with indentation
             let table_header = add_indentation("| Function                                                                                                                                         | CU Consumed | CU Adjusted |", 1);
             let table_separator = add_indentation("|--------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|", 1);
             writeln!(readme, "{}", table_header).unwrap();
