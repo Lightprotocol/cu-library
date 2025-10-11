@@ -11,6 +11,8 @@ use zerocopy::{Immutable, KnownLayout};
     ZeroCopy,
     BorshDeserialize,
     BorshSerialize,
+    borsh1::BorshDeserialize,
+    borsh1::BorshSerialize,
     Serialize,
     Deserialize,
     SchemaRead,
@@ -37,6 +39,8 @@ pub struct PackedMerkleContext {
     Clone,
     BorshSerialize,
     BorshDeserialize,
+    borsh1::BorshSerialize,
+    borsh1::BorshDeserialize,
     Serialize,
     Deserialize,
     SchemaRead,
@@ -63,6 +67,8 @@ pub struct InAccountInfo {
     Clone,
     BorshSerialize,
     BorshDeserialize,
+    borsh1::BorshSerialize,
+    borsh1::BorshDeserialize,
     Serialize,
     Deserialize,
     SchemaRead,
@@ -88,6 +94,8 @@ pub struct OutAccountInfo {
     Default,
     BorshSerialize,
     BorshDeserialize,
+    borsh1::BorshSerialize,
+    borsh1::BorshDeserialize,
     Serialize,
     Deserialize,
     SchemaRead,
@@ -141,6 +149,18 @@ pub fn serialize_compressed_account_info_wincode() -> Vec<u8> {
     wincode::serialize(&test_data).unwrap()
 }
 
+/// Helper function to create and serialize test data using Bincode
+pub fn serialize_compressed_account_info_bincode() -> Vec<u8> {
+    let test_data = create_test_data();
+    bincode::serialize(&test_data).unwrap()
+}
+
+/// Helper function to create and serialize test data using Borsh v1
+pub fn serialize_compressed_account_info_borsh1() -> Vec<u8> {
+    let test_data = create_test_data();
+    borsh1::to_vec(&test_data).unwrap()
+}
+
 #[profile]
 pub fn borsh_deserialize(
     serialized_data: &[u8],
@@ -163,4 +183,18 @@ pub fn wincode_deserialize(
     serialized_data: &[u8],
 ) -> Result<CompressedAccountInfo, ProgramError> {
     wincode::deserialize(serialized_data).map_err(|_| ProgramError::InvalidAccountData)
+}
+
+#[profile]
+pub fn bincode_deserialize(
+    serialized_data: &[u8],
+) -> Result<CompressedAccountInfo, ProgramError> {
+    bincode::deserialize(serialized_data).map_err(|_| ProgramError::InvalidAccountData)
+}
+
+#[profile]
+pub fn borsh1_deserialize(
+    serialized_data: &[u8],
+) -> Result<CompressedAccountInfo, ProgramError> {
+    borsh1::from_slice(serialized_data).map_err(|_| ProgramError::InvalidAccountData)
 }

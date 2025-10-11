@@ -19,6 +19,8 @@ wincode = "0.1"
 wincode-derive = "0.1"
 serde = { version = "1.0", features = ["derive"] }
 borsh = "0.10.4"
+borsh1 = { package = "borsh", version = "1", features = ["derive"] }
+bincode = "1.3"
 zerocopy = { version = "0.8.25", features = [  "derive"] }
 light-zero-copy = { version= "0.4", features = [ "mut", "std", "derive"] }
 # git = "https://github.com/Lightprotocol/light-program-profiler",

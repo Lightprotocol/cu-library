@@ -75,7 +75,8 @@ use crate::partial_eq::partial_eq_neq::{
 };
 use crate::partial_eq::partial_eq_primitives::{u128, u16, u32, u64, u8};
 use crate::serialization::compressed_account_info::{
-    borsh_deserialize, serialize_compressed_account_info,
+    bincode_deserialize, borsh1_deserialize, borsh_deserialize, serialize_compressed_account_info,
+    serialize_compressed_account_info_bincode, serialize_compressed_account_info_borsh1,
     serialize_compressed_account_info_wincode, wincode_deserialize, zero_copy_deserialize,
 };
 use crate::std_math::add_assign::{add_assign_u128, add_assign_u16, add_assign_u32, add_assign_u64, add_assign_u8};
@@ -129,6 +130,8 @@ pub enum CuLibraryInstruction {
     SerializationCompressedAccountInfoBorshDeserialize = 230,
     SerializationCompressedAccountInfoZeroCopyDeserialize = 231,
     SerializationCompressedAccountInfoWincodeDeserialize = 232,
+    SerializationCompressedAccountInfoBincodeDeserialize = 233,
+    SerializationCompressedAccountInfoBorsh1Deserialize = 234,
     PinocchioSysvarRentExemption165 = 5,
     PinocchioClockGetSlot = 6,
     ArrayvecNew = 7,
@@ -577,6 +580,8 @@ impl TryFrom<&[u8]> for CuLibraryInstruction {
             230 => Ok(CuLibraryInstruction::SerializationCompressedAccountInfoBorshDeserialize),
             231 => Ok(CuLibraryInstruction::SerializationCompressedAccountInfoZeroCopyDeserialize),
             232 => Ok(CuLibraryInstruction::SerializationCompressedAccountInfoWincodeDeserialize),
+            233 => Ok(CuLibraryInstruction::SerializationCompressedAccountInfoBincodeDeserialize),
+            234 => Ok(CuLibraryInstruction::SerializationCompressedAccountInfoBorsh1Deserialize),
             _ => Err(ProgramError::InvalidInstructionData),
         }
     }
@@ -707,6 +712,16 @@ pub fn process_instruction(
             let data = serialize_compressed_account_info_wincode();
             let res = wincode_deserialize(data.as_slice())?;
             solana_msg::msg!("Wincode deserialized: {:?}", res.address.is_some());
+        }
+        CuLibraryInstruction::SerializationCompressedAccountInfoBincodeDeserialize => {
+            let data = serialize_compressed_account_info_bincode();
+            let res = bincode_deserialize(data.as_slice())?;
+            solana_msg::msg!("Bincode deserialized: {:?}", res.address.is_some());
+        }
+        CuLibraryInstruction::SerializationCompressedAccountInfoBorsh1Deserialize => {
+            let data = serialize_compressed_account_info_borsh1();
+            let res = borsh1_deserialize(data.as_slice())?;
+            solana_msg::msg!("Borsh1 deserialized: {:?}", res.address.is_some());
         }
         CuLibraryInstruction::PinocchioSysvarRentExemption165 => {
             let _ = pinocchio_ops::sysvar_rent::sysvar_rent_exemption_165();
