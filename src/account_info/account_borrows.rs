@@ -12,6 +12,7 @@ pub fn borrow_lamports_unchecked(account: &AccountInfo) -> &u64 {
 }
 
 #[profile]
+#[allow(clippy::mut_from_ref)]
 pub fn borrow_mut_lamports_unchecked(account: &AccountInfo) -> &mut u64 {
     unsafe { account.borrow_mut_lamports_unchecked() }
 }
@@ -22,6 +23,7 @@ pub fn borrow_data_unchecked(account: &AccountInfo) -> &[u8] {
 }
 
 #[profile]
+#[allow(clippy::mut_from_ref)]
 pub fn borrow_mut_data_unchecked(account: &AccountInfo) -> &mut [u8] {
     unsafe { account.borrow_mut_data_unchecked() }
 }
