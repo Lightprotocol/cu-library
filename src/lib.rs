@@ -75,8 +75,9 @@ use crate::partial_eq::partial_eq_neq::{
 };
 use crate::partial_eq::partial_eq_primitives::{u128, u16, u32, u64, u8};
 use crate::serialization::compressed_account_info::{
-    bincode_deserialize, borsh1_deserialize, borsh_deserialize, serialize_compressed_account_info,
-    serialize_compressed_account_info_bincode, serialize_compressed_account_info_borsh1,
+    bincode_deserialize, borsh1_deserialize, borsh_deserialize, rkyv_zero_copy_deserialize,
+    serialize_compressed_account_info, serialize_compressed_account_info_bincode,
+    serialize_compressed_account_info_borsh1, serialize_compressed_account_info_rkyv,
     serialize_compressed_account_info_wincode, wincode_deserialize, zero_copy_deserialize,
 };
 use crate::std_math::add_assign::{add_assign_u128, add_assign_u16, add_assign_u32, add_assign_u64, add_assign_u8};
@@ -132,6 +133,7 @@ pub enum CuLibraryInstruction {
     SerializationCompressedAccountInfoWincodeDeserialize = 232,
     SerializationCompressedAccountInfoBincodeDeserialize = 233,
     SerializationCompressedAccountInfoBorsh1Deserialize = 234,
+    SerializationCompressedAccountInfoRkyvZeroCopyDeserialize = 235,
     PinocchioSysvarRentExemption165 = 5,
     PinocchioClockGetSlot = 6,
     ArrayvecNew = 7,
@@ -582,6 +584,7 @@ impl TryFrom<&[u8]> for CuLibraryInstruction {
             232 => Ok(CuLibraryInstruction::SerializationCompressedAccountInfoWincodeDeserialize),
             233 => Ok(CuLibraryInstruction::SerializationCompressedAccountInfoBincodeDeserialize),
             234 => Ok(CuLibraryInstruction::SerializationCompressedAccountInfoBorsh1Deserialize),
+            235 => Ok(CuLibraryInstruction::SerializationCompressedAccountInfoRkyvZeroCopyDeserialize),
             _ => Err(ProgramError::InvalidInstructionData),
         }
     }
@@ -722,6 +725,11 @@ pub fn process_instruction(
             let data = serialize_compressed_account_info_borsh1();
             let res = borsh1_deserialize(data.as_slice())?;
             solana_msg::msg!("Borsh1 deserialized: {:?}", res.address.is_some());
+        }
+        CuLibraryInstruction::SerializationCompressedAccountInfoRkyvZeroCopyDeserialize => {
+            let data = serialize_compressed_account_info_rkyv();
+            let res = rkyv_zero_copy_deserialize(data.as_slice())?;
+            solana_msg::msg!("Rkyv zero-copy deserialized: {:?}", res.address.is_some());
         }
         CuLibraryInstruction::PinocchioSysvarRentExemption165 => {
             let _ = pinocchio_ops::sysvar_rent::sysvar_rent_exemption_165();

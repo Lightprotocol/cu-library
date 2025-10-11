@@ -49,7 +49,7 @@ Benchmark results for Solana runtime operations.
 
   | Function                                                                                                                                                                                                                | CU Consumed | CU Adjusted |
   |-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
-  | [baseline_empty_function](https://github.com/Lightprotocol/cu-library/blob/master/src/lib.rs#L103)                                                                                   | 6           | N/A         |
+  | [baseline_empty_function](https://github.com/Lightprotocol/cu-library/blob/master/src/lib.rs#L104)                                                                                   | 6           | N/A         |
 
 ## 2. Access
 
@@ -472,11 +472,12 @@ Benchmark results for Solana runtime operations.
 
   | Function                                                                                                                                                                                                                | CU Consumed | CU Adjusted |
   |-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
-  | [borsh_deserialize](https://github.com/Lightprotocol/cu-library/blob/master/src/serialization/compressed_account_info.rs#L165)                                                       | 427         | 421         |
-  | [zero_copy_deserialize](https://github.com/Lightprotocol/cu-library/blob/master/src/serialization/compressed_account_info.rs#L173)                                                   | 130         | 124         |
-  | [wincode_deserialize](https://github.com/Lightprotocol/cu-library/blob/master/src/serialization/compressed_account_info.rs#L182)                                                     | 1408        | 1402        |
-  | [bincode_deserialize](https://github.com/Lightprotocol/cu-library/blob/master/src/serialization/compressed_account_info.rs#L189)                                                     | 3230        | 3224        |
-  | [borsh1_deserialize](https://github.com/Lightprotocol/cu-library/blob/master/src/serialization/compressed_account_info.rs#L196)                                                      | 427         | 421         |
+  | [borsh_deserialize](https://github.com/Lightprotocol/cu-library/blob/master/src/serialization/compressed_account_info.rs#L188)                                                       | 427         | 421         |
+  | [zero_copy_deserialize](https://github.com/Lightprotocol/cu-library/blob/master/src/serialization/compressed_account_info.rs#L196)                                                   | 130         | 124         |
+  | [wincode_deserialize](https://github.com/Lightprotocol/cu-library/blob/master/src/serialization/compressed_account_info.rs#L205)                                                     | 1408        | 1402        |
+  | [bincode_deserialize](https://github.com/Lightprotocol/cu-library/blob/master/src/serialization/compressed_account_info.rs#L212)                                                     | 3230        | 3224        |
+  | [borsh1_deserialize](https://github.com/Lightprotocol/cu-library/blob/master/src/serialization/compressed_account_info.rs#L219)                                                      | 427         | 421         |
+  | [rkyv_zero_copy_deserialize](https://github.com/Lightprotocol/cu-library/blob/master/src/serialization/compressed_account_info.rs#L226)                                              | 178         | 172         |
 
 ## 14. Solana Ops
 

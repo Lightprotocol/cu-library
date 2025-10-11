@@ -2,6 +2,7 @@ use borsh::{BorshDeserialize, BorshSerialize};
 use light_program_profiler::profile;
 use light_zero_copy::{traits::ZeroCopyAt, ZeroCopy};
 use pinocchio::program_error::ProgramError;
+use rkyv::{Archive, Deserialize as RkyvDeserialize, Serialize as RkyvSerialize};
 use serde::{Deserialize, Serialize};
 use wincode_derive::{SchemaRead, SchemaWrite};
 use zerocopy::{Immutable, KnownLayout};
@@ -15,6 +16,9 @@ use zerocopy::{Immutable, KnownLayout};
     borsh1::BorshSerialize,
     Serialize,
     Deserialize,
+    Archive,
+    RkyvSerialize,
+    RkyvDeserialize,
     SchemaRead,
     SchemaWrite,
     Debug,
@@ -25,6 +29,7 @@ use zerocopy::{Immutable, KnownLayout};
     Immutable,
     KnownLayout,
 )]
+#[archive(check_bytes)]
 pub struct PackedMerkleContext {
     pub merkle_tree_pubkey_index: u8,
     pub nullifier_queue_pubkey_index: u8,
@@ -43,10 +48,14 @@ pub struct PackedMerkleContext {
     borsh1::BorshDeserialize,
     Serialize,
     Deserialize,
+    Archive,
+    RkyvSerialize,
+    RkyvDeserialize,
     SchemaRead,
     SchemaWrite,
     ZeroCopy,
 )]
+#[archive(check_bytes)]
 #[repr(C)]
 pub struct InAccountInfo {
     pub discriminator: [u8; 8],
@@ -71,10 +80,14 @@ pub struct InAccountInfo {
     borsh1::BorshDeserialize,
     Serialize,
     Deserialize,
+    Archive,
+    RkyvSerialize,
+    RkyvDeserialize,
     SchemaRead,
     SchemaWrite,
     ZeroCopy,
 )]
+#[archive(check_bytes)]
 #[repr(C)]
 pub struct OutAccountInfo {
     pub discriminator: [u8; 8],
@@ -98,10 +111,14 @@ pub struct OutAccountInfo {
     borsh1::BorshDeserialize,
     Serialize,
     Deserialize,
+    Archive,
+    RkyvSerialize,
+    RkyvDeserialize,
     SchemaRead,
     SchemaWrite,
     ZeroCopy,
 )]
+#[archive(check_bytes)]
 #[repr(C)]
 pub struct CompressedAccountInfo {
     /// Address.
@@ -161,6 +178,12 @@ pub fn serialize_compressed_account_info_borsh1() -> Vec<u8> {
     borsh1::to_vec(&test_data).unwrap()
 }
 
+/// Helper function to create and serialize test data using Rkyv
+pub fn serialize_compressed_account_info_rkyv() -> Vec<u8> {
+    let test_data = create_test_data();
+    rkyv::to_bytes::<_, 256>(&test_data).unwrap().to_vec()
+}
+
 #[profile]
 pub fn borsh_deserialize(
     serialized_data: &[u8],
@@ -197,4 +220,12 @@ pub fn borsh1_deserialize(
     serialized_data: &[u8],
 ) -> Result<CompressedAccountInfo, ProgramError> {
     borsh1::from_slice(serialized_data).map_err(|_| ProgramError::InvalidAccountData)
+}
+
+#[profile]
+pub fn rkyv_zero_copy_deserialize(
+    serialized_data: &[u8],
+) -> Result<&rkyv::Archived<CompressedAccountInfo>, ProgramError> {
+    rkyv::check_archived_root::<CompressedAccountInfo>(serialized_data)
+        .map_err(|_| ProgramError::InvalidAccountData)
 }
