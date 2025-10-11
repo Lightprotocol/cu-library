@@ -78,10 +78,15 @@ use crate::serialization::compressed_account_info::{
     bincode_deserialize, borsh1_deserialize, borsh_deserialize, rkyv_zero_copy_deserialize,
     serialize_compressed_account_info, serialize_compressed_account_info_bincode,
     serialize_compressed_account_info_borsh1, serialize_compressed_account_info_rkyv,
-    serialize_compressed_account_info_wincode, wincode_deserialize, zero_copy_deserialize,
+    serialize_compressed_account_info_wincode, serialize_compressed_account_info_wincode_shortvec,
+    wincode_deserialize, wincode_shortvec_deserialize, zero_copy_deserialize,
 };
-use crate::std_math::add_assign::{add_assign_u128, add_assign_u16, add_assign_u32, add_assign_u64, add_assign_u8};
-use crate::std_math::sub_assign::{sub_assign_u128, sub_assign_u16, sub_assign_u32, sub_assign_u64, sub_assign_u8};
+use crate::std_math::add_assign::{
+    add_assign_u128, add_assign_u16, add_assign_u32, add_assign_u64, add_assign_u8,
+};
+use crate::std_math::sub_assign::{
+    sub_assign_u128, sub_assign_u16, sub_assign_u32, sub_assign_u64, sub_assign_u8,
+};
 use light_program_profiler::profile;
 
 pub mod access;
@@ -134,6 +139,7 @@ pub enum CuLibraryInstruction {
     SerializationCompressedAccountInfoBincodeDeserialize = 233,
     SerializationCompressedAccountInfoBorsh1Deserialize = 234,
     SerializationCompressedAccountInfoRkyvZeroCopyDeserialize = 235,
+    SerializationCompressedAccountInfoWincodeShortVecDeserialize = 236,
     PinocchioSysvarRentExemption165 = 5,
     PinocchioClockGetSlot = 6,
     ArrayvecNew = 7,
@@ -584,7 +590,12 @@ impl TryFrom<&[u8]> for CuLibraryInstruction {
             232 => Ok(CuLibraryInstruction::SerializationCompressedAccountInfoWincodeDeserialize),
             233 => Ok(CuLibraryInstruction::SerializationCompressedAccountInfoBincodeDeserialize),
             234 => Ok(CuLibraryInstruction::SerializationCompressedAccountInfoBorsh1Deserialize),
-            235 => Ok(CuLibraryInstruction::SerializationCompressedAccountInfoRkyvZeroCopyDeserialize),
+            235 => {
+                Ok(CuLibraryInstruction::SerializationCompressedAccountInfoRkyvZeroCopyDeserialize)
+            }
+            236 => Ok(
+                CuLibraryInstruction::SerializationCompressedAccountInfoWincodeShortVecDeserialize,
+            ),
             _ => Err(ProgramError::InvalidInstructionData),
         }
     }
@@ -611,7 +622,9 @@ pub fn process_instruction(
         }
         CuLibraryInstruction::Msg10 => pinocchio_ops::msg::msg10_chars()?,
         CuLibraryInstruction::SolanaMsg10 => solana_ops::msg::msg10_chars()?,
-        CuLibraryInstruction::SolanaMsgProgramId => solana_ops::msg_program_id::msg_program_id(program_id)?,
+        CuLibraryInstruction::SolanaMsgProgramId => {
+            solana_ops::msg_program_id::msg_program_id(program_id)?
+        }
         CuLibraryInstruction::SolanaPubkeyNewFromArray => {
             let res = solana_ops::pubkey_new_from_array::pubkey_new_from_array(program_id);
             solana_msg::msg!("pubkey: {:?}", res);
@@ -731,10 +744,20 @@ pub fn process_instruction(
             let res = rkyv_zero_copy_deserialize(data.as_slice())?;
             solana_msg::msg!("Rkyv zero-copy deserialized: {:?}", res.address.is_some());
         }
+        CuLibraryInstruction::SerializationCompressedAccountInfoWincodeShortVecDeserialize => {
+            let data = serialize_compressed_account_info_wincode_shortvec();
+            let res = wincode_shortvec_deserialize(data.as_slice())?;
+            solana_msg::msg!(
+                "Wincode short-vec deserialized: {:?}",
+                res.address.is_some()
+            );
+        }
         CuLibraryInstruction::PinocchioSysvarRentExemption165 => {
             let _ = pinocchio_ops::sysvar_rent::sysvar_rent_exemption_165();
         }
-        CuLibraryInstruction::PinocchioClockGetSlot => pinocchio_ops::sysvar_clock::clock_get_slot()?,
+        CuLibraryInstruction::PinocchioClockGetSlot => {
+            pinocchio_ops::sysvar_clock::clock_get_slot()?
+        }
         CuLibraryInstruction::ArrayvecNew => {
             let res = arrayvec::vec_new::u8_new();
             solana_msg::msg!("vec: {:?}", res.as_slice());

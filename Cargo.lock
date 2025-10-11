@@ -774,6 +774,7 @@ dependencies = [
  "solana-program",
  "solana-pubkey",
  "solana-sdk",
+ "solana-short-vec 2.2.1",
  "solana-signer",
  "solana-transaction",
  "wincode",
@@ -3098,7 +3099,7 @@ dependencies = [
  "solana-program-runtime",
  "solana-pubkey",
  "solana-sdk-ids",
- "solana-short-vec",
+ "solana-short-vec 2.2.1",
  "solana-stake-interface",
  "solana-system-interface",
  "solana-transaction-context",
@@ -3577,7 +3578,7 @@ dependencies = [
  "solana-pubkey",
  "solana-sanitize",
  "solana-sdk-ids",
- "solana-short-vec",
+ "solana-short-vec 2.2.1",
  "solana-system-interface",
  "solana-transaction-error",
  "wasm-bindgen",
@@ -3799,7 +3800,7 @@ dependencies = [
  "solana-serde-varint",
  "solana-serialize-utils",
  "solana-sha256-hasher",
- "solana-short-vec",
+ "solana-short-vec 2.2.1",
  "solana-slot-hashes",
  "solana-slot-history",
  "solana-stable-layout",
@@ -4082,7 +4083,7 @@ dependencies = [
  "solana-seed-phrase",
  "solana-serde",
  "solana-serde-varint",
- "solana-short-vec",
+ "solana-short-vec 2.2.1",
  "solana-shred-version",
  "solana-signature",
  "solana-signer",
@@ -4226,6 +4227,15 @@ name = "solana-short-vec"
 version = "2.2.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "5c54c66f19b9766a56fa0057d060de8378676cb64987533fa088861858fc5a69"
+dependencies = [
+ "serde",
+]
+
+[[package]]
+name = "solana-short-vec"
+version = "3.0.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "b69d029da5428fc1c57f7d49101b2077c61f049d4112cd5fb8456567cc7d2638"
 dependencies = [
  "serde",
 ]
@@ -4508,7 +4518,7 @@ dependencies = [
  "solana-reserved-account-keys",
  "solana-sanitize",
  "solana-sdk-ids",
- "solana-short-vec",
+ "solana-short-vec 2.2.1",
  "solana-signature",
  "solana-signer",
  "solana-system-interface",
@@ -4580,7 +4590,7 @@ dependencies = [
  "solana-sdk-ids",
  "solana-serde-varint",
  "solana-serialize-utils",
- "solana-short-vec",
+ "solana-short-vec 2.2.1",
  "solana-system-interface",
 ]
 
@@ -5236,6 +5246,7 @@ version = "0.1.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "0ee7998a4af6c1f046df464354ef230e13a4db5770a39e65b153c1927c2b274d"
 dependencies = [
+ "solana-short-vec 3.0.0",
  "thiserror 2.0.16",
 ]
 

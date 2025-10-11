@@ -286,6 +286,7 @@ fn bench_cu_operations() {
         CuLibraryInstruction::SerializationCompressedAccountInfoBincodeDeserialize,
         CuLibraryInstruction::SerializationCompressedAccountInfoBorsh1Deserialize,
         CuLibraryInstruction::SerializationCompressedAccountInfoRkyvZeroCopyDeserialize,
+        CuLibraryInstruction::SerializationCompressedAccountInfoWincodeShortVecDeserialize,
     ];
 
     for instruction_type in instructions.into_iter() {
