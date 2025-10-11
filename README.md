@@ -472,12 +472,12 @@ Benchmark results for Solana runtime operations.
 
   | Function                                                                                                                                                                                                                | CU Consumed | CU Adjusted |
   |-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
-  | [borsh_deserialize](https://github.com/Lightprotocol/cu-library/blob/master/src/serialization/compressed_account_info.rs#L188)                                                       | 427         | 421         |
-  | [zero_copy_deserialize](https://github.com/Lightprotocol/cu-library/blob/master/src/serialization/compressed_account_info.rs#L196)                                                   | 130         | 124         |
-  | [wincode_deserialize](https://github.com/Lightprotocol/cu-library/blob/master/src/serialization/compressed_account_info.rs#L205)                                                     | 1408        | 1402        |
-  | [bincode_deserialize](https://github.com/Lightprotocol/cu-library/blob/master/src/serialization/compressed_account_info.rs#L212)                                                     | 3230        | 3224        |
-  | [borsh1_deserialize](https://github.com/Lightprotocol/cu-library/blob/master/src/serialization/compressed_account_info.rs#L219)                                                      | 427         | 421         |
-  | [rkyv_zero_copy_deserialize](https://github.com/Lightprotocol/cu-library/blob/master/src/serialization/compressed_account_info.rs#L226)                                              | 178         | 172         |
+  | [borsh_deserialize](https://github.com/Lightprotocol/cu-library/blob/master/src/serialization/compressed_account_info.rs#L202)                                                       | 427         | 421         |
+  | [zero_copy_deserialize](https://github.com/Lightprotocol/cu-library/blob/master/src/serialization/compressed_account_info.rs#L208)                                                   | 130         | 124         |
+  | [wincode_deserialize](https://github.com/Lightprotocol/cu-library/blob/master/src/serialization/compressed_account_info.rs#L217)                                                     | 621         | 615         |
+  | [bincode_deserialize](https://github.com/Lightprotocol/cu-library/blob/master/src/serialization/compressed_account_info.rs#L222)                                                     | 3230        | 3224        |
+  | [borsh1_deserialize](https://github.com/Lightprotocol/cu-library/blob/master/src/serialization/compressed_account_info.rs#L227)                                                      | 427         | 421         |
+  | [rkyv_zero_copy_deserialize](https://github.com/Lightprotocol/cu-library/blob/master/src/serialization/compressed_account_info.rs#L232)                                              | 178         | 172         |
 
 ## 14. Solana Ops
 
@@ -598,4 +598,3 @@ Benchmark results for Solana runtime operations.
   |-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
   | [u8_with_capacity_10](https://github.com/Lightprotocol/cu-library/blob/master/src/vec/vec_with_capacity.rs#L4)                                                                       | 113         | 107         |
   | [u8_with_capacity_100](https://github.com/Lightprotocol/cu-library/blob/master/src/vec/vec_with_capacity.rs#L9)                                                                      | 113         | 107         |
-

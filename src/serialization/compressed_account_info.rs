@@ -4,6 +4,7 @@ use light_zero_copy::{traits::ZeroCopyAt, ZeroCopy};
 use pinocchio::program_error::ProgramError;
 use rkyv::{Archive, Deserialize as RkyvDeserialize, Serialize as RkyvSerialize};
 use serde::{Deserialize, Serialize};
+use wincode::containers::{self, Pod};
 use wincode_derive::{SchemaRead, SchemaWrite};
 use zerocopy::{Immutable, KnownLayout};
 
@@ -31,9 +32,13 @@ use zerocopy::{Immutable, KnownLayout};
 )]
 #[archive(check_bytes)]
 pub struct PackedMerkleContext {
+    #[wincode(with = "Pod<_>")]
     pub merkle_tree_pubkey_index: u8,
+    #[wincode(with = "Pod<_>")]
     pub nullifier_queue_pubkey_index: u8,
+    #[wincode(with = "Pod<_>")]
     pub leaf_index: u32,
+    #[wincode(with = "Pod<_>")]
     pub prove_by_index: bool,
 }
 
@@ -58,14 +63,18 @@ pub struct PackedMerkleContext {
 #[archive(check_bytes)]
 #[repr(C)]
 pub struct InAccountInfo {
+    #[wincode(with = "Pod<_>")]
     pub discriminator: [u8; 8],
     /// Data hash
+    #[wincode(with = "Pod<_>")]
     pub data_hash: [u8; 32],
     /// Merkle tree context.
     pub merkle_context: PackedMerkleContext,
     /// Root index.
+    #[wincode(with = "Pod<_>")]
     pub root_index: u16,
     /// Lamports.
+    #[wincode(with = "Pod<_>")]
     pub lamports: u64,
 }
 
@@ -90,13 +99,18 @@ pub struct InAccountInfo {
 #[archive(check_bytes)]
 #[repr(C)]
 pub struct OutAccountInfo {
+    #[wincode(with = "Pod<_>")]
     pub discriminator: [u8; 8],
     /// Data hash
+    #[wincode(with = "Pod<_>")]
     pub data_hash: [u8; 32],
+    #[wincode(with = "Pod<_>")]
     pub output_merkle_tree_index: u8,
     /// Lamports.
+    #[wincode(with = "Pod<_>")]
     pub lamports: u64,
     /// Account data.
+    #[wincode(with = "containers::Vec<Pod<_>>")]
     pub data: Vec<u8>,
 }
 
@@ -185,9 +199,7 @@ pub fn serialize_compressed_account_info_rkyv() -> Vec<u8> {
 }
 
 #[profile]
-pub fn borsh_deserialize(
-    serialized_data: &[u8],
-) -> Result<CompressedAccountInfo, ProgramError> {
+pub fn borsh_deserialize(serialized_data: &[u8]) -> Result<CompressedAccountInfo, ProgramError> {
     CompressedAccountInfo::try_from_slice(serialized_data)
         .map_err(|_| ProgramError::InvalidAccountData)
 }
@@ -202,23 +214,17 @@ pub fn zero_copy_deserialize<'a>(
 }
 
 #[profile]
-pub fn wincode_deserialize(
-    serialized_data: &[u8],
-) -> Result<CompressedAccountInfo, ProgramError> {
+pub fn wincode_deserialize(serialized_data: &[u8]) -> Result<CompressedAccountInfo, ProgramError> {
     wincode::deserialize(serialized_data).map_err(|_| ProgramError::InvalidAccountData)
 }
 
 #[profile]
-pub fn bincode_deserialize(
-    serialized_data: &[u8],
-) -> Result<CompressedAccountInfo, ProgramError> {
+pub fn bincode_deserialize(serialized_data: &[u8]) -> Result<CompressedAccountInfo, ProgramError> {
     bincode::deserialize(serialized_data).map_err(|_| ProgramError::InvalidAccountData)
 }
 
 #[profile]
-pub fn borsh1_deserialize(
-    serialized_data: &[u8],
-) -> Result<CompressedAccountInfo, ProgramError> {
+pub fn borsh1_deserialize(serialized_data: &[u8]) -> Result<CompressedAccountInfo, ProgramError> {
     borsh1::from_slice(serialized_data).map_err(|_| ProgramError::InvalidAccountData)
 }
 
