@@ -32,7 +32,7 @@ Example structure:
 
   | Function                                                                                                                                                                                                                | CU Consumed | CU Adjusted |
   |-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
-  | [baseline_empty_function](https://github.com/Lightprotocol/cu-library/blob/master/src/lib.rs#L102)                                                                                   | 6           | N/A         |
+  | [baseline_empty_function](https://github.com/Lightprotocol/cu-library/blob/main/src/lib.rs#L102)                                                                                   | 6           | N/A         |
 
 ## 2. Checked Math
 
@@ -40,7 +40,7 @@ Example structure:
 
   | Function                                                                                                                                                                                                                | CU Consumed | CU Adjusted |
   |-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
-  | [add_u8](https://github.com/Lightprotocol/cu-library/blob/master/src/checked_math/checked_add.rs#L4)                                                                                 | 7           | 1           |
+  | [add_u8](https://github.com/Lightprotocol/cu-library/blob/main/src/checked_math/checked_add.rs#L4)                                                                                 | 7           | 1           |
 ```
 
 ## Adding New Profiling Cases
