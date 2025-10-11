@@ -651,7 +651,7 @@ fn write_categorized_readme(mut results_by_category: BTreeMap<String, BTreeMap<S
                     if parts.len() >= 2 {
                         let file_path = parts[0];
                         let line_num = parts[1].trim().parse::<usize>().unwrap_or(0) + 1;
-                        format!("[{}](https://github.com/Lightprotocol/cu-library/blob/master/{}#L{})",
+                        format!("[{}](https://github.com/Lightprotocol/cu-library/blob/main/{}#L{})",
                                 func_name, file_path, line_num)
                     } else {
                         func_name.clone()
@@ -698,7 +698,7 @@ fn write_categorized_readme(mut results_by_category: BTreeMap<String, BTreeMap<S
                     if parts.len() >= 2 {
                         let file_path = parts[0];
                         let line_num = parts[1].trim().parse::<usize>().unwrap_or(0) + 1;
-                        format!("[{}](https://github.com/Lightprotocol/cu-library/blob/master/{}#L{})",
+                        format!("[{}](https://github.com/Lightprotocol/cu-library/blob/main/{}#L{})",
                                 func_name, file_path, line_num)
                     } else {
                         func_name.clone()
