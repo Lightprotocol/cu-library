@@ -14,6 +14,9 @@ pinocchio = "0.9.1"
 solana-msg = "2.2.1"
 solana-pubkey = "2.2.1"
 arrayvec = { version = "0.7"}
+tinyvec = { version = "1.10.0" }
+heapless = { version = "0.8", default-features = false }
+smallvec = "1.15.1"
 light-program-profiler = {git = "https://github.com/Lightprotocol/light-program-profiler" ,features = ["profile-program", "inline"] }
 wincode = { version = "0.1", features = ["solana-short-vec"] }
 wincode-derive = "0.1"

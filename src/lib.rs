@@ -1,17 +1,5 @@
 use pinocchio::{account_info::AccountInfo, program_error::ProgramError, pubkey::Pubkey};
 
-use crate::access::array_u64_10::{
-    array_u64_10_get, array_u64_10_get_ok_or, array_u64_10_if_let_get, array_u64_10_index,
-};
-use crate::access::array_u8_32::{
-    array_u8_32_get, array_u8_32_get_ok_or, array_u8_32_if_let_get, array_u8_32_index,
-};
-use crate::access::vec_u64_10::{
-    vec_u64_10_get, vec_u64_10_get_ok_or, vec_u64_10_if_let_get, vec_u64_10_index,
-};
-use crate::access::vec_u8_32::{
-    vec_u8_32_get, vec_u8_32_get_ok_or, vec_u8_32_if_let_get, vec_u8_32_index,
-};
 use crate::account_info::account_borrows::{
     borrow_data_unchecked, borrow_lamports_unchecked, borrow_mut_data_unchecked,
     borrow_mut_lamports_unchecked, can_borrow_data, can_borrow_lamports, can_borrow_mut_data,
@@ -24,11 +12,23 @@ use crate::account_info::account_key::key;
 use crate::account_info::account_owner::owner;
 use crate::account_info::account_ownership::{assign, is_owned_by};
 use crate::account_info::account_realloc::{close, close_unchecked, realloc};
-use crate::array::array_assign::{
+use crate::collections::array::array_assign::{
     assign_10_pubkey, assign_10_u64, assign_10_u8, assign_pubkey, assign_u64, assign_u8,
 };
-use crate::array::array_new::new;
-use crate::array::array_with_capacity::{with_capacity_10, with_capacity_100};
+use crate::collections::array::array_new::new;
+use crate::collections::array::array_u64_10::{
+    array_u64_10_get, array_u64_10_get_ok_or, array_u64_10_if_let_get, array_u64_10_index,
+};
+use crate::collections::array::array_u8_32::{
+    array_u8_32_get, array_u8_32_get_ok_or, array_u8_32_if_let_get, array_u8_32_index,
+};
+use crate::collections::array::array_with_capacity::{with_capacity_10, with_capacity_100};
+use crate::collections::vec::vec_u64_10::{
+    vec_u64_10_get, vec_u64_10_get_ok_or, vec_u64_10_if_let_get, vec_u64_10_index,
+};
+use crate::collections::vec::vec_u8_32::{
+    vec_u8_32_get, vec_u8_32_get_ok_or, vec_u8_32_if_let_get, vec_u8_32_index,
+};
 use crate::conversions::cast_u16::{u16_as_u32, u16_as_u64, u16_as_u8, u16_as_usize};
 use crate::conversions::cast_u32::{u32_as_u16, u32_as_u64, u32_as_u8, u32_as_usize};
 use crate::conversions::cast_u64::{u64_as_u16, u64_as_u32, u64_as_u8, u64_as_usize};
@@ -89,11 +89,9 @@ use crate::std_math::sub_assign::{
 };
 use light_program_profiler::profile;
 
-pub mod access;
 pub mod account_info;
-pub mod array;
-pub mod arrayvec;
 pub mod checked_math;
+pub mod collections;
 pub mod conversions;
 pub mod cpi;
 pub mod option;
@@ -103,7 +101,6 @@ pub mod saturating_math;
 pub mod serialization;
 pub mod solana_ops;
 pub mod std_math;
-pub mod vec;
 
 #[profile]
 pub fn baseline_empty_function() {}
@@ -116,30 +113,6 @@ pub enum CuLibraryInstruction {
     SolanaMsg10 = 2,
     SolanaMsgProgramId = 3,
     SolanaPubkeyNewFromArray = 4,
-    SolanaPubkeyToBytes = 213,
-    ArrayU8_32Index = 214,
-    ArrayU8_32Get = 215,
-    ArrayU8_32GetOkOr = 216,
-    ArrayU8_32IfLetGet = 217,
-    ArrayU64_10Index = 218,
-    ArrayU64_10Get = 219,
-    ArrayU64_10GetOkOr = 220,
-    ArrayU64_10IfLetGet = 221,
-    VecU8_32Index = 222,
-    VecU8_32Get = 223,
-    VecU8_32GetOkOr = 224,
-    VecU8_32IfLetGet = 225,
-    VecU64_10Index = 226,
-    VecU64_10Get = 227,
-    VecU64_10GetOkOr = 228,
-    VecU64_10IfLetGet = 229,
-    SerializationCompressedAccountInfoBorshDeserialize = 230,
-    SerializationCompressedAccountInfoZeroCopyDeserialize = 231,
-    SerializationCompressedAccountInfoWincodeDeserialize = 232,
-    SerializationCompressedAccountInfoBincodeDeserialize = 233,
-    SerializationCompressedAccountInfoBorsh1Deserialize = 234,
-    SerializationCompressedAccountInfoRkyvZeroCopyDeserialize = 235,
-    SerializationCompressedAccountInfoWincodeShortVecDeserialize = 236,
     PinocchioSysvarRentExemption165 = 5,
     PinocchioClockGetSlot = 6,
     ArrayvecNew = 7,
@@ -346,6 +319,96 @@ pub enum CuLibraryInstruction {
     OptionIfLetSomeArray = 210,
     OptionIfLetSomePubkey = 211,
     OptionIfLetSomeArrayRef = 212,
+    SolanaPubkeyToBytes = 213,
+    ArrayU8_32Index = 214,
+    ArrayU8_32Get = 215,
+    ArrayU8_32GetOkOr = 216,
+    ArrayU8_32IfLetGet = 217,
+    ArrayU64_10Index = 218,
+    ArrayU64_10Get = 219,
+    ArrayU64_10GetOkOr = 220,
+    ArrayU64_10IfLetGet = 221,
+    VecU8_32Index = 222,
+    VecU8_32Get = 223,
+    VecU8_32GetOkOr = 224,
+    VecU8_32IfLetGet = 225,
+    VecU64_10Index = 226,
+    VecU64_10Get = 227,
+    VecU64_10GetOkOr = 228,
+    VecU64_10IfLetGet = 229,
+    SerializationCompressedAccountInfoBorshDeserialize = 230,
+    SerializationCompressedAccountInfoZeroCopyDeserialize = 231,
+    SerializationCompressedAccountInfoWincodeDeserialize = 232,
+    SerializationCompressedAccountInfoBincodeDeserialize = 233,
+    SerializationCompressedAccountInfoBorsh1Deserialize = 234,
+    SerializationCompressedAccountInfoRkyvZeroCopyDeserialize = 235,
+    SerializationCompressedAccountInfoWincodeShortVecDeserialize = 236,
+    ArrayvecGetFirstPubkey = 237,
+    ArrayvecGet10thPubkey = 238,
+    ArrayvecFindPubkey1Iters = 239,
+    ArrayvecFindPubkey10Iters = 240,
+    ArrayvecPositionPubkey1Iters = 241,
+    ArrayvecPositionPubkey10Iters = 242,
+    ArrayvecUpdateIndex = 243,
+    ArrayvecUpdateGetMut = 244,
+    ArrayvecUpdateIterMutFind = 245,
+    // Tinyvec benchmarks
+    TinyvecU8New = 246,
+    TinyvecU8WithCapacity10 = 247,
+    TinyvecU8WithCapacity100 = 248,
+    TinyvecPushU8 = 249,
+    TinyvecPushU64 = 250,
+    TinyvecPushPubkey = 251,
+    TinyvecPush10U8 = 252,
+    TinyvecPush10U64 = 253,
+    TinyvecPush10Pubkey = 254,
+    TinyvecGetFirstPubkey = 255,
+    TinyvecGet10thPubkey = 256,
+    TinyvecFindPubkey1Iters = 257,
+    TinyvecFindPubkey10Iters = 258,
+    TinyvecPositionPubkey1Iters = 259,
+    TinyvecPositionPubkey10Iters = 260,
+    TinyvecUpdateIndex = 261,
+    TinyvecUpdateGetMut = 262,
+    TinyvecUpdateIterMutFind = 263,
+    // Heapless benchmarks
+    HeaplessU8New = 264,
+    HeaplessU8WithCapacity10 = 265,
+    HeaplessU8WithCapacity100 = 266,
+    HeaplessPushU8 = 267,
+    HeaplessPushU64 = 268,
+    HeaplessPushPubkey = 269,
+    HeaplessPush10U8 = 270,
+    HeaplessPush10U64 = 271,
+    HeaplessPush10Pubkey = 272,
+    HeaplessGetFirstPubkey = 273,
+    HeaplessGet10thPubkey = 274,
+    HeaplessFindPubkey1Iters = 275,
+    HeaplessFindPubkey10Iters = 276,
+    HeaplessPositionPubkey1Iters = 277,
+    HeaplessPositionPubkey10Iters = 278,
+    HeaplessUpdateIndex = 279,
+    HeaplessUpdateGetMut = 280,
+    HeaplessUpdateIterMutFind = 281,
+    // Smallvec benchmarks
+    SmallvecU8New = 282,
+    SmallvecU8WithCapacity10 = 283,
+    SmallvecU8WithCapacity128 = 284,
+    SmallvecPushU8 = 285,
+    SmallvecPushU64 = 286,
+    SmallvecPushPubkey = 287,
+    SmallvecPush10U8 = 288,
+    SmallvecPush10U64 = 289,
+    SmallvecPush10Pubkey = 290,
+    SmallvecGetFirstPubkey = 291,
+    SmallvecGet10thPubkey = 292,
+    SmallvecFindPubkey1Iters = 293,
+    SmallvecFindPubkey10Iters = 294,
+    SmallvecPositionPubkey1Iters = 295,
+    SmallvecPositionPubkey10Iters = 296,
+    SmallvecUpdateIndex = 297,
+    SmallvecUpdateGetMut = 298,
+    SmallvecUpdateIterMutFind = 299,
 }
 
 impl From<CuLibraryInstruction> for Vec<u8> {
@@ -596,6 +659,69 @@ impl TryFrom<&[u8]> for CuLibraryInstruction {
             236 => Ok(
                 CuLibraryInstruction::SerializationCompressedAccountInfoWincodeShortVecDeserialize,
             ),
+            237 => Ok(CuLibraryInstruction::ArrayvecGetFirstPubkey),
+            238 => Ok(CuLibraryInstruction::ArrayvecGet10thPubkey),
+            239 => Ok(CuLibraryInstruction::ArrayvecFindPubkey1Iters),
+            240 => Ok(CuLibraryInstruction::ArrayvecFindPubkey10Iters),
+            241 => Ok(CuLibraryInstruction::ArrayvecPositionPubkey1Iters),
+            242 => Ok(CuLibraryInstruction::ArrayvecPositionPubkey10Iters),
+            243 => Ok(CuLibraryInstruction::ArrayvecUpdateIndex),
+            244 => Ok(CuLibraryInstruction::ArrayvecUpdateGetMut),
+            245 => Ok(CuLibraryInstruction::ArrayvecUpdateIterMutFind),
+            246 => Ok(CuLibraryInstruction::TinyvecU8New),
+            247 => Ok(CuLibraryInstruction::TinyvecU8WithCapacity10),
+            248 => Ok(CuLibraryInstruction::TinyvecU8WithCapacity100),
+            249 => Ok(CuLibraryInstruction::TinyvecPushU8),
+            250 => Ok(CuLibraryInstruction::TinyvecPushU64),
+            251 => Ok(CuLibraryInstruction::TinyvecPushPubkey),
+            252 => Ok(CuLibraryInstruction::TinyvecPush10U8),
+            253 => Ok(CuLibraryInstruction::TinyvecPush10U64),
+            254 => Ok(CuLibraryInstruction::TinyvecPush10Pubkey),
+            255 => Ok(CuLibraryInstruction::TinyvecGetFirstPubkey),
+            256 => Ok(CuLibraryInstruction::TinyvecGet10thPubkey),
+            257 => Ok(CuLibraryInstruction::TinyvecFindPubkey1Iters),
+            258 => Ok(CuLibraryInstruction::TinyvecFindPubkey10Iters),
+            259 => Ok(CuLibraryInstruction::TinyvecPositionPubkey1Iters),
+            260 => Ok(CuLibraryInstruction::TinyvecPositionPubkey10Iters),
+            261 => Ok(CuLibraryInstruction::TinyvecUpdateIndex),
+            262 => Ok(CuLibraryInstruction::TinyvecUpdateGetMut),
+            263 => Ok(CuLibraryInstruction::TinyvecUpdateIterMutFind),
+            264 => Ok(CuLibraryInstruction::HeaplessU8New),
+            265 => Ok(CuLibraryInstruction::HeaplessU8WithCapacity10),
+            266 => Ok(CuLibraryInstruction::HeaplessU8WithCapacity100),
+            267 => Ok(CuLibraryInstruction::HeaplessPushU8),
+            268 => Ok(CuLibraryInstruction::HeaplessPushU64),
+            269 => Ok(CuLibraryInstruction::HeaplessPushPubkey),
+            270 => Ok(CuLibraryInstruction::HeaplessPush10U8),
+            271 => Ok(CuLibraryInstruction::HeaplessPush10U64),
+            272 => Ok(CuLibraryInstruction::HeaplessPush10Pubkey),
+            273 => Ok(CuLibraryInstruction::HeaplessGetFirstPubkey),
+            274 => Ok(CuLibraryInstruction::HeaplessGet10thPubkey),
+            275 => Ok(CuLibraryInstruction::HeaplessFindPubkey1Iters),
+            276 => Ok(CuLibraryInstruction::HeaplessFindPubkey10Iters),
+            277 => Ok(CuLibraryInstruction::HeaplessPositionPubkey1Iters),
+            278 => Ok(CuLibraryInstruction::HeaplessPositionPubkey10Iters),
+            279 => Ok(CuLibraryInstruction::HeaplessUpdateIndex),
+            280 => Ok(CuLibraryInstruction::HeaplessUpdateGetMut),
+            281 => Ok(CuLibraryInstruction::HeaplessUpdateIterMutFind),
+            282 => Ok(CuLibraryInstruction::SmallvecU8New),
+            283 => Ok(CuLibraryInstruction::SmallvecU8WithCapacity10),
+            284 => Ok(CuLibraryInstruction::SmallvecU8WithCapacity128),
+            285 => Ok(CuLibraryInstruction::SmallvecPushU8),
+            286 => Ok(CuLibraryInstruction::SmallvecPushU64),
+            287 => Ok(CuLibraryInstruction::SmallvecPushPubkey),
+            288 => Ok(CuLibraryInstruction::SmallvecPush10U8),
+            289 => Ok(CuLibraryInstruction::SmallvecPush10U64),
+            290 => Ok(CuLibraryInstruction::SmallvecPush10Pubkey),
+            291 => Ok(CuLibraryInstruction::SmallvecGetFirstPubkey),
+            292 => Ok(CuLibraryInstruction::SmallvecGet10thPubkey),
+            293 => Ok(CuLibraryInstruction::SmallvecFindPubkey1Iters),
+            294 => Ok(CuLibraryInstruction::SmallvecFindPubkey10Iters),
+            295 => Ok(CuLibraryInstruction::SmallvecPositionPubkey1Iters),
+            296 => Ok(CuLibraryInstruction::SmallvecPositionPubkey10Iters),
+            297 => Ok(CuLibraryInstruction::SmallvecUpdateIndex),
+            298 => Ok(CuLibraryInstruction::SmallvecUpdateGetMut),
+            299 => Ok(CuLibraryInstruction::SmallvecUpdateIterMutFind),
             _ => Err(ProgramError::InvalidInstructionData),
         }
     }
@@ -615,6 +741,25 @@ pub fn process_instruction(
     instruction_data: &[u8],
 ) -> Result<(), ProgramError> {
     let instruction = CuLibraryInstruction::try_from(instruction_data)?;
+
+    // Route to helper functions based on discriminator to reduce stack usage
+    let discriminator = u16::from_le_bytes([instruction_data[0], instruction_data[1]]);
+    if discriminator < 100 {
+        return process_instruction_0_99(instruction, program_id, accounts, instruction_data);
+    } else if discriminator < 200 {
+        return process_instruction_100_199(instruction, program_id, accounts, instruction_data);
+    } else {
+        return process_instruction_200_plus(instruction, program_id, accounts, instruction_data);
+    }
+}
+
+#[inline(never)]
+fn process_instruction_0_99(
+    instruction: CuLibraryInstruction,
+    program_id: &Pubkey,
+    _accounts: &[AccountInfo],
+    _instruction_data: &[u8],
+) -> Result<(), ProgramError> {
     match instruction {
         CuLibraryInstruction::Baseline => {
             baseline_empty_function();
@@ -629,129 +774,6 @@ pub fn process_instruction(
             let res = solana_ops::pubkey_new_from_array::pubkey_new_from_array(program_id);
             solana_msg::msg!("pubkey: {:?}", res);
         }
-        CuLibraryInstruction::SolanaPubkeyToBytes => {
-            let solana_pubkey = solana_pubkey::Pubkey::from(*program_id);
-            let res = solana_ops::pubkey_to_bytes::pubkey_to_bytes(&solana_pubkey);
-            solana_msg::msg!("pubkey to_bytes: {:?}", res[0]);
-        }
-        CuLibraryInstruction::ArrayU8_32Index => {
-            let array: [u8; 32] = [1; 32];
-            let res = array_u8_32_index(&array);
-            solana_msg::msg!("{}", res);
-        }
-        CuLibraryInstruction::ArrayU8_32Get => {
-            let array: [u8; 32] = [1; 32];
-            let res = array_u8_32_get(&array);
-            solana_msg::msg!("{}", res.unwrap_or(&0));
-        }
-        CuLibraryInstruction::ArrayU8_32GetOkOr => {
-            let array: [u8; 32] = [1; 32];
-            let res = array_u8_32_get_ok_or(&array);
-            solana_msg::msg!("{}", res.unwrap_or(&0));
-        }
-        CuLibraryInstruction::ArrayU8_32IfLetGet => {
-            let array: [u8; 32] = [1; 32];
-            let res = array_u8_32_if_let_get(&array);
-            solana_msg::msg!("{}", res);
-        }
-        CuLibraryInstruction::ArrayU64_10Index => {
-            let array: [u64; 10] = [100; 10];
-            let res = array_u64_10_index(&array);
-            solana_msg::msg!("{}", res);
-        }
-        CuLibraryInstruction::ArrayU64_10Get => {
-            let array: [u64; 10] = [100; 10];
-            let res = array_u64_10_get(&array);
-            solana_msg::msg!("{}", res.unwrap_or(&0));
-        }
-        CuLibraryInstruction::ArrayU64_10GetOkOr => {
-            let array: [u64; 10] = [100; 10];
-            let res = array_u64_10_get_ok_or(&array);
-            solana_msg::msg!("{}", res.unwrap_or(&0));
-        }
-        CuLibraryInstruction::ArrayU64_10IfLetGet => {
-            let array: [u64; 10] = [100; 10];
-            let res = array_u64_10_if_let_get(&array);
-            solana_msg::msg!("{}", res);
-        }
-        CuLibraryInstruction::VecU8_32Index => {
-            let vec: Vec<u8> = vec![1; 32];
-            let res = vec_u8_32_index(&vec);
-            solana_msg::msg!("{}", res);
-        }
-        CuLibraryInstruction::VecU8_32Get => {
-            let vec: Vec<u8> = vec![1; 32];
-            let res = vec_u8_32_get(&vec);
-            solana_msg::msg!("{}", res.unwrap_or(&0));
-        }
-        CuLibraryInstruction::VecU8_32GetOkOr => {
-            let vec: Vec<u8> = vec![1; 32];
-            let res = vec_u8_32_get_ok_or(&vec);
-            solana_msg::msg!("{}", res.unwrap_or(&0));
-        }
-        CuLibraryInstruction::VecU8_32IfLetGet => {
-            let vec: Vec<u8> = vec![1; 32];
-            let res = vec_u8_32_if_let_get(&vec);
-            solana_msg::msg!("{}", res);
-        }
-        CuLibraryInstruction::VecU64_10Index => {
-            let vec: Vec<u64> = vec![100; 10];
-            let res = vec_u64_10_index(&vec);
-            solana_msg::msg!("{}", res);
-        }
-        CuLibraryInstruction::VecU64_10Get => {
-            let vec: Vec<u64> = vec![100; 10];
-            let res = vec_u64_10_get(&vec);
-            solana_msg::msg!("{}", res.unwrap_or(&0));
-        }
-        CuLibraryInstruction::VecU64_10GetOkOr => {
-            let vec: Vec<u64> = vec![100; 10];
-            let res = vec_u64_10_get_ok_or(&vec);
-            solana_msg::msg!("{}", res.unwrap_or(&0));
-        }
-        CuLibraryInstruction::VecU64_10IfLetGet => {
-            let vec: Vec<u64> = vec![100; 10];
-            let res = vec_u64_10_if_let_get(&vec);
-            solana_msg::msg!("{}", res);
-        }
-        CuLibraryInstruction::SerializationCompressedAccountInfoBorshDeserialize => {
-            let data = serialize_compressed_account_info();
-            let res = borsh_deserialize(data.as_slice())?;
-            solana_msg::msg!("Borsh deserialized: {:?}", res.address.is_some());
-        }
-        CuLibraryInstruction::SerializationCompressedAccountInfoZeroCopyDeserialize => {
-            let data = serialize_compressed_account_info();
-            let res = zero_copy_deserialize(data.as_slice())?;
-            solana_msg::msg!("Zerocopy deserialized: {:?}", res.address.is_some());
-        }
-        CuLibraryInstruction::SerializationCompressedAccountInfoWincodeDeserialize => {
-            let data = serialize_compressed_account_info_wincode();
-            let res = wincode_deserialize(data.as_slice())?;
-            solana_msg::msg!("Wincode deserialized: {:?}", res.address.is_some());
-        }
-        CuLibraryInstruction::SerializationCompressedAccountInfoBincodeDeserialize => {
-            let data = serialize_compressed_account_info_bincode();
-            let res = bincode_deserialize(data.as_slice())?;
-            solana_msg::msg!("Bincode deserialized: {:?}", res.address.is_some());
-        }
-        CuLibraryInstruction::SerializationCompressedAccountInfoBorsh1Deserialize => {
-            let data = serialize_compressed_account_info_borsh1();
-            let res = borsh1_deserialize(data.as_slice())?;
-            solana_msg::msg!("Borsh1 deserialized: {:?}", res.address.is_some());
-        }
-        CuLibraryInstruction::SerializationCompressedAccountInfoRkyvZeroCopyDeserialize => {
-            let data = serialize_compressed_account_info_rkyv();
-            let res = rkyv_zero_copy_deserialize(data.as_slice())?;
-            solana_msg::msg!("Rkyv zero-copy deserialized: {:?}", res.address.is_some());
-        }
-        CuLibraryInstruction::SerializationCompressedAccountInfoWincodeShortVecDeserialize => {
-            let data = serialize_compressed_account_info_wincode_shortvec();
-            let res = wincode_shortvec_deserialize(data.as_slice())?;
-            solana_msg::msg!(
-                "Wincode short-vec deserialized: {:?}",
-                res.address.is_some()
-            );
-        }
         CuLibraryInstruction::PinocchioSysvarRentExemption165 => {
             let _ = pinocchio_ops::sysvar_rent::sysvar_rent_exemption_165();
         }
@@ -759,75 +781,81 @@ pub fn process_instruction(
             pinocchio_ops::sysvar_clock::clock_get_slot()?
         }
         CuLibraryInstruction::ArrayvecNew => {
-            let res = arrayvec::vec_new::u8_new();
+            let res = collections::arrayvec::vec_new::u8_new();
             solana_msg::msg!("vec: {:?}", res.as_slice());
         }
         CuLibraryInstruction::ArrayvecWithCapacity10 => {
-            let res = arrayvec::vec_with_capacity::u8_with_capacity_10();
+            let res = collections::arrayvec::vec_with_capacity::u8_with_capacity_10();
             solana_msg::msg!("vec: {:?}", res.as_slice());
         }
         CuLibraryInstruction::ArrayvecWithCapacity100 => {
-            let res = arrayvec::vec_with_capacity::u8_with_capacity_100();
+            let res = collections::arrayvec::vec_with_capacity::u8_with_capacity_100();
             solana_msg::msg!("vec: {:?}", res.as_slice());
         }
         CuLibraryInstruction::ArrayvecPushU8 => {
-            let res = arrayvec::vec_push::push_u8();
-            solana_msg::msg!("vec: {:?}", res.as_slice());
+            let mut vec = collections::arrayvec::vec_push::create_empty_u8_vec();
+            collections::arrayvec::vec_push::push_u8(&mut vec);
+            solana_msg::msg!("vec: {:?}", vec.as_slice());
         }
         CuLibraryInstruction::ArrayvecPushU64 => {
-            let res = arrayvec::vec_push::push_u64();
-            solana_msg::msg!("vec: {:?}", res.as_slice());
+            let mut vec = collections::arrayvec::vec_push::create_empty_u64_vec();
+            collections::arrayvec::vec_push::push_u64(&mut vec);
+            solana_msg::msg!("vec: {:?}", vec.as_slice());
         }
         CuLibraryInstruction::ArrayvecPushPubkey => {
-            let res = arrayvec::vec_push::push_pubkey(program_id);
-            solana_msg::msg!("vec: {:?}", res.as_slice());
+            let mut vec = collections::arrayvec::vec_push::create_empty_pubkey_vec();
+            collections::arrayvec::vec_push::push_pubkey(&mut vec, program_id);
+            solana_msg::msg!("vec: {:?}", vec.as_slice());
         }
         CuLibraryInstruction::ArrayvecPush10U8 => {
-            let res = arrayvec::vec_push::push_10_u8();
-            solana_msg::msg!("vec: {:?}", res.as_slice());
+            let mut vec = collections::arrayvec::vec_push::create_empty_u8_vec();
+            collections::arrayvec::vec_push::push_10_u8(&mut vec);
+            solana_msg::msg!("vec: {:?}", vec.as_slice());
         }
         CuLibraryInstruction::ArrayvecPush10U64 => {
-            let res = arrayvec::vec_push::push_10_u64();
-            solana_msg::msg!("vec: {:?}", res.as_slice());
+            let mut vec = collections::arrayvec::vec_push::create_empty_u64_vec();
+            collections::arrayvec::vec_push::push_10_u64(&mut vec);
+            solana_msg::msg!("vec: {:?}", vec.as_slice());
         }
         CuLibraryInstruction::ArrayvecPush10Pubkey => {
-            let res = arrayvec::vec_push::push_10_pubkey(program_id)?;
-            solana_msg::msg!("vec: {:?}", res.as_slice());
+            let mut vec = collections::arrayvec::vec_push::create_empty_pubkey_vec();
+            collections::arrayvec::vec_push::push_10_pubkey(&mut vec, program_id)?;
+            solana_msg::msg!("vec: {:?}", vec.as_slice());
         }
         CuLibraryInstruction::VecNew => {
-            let res = vec::vec_new::u8_new();
+            let res = collections::vec::vec_new::u8_new();
             solana_msg::msg!("vec: {:?}", res);
         }
         CuLibraryInstruction::VecWithCapacity10 => {
-            let res = vec::vec_with_capacity::u8_with_capacity_10();
+            let res = collections::vec::vec_with_capacity::u8_with_capacity_10();
             solana_msg::msg!("vec: {:?}", res);
         }
         CuLibraryInstruction::VecWithCapacity100 => {
-            let res = vec::vec_with_capacity::u8_with_capacity_100();
+            let res = collections::vec::vec_with_capacity::u8_with_capacity_100();
             solana_msg::msg!("vec: {:?}", res);
         }
         CuLibraryInstruction::VecPushU8 => {
-            let res = vec::vec_push::push_u8();
+            let res = collections::vec::vec_push::push_u8();
             solana_msg::msg!("vec: {:?}", res);
         }
         CuLibraryInstruction::VecPushU64 => {
-            let res = vec::vec_push::push_u64();
+            let res = collections::vec::vec_push::push_u64();
             solana_msg::msg!("vec: {:?}", res);
         }
         CuLibraryInstruction::VecPushPubkey => {
-            let res = vec::vec_push::push_pubkey(program_id);
+            let res = collections::vec::vec_push::push_pubkey(program_id);
             solana_msg::msg!("vec: {:?}", res);
         }
         CuLibraryInstruction::VecPush10U8 => {
-            let res = vec::vec_push::push_10_u8();
+            let res = collections::vec::vec_push::push_10_u8();
             solana_msg::msg!("vec: {:?}", res);
         }
         CuLibraryInstruction::VecPush10U64 => {
-            let res = vec::vec_push::push_10_u64();
+            let res = collections::vec::vec_push::push_10_u64();
             solana_msg::msg!("vec: {:?}", res);
         }
         CuLibraryInstruction::VecPush10Pubkey => {
-            let res = vec::vec_push::push_10_pubkey(program_id);
+            let res = collections::vec::vec_push::push_10_pubkey(program_id);
             solana_msg::msg!("vec: {:?}", res);
         }
         CuLibraryInstruction::ArrayNew => {
@@ -1127,27 +1155,40 @@ pub fn process_instruction(
             solana_msg::msg!("result: {:?}", res);
         }
         CuLibraryInstruction::VecPushU8WithCapacity => {
-            let res = vec::vec_push::push_u8_with_capacity();
+            let res = collections::vec::vec_push::push_u8_with_capacity();
             solana_msg::msg!("vec: {:?}", res);
         }
+        _ => return Err(ProgramError::InvalidInstructionData),
+    }
+    Ok(())
+}
+
+#[inline(never)]
+fn process_instruction_100_199(
+    instruction: CuLibraryInstruction,
+    program_id: &Pubkey,
+    accounts: &[AccountInfo],
+    instruction_data: &[u8],
+) -> Result<(), ProgramError> {
+    match instruction {
         CuLibraryInstruction::VecPushU64WithCapacity => {
-            let res = vec::vec_push::push_u64_with_capacity();
+            let res = collections::vec::vec_push::push_u64_with_capacity();
             solana_msg::msg!("vec: {:?}", res);
         }
         CuLibraryInstruction::VecPushPubkeyWithCapacity => {
-            let res = vec::vec_push::push_pubkey_with_capacity(program_id);
+            let res = collections::vec::vec_push::push_pubkey_with_capacity(program_id);
             solana_msg::msg!("vec: {:?}", res);
         }
         CuLibraryInstruction::VecPush10U8WithCapacity => {
-            let res = vec::vec_push::push_10_u8_with_capacity();
+            let res = collections::vec::vec_push::push_10_u8_with_capacity();
             solana_msg::msg!("vec: {:?}", res);
         }
         CuLibraryInstruction::VecPush10U64WithCapacity => {
-            let res = vec::vec_push::push_10_u64_with_capacity();
+            let res = collections::vec::vec_push::push_10_u64_with_capacity();
             solana_msg::msg!("vec: {:?}", res);
         }
         CuLibraryInstruction::VecPush10PubkeyWithCapacity => {
-            let res = vec::vec_push::push_10_pubkey_with_capacity(program_id);
+            let res = collections::vec::vec_push::push_10_pubkey_with_capacity(program_id);
             solana_msg::msg!("vec: {:?}", res);
         }
         CuLibraryInstruction::AccountInfoKey => {
@@ -1893,6 +1934,19 @@ pub fn process_instruction(
             let result = checked_add_u8_ok_or_else(val);
             solana_msg::msg!("option checked_add ok_or_else: {:?}", result.is_ok());
         }
+        _ => return Err(ProgramError::InvalidInstructionData),
+    }
+    Ok(())
+}
+
+#[inline(never)]
+fn process_instruction_200_plus(
+    instruction: CuLibraryInstruction,
+    program_id: &Pubkey,
+    _accounts: &[AccountInfo],
+    instruction_data: &[u8],
+) -> Result<(), ProgramError> {
+    match instruction {
         CuLibraryInstruction::OptionCheckedAddU8UnwrapOrDefault => {
             let val = if instruction_data.len() > 2 {
                 instruction_data[2]
@@ -1974,6 +2028,465 @@ pub fn process_instruction(
             let result = if_let_some_array_ref(option);
             solana_msg::msg!("option if let some array ref: {:?}", result[0]);
         }
+        CuLibraryInstruction::SolanaPubkeyToBytes => {
+            let solana_pubkey = solana_pubkey::Pubkey::from(*program_id);
+            let res = solana_ops::pubkey_to_bytes::pubkey_to_bytes(&solana_pubkey);
+            solana_msg::msg!("pubkey to_bytes: {:?}", res[0]);
+        }
+        CuLibraryInstruction::ArrayU8_32Index => {
+            let array: [u8; 32] = [1; 32];
+            let res = array_u8_32_index(&array);
+            solana_msg::msg!("{}", res);
+        }
+        CuLibraryInstruction::ArrayU8_32Get => {
+            let array: [u8; 32] = [1; 32];
+            let res = array_u8_32_get(&array);
+            solana_msg::msg!("{}", res.unwrap_or(&0));
+        }
+        CuLibraryInstruction::ArrayU8_32GetOkOr => {
+            let array: [u8; 32] = [1; 32];
+            let res = array_u8_32_get_ok_or(&array);
+            solana_msg::msg!("{}", res.unwrap_or(&0));
+        }
+        CuLibraryInstruction::ArrayU8_32IfLetGet => {
+            let array: [u8; 32] = [1; 32];
+            let res = array_u8_32_if_let_get(&array);
+            solana_msg::msg!("{}", res);
+        }
+        CuLibraryInstruction::ArrayU64_10Index => {
+            let array: [u64; 10] = [100; 10];
+            let res = array_u64_10_index(&array);
+            solana_msg::msg!("{}", res);
+        }
+        CuLibraryInstruction::ArrayU64_10Get => {
+            let array: [u64; 10] = [100; 10];
+            let res = array_u64_10_get(&array);
+            solana_msg::msg!("{}", res.unwrap_or(&0));
+        }
+        CuLibraryInstruction::ArrayU64_10GetOkOr => {
+            let array: [u64; 10] = [100; 10];
+            let res = array_u64_10_get_ok_or(&array);
+            solana_msg::msg!("{}", res.unwrap_or(&0));
+        }
+        CuLibraryInstruction::ArrayU64_10IfLetGet => {
+            let array: [u64; 10] = [100; 10];
+            let res = array_u64_10_if_let_get(&array);
+            solana_msg::msg!("{}", res);
+        }
+        CuLibraryInstruction::VecU8_32Index => {
+            let vec: Vec<u8> = vec![1; 32];
+            let res = vec_u8_32_index(&vec);
+            solana_msg::msg!("{}", res);
+        }
+        CuLibraryInstruction::VecU8_32Get => {
+            let vec: Vec<u8> = vec![1; 32];
+            let res = vec_u8_32_get(&vec);
+            solana_msg::msg!("{}", res.unwrap_or(&0));
+        }
+        CuLibraryInstruction::VecU8_32GetOkOr => {
+            let vec: Vec<u8> = vec![1; 32];
+            let res = vec_u8_32_get_ok_or(&vec);
+            solana_msg::msg!("{}", res.unwrap_or(&0));
+        }
+        CuLibraryInstruction::VecU8_32IfLetGet => {
+            let vec: Vec<u8> = vec![1; 32];
+            let res = vec_u8_32_if_let_get(&vec);
+            solana_msg::msg!("{}", res);
+        }
+        CuLibraryInstruction::VecU64_10Index => {
+            let vec: Vec<u64> = vec![100; 10];
+            let res = vec_u64_10_index(&vec);
+            solana_msg::msg!("{}", res);
+        }
+        CuLibraryInstruction::VecU64_10Get => {
+            let vec: Vec<u64> = vec![100; 10];
+            let res = vec_u64_10_get(&vec);
+            solana_msg::msg!("{}", res.unwrap_or(&0));
+        }
+        CuLibraryInstruction::VecU64_10GetOkOr => {
+            let vec: Vec<u64> = vec![100; 10];
+            let res = vec_u64_10_get_ok_or(&vec);
+            solana_msg::msg!("{}", res.unwrap_or(&0));
+        }
+        CuLibraryInstruction::VecU64_10IfLetGet => {
+            let vec: Vec<u64> = vec![100; 10];
+            let res = vec_u64_10_if_let_get(&vec);
+            solana_msg::msg!("{}", res);
+        }
+        CuLibraryInstruction::SerializationCompressedAccountInfoBorshDeserialize => {
+            let data = serialize_compressed_account_info();
+            let res = borsh_deserialize(data.as_slice())?;
+            solana_msg::msg!("Borsh deserialized: {:?}", res.address.is_some());
+        }
+        CuLibraryInstruction::SerializationCompressedAccountInfoZeroCopyDeserialize => {
+            let data = serialize_compressed_account_info();
+            let res = zero_copy_deserialize(data.as_slice())?;
+            solana_msg::msg!("Zerocopy deserialized: {:?}", res.address.is_some());
+        }
+        CuLibraryInstruction::SerializationCompressedAccountInfoWincodeDeserialize => {
+            let data = serialize_compressed_account_info_wincode();
+            let res = wincode_deserialize(data.as_slice())?;
+            solana_msg::msg!("Wincode deserialized: {:?}", res.address.is_some());
+        }
+        CuLibraryInstruction::SerializationCompressedAccountInfoBincodeDeserialize => {
+            let data = serialize_compressed_account_info_bincode();
+            let res = bincode_deserialize(data.as_slice())?;
+            solana_msg::msg!("Bincode deserialized: {:?}", res.address.is_some());
+        }
+        CuLibraryInstruction::SerializationCompressedAccountInfoBorsh1Deserialize => {
+            let data = serialize_compressed_account_info_borsh1();
+            let res = borsh1_deserialize(data.as_slice())?;
+            solana_msg::msg!("Borsh1 deserialized: {:?}", res.address.is_some());
+        }
+        CuLibraryInstruction::SerializationCompressedAccountInfoRkyvZeroCopyDeserialize => {
+            let data = serialize_compressed_account_info_rkyv();
+            let res = rkyv_zero_copy_deserialize(data.as_slice())?;
+            solana_msg::msg!("Rkyv zero-copy deserialized: {:?}", res.address.is_some());
+        }
+        CuLibraryInstruction::SerializationCompressedAccountInfoWincodeShortVecDeserialize => {
+            let data = serialize_compressed_account_info_wincode_shortvec();
+            let res = wincode_shortvec_deserialize(data.as_slice())?;
+            solana_msg::msg!(
+                "Wincode short-vec deserialized: {:?}",
+                res.address.is_some()
+            );
+        }
+        CuLibraryInstruction::ArrayvecGetFirstPubkey => {
+            let vec = collections::arrayvec::access::create_populated_vec(program_id);
+            let res = collections::arrayvec::access::get_first_pubkey(&vec)?;
+            solana_msg::msg!("pubkey: {:?}", res);
+        }
+        CuLibraryInstruction::ArrayvecGet10thPubkey => {
+            let vec = collections::arrayvec::access::create_populated_vec(program_id);
+            let res = collections::arrayvec::access::get_10th_pubkey(&vec)?;
+            solana_msg::msg!("pubkey: {:?}", res);
+        }
+        CuLibraryInstruction::ArrayvecFindPubkey1Iters => {
+            let other_key = Pubkey::from([1u8; 32]);
+            let vec =
+                collections::arrayvec::access::create_vec_target_first(program_id, &other_key);
+            let res = collections::arrayvec::access::find_pubkey_1_iters(&vec, program_id)?;
+            solana_msg::msg!("pubkey: {:?}", res);
+        }
+        CuLibraryInstruction::ArrayvecFindPubkey10Iters => {
+            let other_key = Pubkey::from([1u8; 32]);
+            let vec = collections::arrayvec::access::create_vec_target_last(program_id, &other_key);
+            let res = collections::arrayvec::access::find_pubkey_10_iters(&vec, program_id)?;
+            solana_msg::msg!("pubkey: {:?}", res);
+        }
+        CuLibraryInstruction::ArrayvecPositionPubkey1Iters => {
+            let other_key = Pubkey::from([1u8; 32]);
+            let vec =
+                collections::arrayvec::access::create_vec_target_first(program_id, &other_key);
+            let res = collections::arrayvec::access::position_pubkey_1_iters(&vec, program_id);
+            solana_msg::msg!("position: {:?}", res);
+        }
+        CuLibraryInstruction::ArrayvecPositionPubkey10Iters => {
+            let other_key = Pubkey::from([1u8; 32]);
+            let vec = collections::arrayvec::access::create_vec_target_last(program_id, &other_key);
+            let res = collections::arrayvec::access::position_pubkey_10_iters(&vec, program_id);
+            solana_msg::msg!("position: {:?}", res);
+        }
+        CuLibraryInstruction::ArrayvecUpdateIndex => {
+            let mut vec = collections::arrayvec::access::create_populated_vec(program_id);
+            collections::arrayvec::access::update_index(&mut vec, 5, program_id);
+            solana_msg::msg!("updated vec: {:?}", vec.as_slice());
+        }
+        CuLibraryInstruction::ArrayvecUpdateGetMut => {
+            let mut vec = collections::arrayvec::access::create_populated_vec(program_id);
+            collections::arrayvec::access::update_get_mut(&mut vec, 5, program_id)?;
+            solana_msg::msg!("updated vec: {:?}", vec.as_slice());
+        }
+        CuLibraryInstruction::ArrayvecUpdateIterMutFind => {
+            let mut vec = collections::arrayvec::access::create_populated_vec(program_id);
+            let target = Pubkey::from([1u8; 32]);
+            collections::arrayvec::access::update_iter_mut_find(&mut vec, &target, program_id)?;
+            solana_msg::msg!("updated vec: {:?}", vec.as_slice());
+        }
+        // Tinyvec benchmarks
+        CuLibraryInstruction::TinyvecU8New => {
+            let res = collections::tinyvec::vec_new::u8_new();
+            solana_msg::msg!("vec len: {}", res.len());
+        }
+        CuLibraryInstruction::TinyvecU8WithCapacity10 => {
+            let res = collections::tinyvec::vec_with_capacity::u8_with_capacity_10();
+            solana_msg::msg!("vec len: {}", res.len());
+        }
+        CuLibraryInstruction::TinyvecU8WithCapacity100 => {
+            let res = collections::tinyvec::vec_with_capacity::u8_with_capacity_100();
+            solana_msg::msg!("vec len: {}", res.len());
+        }
+        CuLibraryInstruction::TinyvecPushU8 => {
+            let mut vec = collections::tinyvec::vec_push::create_empty_u8_vec();
+            collections::tinyvec::vec_push::push_u8(&mut vec);
+            solana_msg::msg!("vec: {:?}", vec.as_slice());
+        }
+        CuLibraryInstruction::TinyvecPushU64 => {
+            let mut vec = collections::tinyvec::vec_push::create_empty_u64_vec();
+            collections::tinyvec::vec_push::push_u64(&mut vec);
+            solana_msg::msg!("vec: {:?}", vec.as_slice());
+        }
+        CuLibraryInstruction::TinyvecPushPubkey => {
+            let mut vec = collections::tinyvec::vec_push::create_empty_pubkey_vec();
+            collections::tinyvec::vec_push::push_pubkey(&mut vec, program_id);
+            solana_msg::msg!("vec: {:?}", vec.as_slice());
+        }
+        CuLibraryInstruction::TinyvecPush10U8 => {
+            let mut vec = collections::tinyvec::vec_push::create_empty_u8_vec();
+            collections::tinyvec::vec_push::push_10_u8(&mut vec);
+            solana_msg::msg!("vec: {:?}", vec.as_slice());
+        }
+        CuLibraryInstruction::TinyvecPush10U64 => {
+            let mut vec = collections::tinyvec::vec_push::create_empty_u64_vec();
+            collections::tinyvec::vec_push::push_10_u64(&mut vec);
+            solana_msg::msg!("vec: {:?}", vec.as_slice());
+        }
+        CuLibraryInstruction::TinyvecPush10Pubkey => {
+            let mut vec = collections::tinyvec::vec_push::create_empty_pubkey_vec();
+            collections::tinyvec::vec_push::push_10_pubkey(&mut vec, program_id)?;
+            solana_msg::msg!("vec: {:?}", vec.as_slice());
+        }
+        CuLibraryInstruction::TinyvecGetFirstPubkey => {
+            let vec = collections::tinyvec::access::create_populated_vec(program_id);
+            let res = collections::tinyvec::access::get_first_pubkey(&vec)?;
+            solana_msg::msg!("pubkey: {:?}", res);
+        }
+        CuLibraryInstruction::TinyvecGet10thPubkey => {
+            let vec = collections::tinyvec::access::create_populated_vec(program_id);
+            let res = collections::tinyvec::access::get_10th_pubkey(&vec)?;
+            solana_msg::msg!("pubkey: {:?}", res);
+        }
+        CuLibraryInstruction::TinyvecFindPubkey1Iters => {
+            let other_key = Pubkey::from([1u8; 32]);
+            let vec = collections::tinyvec::access::create_vec_target_first(program_id, &other_key);
+            let res = collections::tinyvec::access::find_pubkey_1_iters(&vec, program_id)?;
+            solana_msg::msg!("pubkey: {:?}", res);
+        }
+        CuLibraryInstruction::TinyvecFindPubkey10Iters => {
+            let other_key = Pubkey::from([1u8; 32]);
+            let vec = collections::tinyvec::access::create_vec_target_last(program_id, &other_key);
+            let res = collections::tinyvec::access::find_pubkey_10_iters(&vec, program_id)?;
+            solana_msg::msg!("pubkey: {:?}", res);
+        }
+        CuLibraryInstruction::TinyvecPositionPubkey1Iters => {
+            let other_key = Pubkey::from([1u8; 32]);
+            let vec = collections::tinyvec::access::create_vec_target_first(program_id, &other_key);
+            let res = collections::tinyvec::access::position_pubkey_1_iters(&vec, program_id);
+            solana_msg::msg!("position: {:?}", res);
+        }
+        CuLibraryInstruction::TinyvecPositionPubkey10Iters => {
+            let other_key = Pubkey::from([1u8; 32]);
+            let vec = collections::tinyvec::access::create_vec_target_last(program_id, &other_key);
+            let res = collections::tinyvec::access::position_pubkey_10_iters(&vec, program_id);
+            solana_msg::msg!("position: {:?}", res);
+        }
+        CuLibraryInstruction::TinyvecUpdateIndex => {
+            let mut vec = collections::tinyvec::access::create_populated_vec(program_id);
+            collections::tinyvec::access::update_index(&mut vec, 5, program_id);
+            solana_msg::msg!("updated vec: {:?}", vec.as_slice());
+        }
+        CuLibraryInstruction::TinyvecUpdateGetMut => {
+            let mut vec = collections::tinyvec::access::create_populated_vec(program_id);
+            collections::tinyvec::access::update_get_mut(&mut vec, 5, program_id)?;
+            solana_msg::msg!("updated vec: {:?}", vec.as_slice());
+        }
+        CuLibraryInstruction::TinyvecUpdateIterMutFind => {
+            let mut vec = collections::tinyvec::access::create_populated_vec(program_id);
+            let target = Pubkey::from([1u8; 32]);
+            collections::tinyvec::access::update_iter_mut_find(&mut vec, &target, program_id)?;
+            solana_msg::msg!("updated vec: {:?}", vec.as_slice());
+        }
+        // Heapless benchmarks
+        CuLibraryInstruction::HeaplessU8New => {
+            let res = collections::heapless::vec_new::u8_new();
+            solana_msg::msg!("vec len: {}", res.len());
+        }
+        CuLibraryInstruction::HeaplessU8WithCapacity10 => {
+            let res = collections::heapless::vec_with_capacity::u8_with_capacity_10();
+            solana_msg::msg!("vec len: {}", res.len());
+        }
+        CuLibraryInstruction::HeaplessU8WithCapacity100 => {
+            let res = collections::heapless::vec_with_capacity::u8_with_capacity_100();
+            solana_msg::msg!("vec len: {}", res.len());
+        }
+        CuLibraryInstruction::HeaplessPushU8 => {
+            let mut vec = collections::heapless::vec_push::create_empty_u8_vec();
+            collections::heapless::vec_push::push_u8(&mut vec);
+            solana_msg::msg!("vec: {:?}", vec.as_slice());
+        }
+        CuLibraryInstruction::HeaplessPushU64 => {
+            let mut vec = collections::heapless::vec_push::create_empty_u64_vec();
+            collections::heapless::vec_push::push_u64(&mut vec);
+            solana_msg::msg!("vec: {:?}", vec.as_slice());
+        }
+        CuLibraryInstruction::HeaplessPushPubkey => {
+            let mut vec = collections::heapless::vec_push::create_empty_pubkey_vec();
+            collections::heapless::vec_push::push_pubkey(&mut vec, program_id);
+            solana_msg::msg!("vec: {:?}", vec.as_slice());
+        }
+        CuLibraryInstruction::HeaplessPush10U8 => {
+            let mut vec = collections::heapless::vec_push::create_empty_u8_vec();
+            collections::heapless::vec_push::push_10_u8(&mut vec);
+            solana_msg::msg!("vec: {:?}", vec.as_slice());
+        }
+        CuLibraryInstruction::HeaplessPush10U64 => {
+            let mut vec = collections::heapless::vec_push::create_empty_u64_vec();
+            collections::heapless::vec_push::push_10_u64(&mut vec);
+            solana_msg::msg!("vec: {:?}", vec.as_slice());
+        }
+        CuLibraryInstruction::HeaplessPush10Pubkey => {
+            let mut vec = collections::heapless::vec_push::create_empty_pubkey_vec();
+            collections::heapless::vec_push::push_10_pubkey(&mut vec, program_id)?;
+            solana_msg::msg!("vec: {:?}", vec.as_slice());
+        }
+        CuLibraryInstruction::HeaplessGetFirstPubkey => {
+            let vec = collections::heapless::access::create_populated_vec(program_id);
+            let res = collections::heapless::access::get_first_pubkey(&vec)?;
+            solana_msg::msg!("pubkey: {:?}", res);
+        }
+        CuLibraryInstruction::HeaplessGet10thPubkey => {
+            let vec = collections::heapless::access::create_populated_vec(program_id);
+            let res = collections::heapless::access::get_10th_pubkey(&vec)?;
+            solana_msg::msg!("pubkey: {:?}", res);
+        }
+        CuLibraryInstruction::HeaplessFindPubkey1Iters => {
+            let other_key = Pubkey::from([1u8; 32]);
+            let vec =
+                collections::heapless::access::create_vec_target_first(program_id, &other_key);
+            let res = collections::heapless::access::find_pubkey_1_iters(&vec, program_id)?;
+            solana_msg::msg!("pubkey: {:?}", res);
+        }
+        CuLibraryInstruction::HeaplessFindPubkey10Iters => {
+            let other_key = Pubkey::from([1u8; 32]);
+            let vec = collections::heapless::access::create_vec_target_last(program_id, &other_key);
+            let res = collections::heapless::access::find_pubkey_10_iters(&vec, program_id)?;
+            solana_msg::msg!("pubkey: {:?}", res);
+        }
+        CuLibraryInstruction::HeaplessPositionPubkey1Iters => {
+            let other_key = Pubkey::from([1u8; 32]);
+            let vec =
+                collections::heapless::access::create_vec_target_first(program_id, &other_key);
+            let res = collections::heapless::access::position_pubkey_1_iters(&vec, program_id);
+            solana_msg::msg!("position: {:?}", res);
+        }
+        CuLibraryInstruction::HeaplessPositionPubkey10Iters => {
+            let other_key = Pubkey::from([1u8; 32]);
+            let vec = collections::heapless::access::create_vec_target_last(program_id, &other_key);
+            let res = collections::heapless::access::position_pubkey_10_iters(&vec, program_id);
+            solana_msg::msg!("position: {:?}", res);
+        }
+        CuLibraryInstruction::HeaplessUpdateIndex => {
+            let mut vec = collections::heapless::access::create_populated_vec(program_id);
+            collections::heapless::access::update_index(&mut vec, 5, program_id);
+            solana_msg::msg!("updated vec: {:?}", vec.as_slice());
+        }
+        CuLibraryInstruction::HeaplessUpdateGetMut => {
+            let mut vec = collections::heapless::access::create_populated_vec(program_id);
+            collections::heapless::access::update_get_mut(&mut vec, 5, program_id)?;
+            solana_msg::msg!("updated vec: {:?}", vec.as_slice());
+        }
+        CuLibraryInstruction::HeaplessUpdateIterMutFind => {
+            let mut vec = collections::heapless::access::create_populated_vec(program_id);
+            let target = Pubkey::from([1u8; 32]);
+            collections::heapless::access::update_iter_mut_find(&mut vec, &target, program_id)?;
+            solana_msg::msg!("updated vec: {:?}", vec.as_slice());
+        }
+        // Smallvec benchmarks
+        CuLibraryInstruction::SmallvecU8New => {
+            let res = collections::smallvec::vec_new::u8_new();
+            solana_msg::msg!("vec len: {}", res.len());
+        }
+        CuLibraryInstruction::SmallvecU8WithCapacity10 => {
+            let res = collections::smallvec::vec_with_capacity::u8_with_capacity_10();
+            solana_msg::msg!("vec len: {}", res.len());
+        }
+        CuLibraryInstruction::SmallvecU8WithCapacity128 => {
+            let res = collections::smallvec::vec_with_capacity::u8_with_capacity_128();
+            solana_msg::msg!("vec len: {}", res.len());
+        }
+        CuLibraryInstruction::SmallvecPushU8 => {
+            let mut vec = collections::smallvec::vec_push::create_empty_u8_vec();
+            collections::smallvec::vec_push::push_u8(&mut vec);
+            solana_msg::msg!("vec: {:?}", vec.as_slice());
+        }
+        CuLibraryInstruction::SmallvecPushU64 => {
+            let mut vec = collections::smallvec::vec_push::create_empty_u64_vec();
+            collections::smallvec::vec_push::push_u64(&mut vec);
+            solana_msg::msg!("vec: {:?}", vec.as_slice());
+        }
+        CuLibraryInstruction::SmallvecPushPubkey => {
+            let mut vec = collections::smallvec::vec_push::create_empty_pubkey_vec();
+            collections::smallvec::vec_push::push_pubkey(&mut vec, program_id);
+            solana_msg::msg!("vec: {:?}", vec.as_slice());
+        }
+        CuLibraryInstruction::SmallvecPush10U8 => {
+            let mut vec = collections::smallvec::vec_push::create_empty_u8_vec();
+            collections::smallvec::vec_push::push_10_u8(&mut vec);
+            solana_msg::msg!("vec: {:?}", vec.as_slice());
+        }
+        CuLibraryInstruction::SmallvecPush10U64 => {
+            let mut vec = collections::smallvec::vec_push::create_empty_u64_vec();
+            collections::smallvec::vec_push::push_10_u64(&mut vec);
+            solana_msg::msg!("vec: {:?}", vec.as_slice());
+        }
+        CuLibraryInstruction::SmallvecPush10Pubkey => {
+            let mut vec = collections::smallvec::vec_push::create_empty_pubkey_vec();
+            collections::smallvec::vec_push::push_10_pubkey(&mut vec, program_id)?;
+            solana_msg::msg!("vec: {:?}", vec.as_slice());
+        }
+        CuLibraryInstruction::SmallvecGetFirstPubkey => {
+            let vec = collections::smallvec::access::create_populated_vec(program_id);
+            let res = collections::smallvec::access::get_first_pubkey(&vec)?;
+            solana_msg::msg!("pubkey: {:?}", res);
+        }
+        CuLibraryInstruction::SmallvecGet10thPubkey => {
+            let vec = collections::smallvec::access::create_populated_vec(program_id);
+            let res = collections::smallvec::access::get_10th_pubkey(&vec)?;
+            solana_msg::msg!("pubkey: {:?}", res);
+        }
+        CuLibraryInstruction::SmallvecFindPubkey1Iters => {
+            let other_key = Pubkey::from([1u8; 32]);
+            let vec =
+                collections::smallvec::access::create_vec_target_first(program_id, &other_key);
+            let res = collections::smallvec::access::find_pubkey_1_iters(&vec, program_id)?;
+            solana_msg::msg!("pubkey: {:?}", res);
+        }
+        CuLibraryInstruction::SmallvecFindPubkey10Iters => {
+            let other_key = Pubkey::from([1u8; 32]);
+            let vec = collections::smallvec::access::create_vec_target_last(program_id, &other_key);
+            let res = collections::smallvec::access::find_pubkey_10_iters(&vec, program_id)?;
+            solana_msg::msg!("pubkey: {:?}", res);
+        }
+        CuLibraryInstruction::SmallvecPositionPubkey1Iters => {
+            let other_key = Pubkey::from([1u8; 32]);
+            let vec =
+                collections::smallvec::access::create_vec_target_first(program_id, &other_key);
+            let res = collections::smallvec::access::position_pubkey_1_iters(&vec, program_id);
+            solana_msg::msg!("position: {:?}", res);
+        }
+        CuLibraryInstruction::SmallvecPositionPubkey10Iters => {
+            let other_key = Pubkey::from([1u8; 32]);
+            let vec = collections::smallvec::access::create_vec_target_last(program_id, &other_key);
+            let res = collections::smallvec::access::position_pubkey_10_iters(&vec, program_id);
+            solana_msg::msg!("position: {:?}", res);
+        }
+        CuLibraryInstruction::SmallvecUpdateIndex => {
+            let mut vec = collections::smallvec::access::create_populated_vec(program_id);
+            collections::smallvec::access::update_index(&mut vec, 5, program_id);
+            solana_msg::msg!("updated vec: {:?}", vec.as_slice());
+        }
+        CuLibraryInstruction::SmallvecUpdateGetMut => {
+            let mut vec = collections::smallvec::access::create_populated_vec(program_id);
+            collections::smallvec::access::update_get_mut(&mut vec, 5, program_id)?;
+            solana_msg::msg!("updated vec: {:?}", vec.as_slice());
+        }
+        CuLibraryInstruction::SmallvecUpdateIterMutFind => {
+            let mut vec = collections::smallvec::access::create_populated_vec(program_id);
+            let target = Pubkey::from([1u8; 32]);
+            collections::smallvec::access::update_iter_mut_find(&mut vec, &target, program_id)?;
+            solana_msg::msg!("updated vec: {:?}", vec.as_slice());
+        }
+        _ => return Err(ProgramError::InvalidInstructionData),
     }
     Ok(())
 }

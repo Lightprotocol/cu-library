@@ -7,3 +7,4 @@ target/
 # Logs
 *.log
 bench.log
+.claude

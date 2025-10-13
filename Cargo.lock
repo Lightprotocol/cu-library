@@ -760,12 +760,14 @@ dependencies = [
  "bincode",
  "borsh 0.10.4",
  "borsh 1.5.7",
+ "heapless",
  "light-program-profiler",
  "light-zero-copy",
  "litesvm",
  "pinocchio",
  "rkyv",
  "serde",
+ "smallvec",
  "solana-account",
  "solana-instruction",
  "solana-keypair",
@@ -777,6 +779,7 @@ dependencies = [
  "solana-short-vec 2.2.1",
  "solana-signer",
  "solana-transaction",
+ "tinyvec",
  "wincode",
  "wincode-derive",
  "zerocopy",
@@ -1257,6 +1260,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "hash32"
+version = "0.3.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "47d60b12902ba28e2730cd37e95b8c9223af2808df9e902d4df49588d1470606"
+dependencies = [
+ "byteorder",
+]
+
+[[package]]
 name = "hashbrown"
 version = "0.12.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1279,6 +1291,16 @@ name = "hashbrown"
 version = "0.15.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "9229cfe53dfd69f0609a49f65461bd93001ea1ef889cd5529dd176593f5338a1"
+
+[[package]]
+name = "heapless"
+version = "0.8.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "0bfb9eb618601c89945a70e254898da93b13be0388091d42117462b265bb3fad"
+dependencies = [
+ "hash32 0.3.1",
+ "stable_deref_trait",
+]
 
 [[package]]
 name = "hermit-abi"
@@ -4017,7 +4039,7 @@ checksum = "66a3ce7a0f4d6830124ceb2c263c36d1ee39444ec70146eb49b939e557e72b96"
 dependencies = [
  "byteorder",
  "combine",
- "hash32",
+ "hash32 0.2.1",
  "libc",
  "log",
  "rand 0.8.5",
