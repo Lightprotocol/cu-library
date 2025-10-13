@@ -5264,10 +5264,12 @@ checksum = "712e227841d057c1ee1cd2fb22fa7e5a5461ae8e48fa2ca79ec42cfc1931183f"
 
 [[package]]
 name = "wincode"
-version = "0.1.1"
+version = "0.1.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0ee7998a4af6c1f046df464354ef230e13a4db5770a39e65b153c1927c2b274d"
+checksum = "d5067322fecd19471f7980888bff95cedf08b19829c83418f51410ff9ccc4193"
 dependencies = [
+ "proc-macro2",
+ "quote",
  "solana-short-vec 3.0.0",
  "thiserror 2.0.16",
 ]

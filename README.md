@@ -521,11 +521,11 @@ Benchmark results for Solana runtime operations.
   |-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
   | [borsh_deserialize](https://github.com/Lightprotocol/cu-library/blob/main/src/serialization/compressed_account_info.rs#L200)                                                         | 428         | 422         |
   | [zero_copy_deserialize](https://github.com/Lightprotocol/cu-library/blob/main/src/serialization/compressed_account_info.rs#L206)                                                     | 130         | 124         |
-  | [wincode_deserialize](https://github.com/Lightprotocol/cu-library/blob/main/src/serialization/compressed_account_info.rs#L215)                                                       | 594         | 588         |
+  | [wincode_deserialize](https://github.com/Lightprotocol/cu-library/blob/main/src/serialization/compressed_account_info.rs#L215)                                                       | 263         | 257         |
   | [bincode_deserialize](https://github.com/Lightprotocol/cu-library/blob/main/src/serialization/compressed_account_info.rs#L220)                                                       | 3231        | 3225        |
   | [borsh1_deserialize](https://github.com/Lightprotocol/cu-library/blob/main/src/serialization/compressed_account_info.rs#L225)                                                        | 428         | 422         |
   | [rkyv_zero_copy_deserialize](https://github.com/Lightprotocol/cu-library/blob/main/src/serialization/compressed_account_info.rs#L230)                                                | 178         | 172         |
-  | [wincode_shortvec_deserialize](https://github.com/Lightprotocol/cu-library/blob/main/src/serialization/compressed_account_info.rs#L285)                                              | 612         | 606         |
+  | [wincode_shortvec_deserialize](https://github.com/Lightprotocol/cu-library/blob/main/src/serialization/compressed_account_info.rs#L285)                                              | 282         | 276         |
 
 ## 9. Solana Crates
 
