@@ -1,7 +1,7 @@
 use pinocchio::{account_info::AccountInfo, program_error::ProgramError, pubkey::Pubkey};
 
 use crate::instructions::discriminator::CuLibraryInstruction;
-use crate::{collections, solana_ops};
+use crate::{collections, solana_crates as solana_ops};
 
 use crate::collections::array::array_u64_10::{
     array_u64_10_get, array_u64_10_get_ok_or, array_u64_10_if_let_get, array_u64_10_index,

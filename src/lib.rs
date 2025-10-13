@@ -2,17 +2,15 @@ use pinocchio::{account_info::AccountInfo, program_error::ProgramError, pubkey::
 
 use light_program_profiler::profile;
 
-pub mod account_info;
 pub mod collections;
 pub mod conversions;
-pub mod cpi;
 pub mod instructions;
 pub mod math;
 pub mod option;
 pub mod partial_eq;
-pub mod pinocchio_ops;
+pub mod pinocchio_crates;
 pub mod serialization;
-pub mod solana_ops;
+pub mod solana_crates;
 pub use crate::instructions::discriminator::CuLibraryInstruction;
 
 #[profile]

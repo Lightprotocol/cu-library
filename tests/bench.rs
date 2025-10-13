@@ -515,8 +515,8 @@ fn extract_category_and_file_from_path(file_location: &str) -> (String, String) 
 fn format_display_name(folder_name: &str) -> String {
     match folder_name {
         "account_info" => "Account Info".to_string(),
-        "pinocchio_ops" => "Pinocchio Ops".to_string(),
-        "solana_ops" => "Solana Ops".to_string(),
+        "pinocchio_crates" => "Pinocchio Crates".to_string(),
+        "solana_crates" => "Solana Crates".to_string(),
         "checked_math" => "Checked Math".to_string(),
         "saturating_math" => "Saturating Math".to_string(),
         "std_math" => "Std Math".to_string(),

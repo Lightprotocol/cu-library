@@ -1,7 +1,7 @@
 use pinocchio::{account_info::AccountInfo, program_error::ProgramError, pubkey::Pubkey};
 
 use crate::{baseline_empty_function, instructions::discriminator::CuLibraryInstruction};
-use crate::{collections, math, pinocchio_ops, solana_ops};
+use crate::{collections, math, pinocchio_crates, solana_crates};
 
 use crate::collections::array::array_assign::{
     assign_10_pubkey, assign_10_u64, assign_10_u8, assign_pubkey, assign_u64, assign_u8,
@@ -28,20 +28,20 @@ pub fn process_instruction_0_99(
             baseline_empty_function();
             solana_msg::msg!("baseline complete");
         }
-        CuLibraryInstruction::Msg10 => pinocchio_ops::msg::msg10_chars()?,
-        CuLibraryInstruction::SolanaMsg10 => solana_ops::msg::msg10_chars()?,
+        CuLibraryInstruction::Msg10 => pinocchio_crates::msg::msg10_chars()?,
+        CuLibraryInstruction::SolanaMsg10 => solana_crates::msg::msg10_chars()?,
         CuLibraryInstruction::SolanaMsgProgramId => {
-            solana_ops::msg_program_id::msg_program_id(program_id)?
+            solana_crates::msg_program_id::msg_program_id(program_id)?
         }
         CuLibraryInstruction::SolanaPubkeyNewFromArray => {
-            let res = solana_ops::pubkey_new_from_array::pubkey_new_from_array(program_id);
+            let res = solana_crates::pubkey_new_from_array::pubkey_new_from_array(program_id);
             solana_msg::msg!("pubkey: {:?}", res);
         }
         CuLibraryInstruction::PinocchioSysvarRentExemption165 => {
-            let _ = pinocchio_ops::sysvar_rent::sysvar_rent_exemption_165();
+            let _ = pinocchio_crates::sysvar_rent::sysvar_rent_exemption_165();
         }
         CuLibraryInstruction::PinocchioClockGetSlot => {
-            pinocchio_ops::sysvar_clock::clock_get_slot()?
+            pinocchio_crates::sysvar_clock::clock_get_slot()?
         }
         CuLibraryInstruction::ArrayvecNew => {
             let res = collections::arrayvec::vec_new::u8_new();

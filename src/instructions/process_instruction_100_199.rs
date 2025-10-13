@@ -2,18 +2,18 @@ use pinocchio::{account_info::AccountInfo, program_error::ProgramError, pubkey::
 
 use crate::{collections, instructions::discriminator::CuLibraryInstruction};
 
-use crate::account_info::account_borrows::{
+use crate::pinocchio_crates::account_info::account_borrows::{
     borrow_data_unchecked, borrow_lamports_unchecked, borrow_mut_data_unchecked,
     borrow_mut_lamports_unchecked, can_borrow_data, can_borrow_lamports, can_borrow_mut_data,
     can_borrow_mut_lamports, is_borrowed, try_borrow_data, try_borrow_lamports,
     try_borrow_mut_data, try_borrow_mut_lamports,
 };
-use crate::account_info::account_checks::{data_is_empty, executable, is_signer, is_writable};
-use crate::account_info::account_data::{data_len, lamports};
-use crate::account_info::account_key::key;
-use crate::account_info::account_owner::owner;
-use crate::account_info::account_ownership::{assign, is_owned_by};
-use crate::account_info::account_realloc::{close, close_unchecked, realloc};
+use crate::pinocchio_crates::account_info::account_checks::{data_is_empty, executable, is_signer, is_writable};
+use crate::pinocchio_crates::account_info::account_data::{data_len, lamports};
+use crate::pinocchio_crates::account_info::account_key::key;
+use crate::pinocchio_crates::account_info::account_owner::owner;
+use crate::pinocchio_crates::account_info::account_ownership::{assign, is_owned_by};
+use crate::pinocchio_crates::account_info::account_realloc::{close, close_unchecked, realloc};
 
 use crate::conversions::cast_u16::{u16_as_u32, u16_as_u64, u16_as_u8, u16_as_usize};
 use crate::conversions::cast_u32::{u32_as_u16, u32_as_u64, u32_as_u8, u32_as_usize};
@@ -28,15 +28,15 @@ use crate::conversions::to_usize::{
     try_into_u32_to_usize_unwrap, try_into_u64_to_usize_map_err, try_into_u64_to_usize_unwrap,
     try_into_u8_to_usize_map_err, try_into_u8_to_usize_unwrap,
 };
-use crate::cpi::cpi_array_loop::{
+use crate::pinocchio_crates::account_meta::array_loop::{
     account_info_array_10_clone_loop, account_info_array_10_move_loop,
     account_info_array_10_ref_loop, account_meta_array_10_loop,
 };
-use crate::cpi::cpi_arrays::{
+use crate::pinocchio_crates::account_meta::arrays::{
     account_info_array_10_clone, account_info_array_10_move, account_info_array_10_ref,
     account_meta_array_10,
 };
-use crate::cpi::cpi_arrayvec::{
+use crate::pinocchio_crates::account_meta::arrayvec::{
     arrayvec_push_account_info_10_clone, arrayvec_push_account_info_10_move,
     arrayvec_push_account_info_10_ref, arrayvec_push_account_meta_10,
 };

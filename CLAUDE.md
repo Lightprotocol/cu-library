@@ -49,8 +49,8 @@ Example structure:
 
 Organize profiling functions by operation category:
 
-- `src/pinocchio_ops/` - Pinocchio-specific operations (e.g., msg!, pubkey operations)
-- `src/solana_ops/` - Solana SDK operations (e.g., solana_msg::msg!)
+- `src/pinocchio_crates/` - Pinocchio-specific operations (e.g., msg!, pubkey operations)
+- `src/solana_crates/` - Solana SDK operations (e.g., solana_msg::msg!)
 - `src/checked_math/` - Checked arithmetic operations
 - `src/unchecked_math/` - Unchecked arithmetic operations
 
@@ -244,7 +244,7 @@ pub fn process_instruction(
             baseline_empty_function();
             solana_msg::msg!("baseline complete");
         }
-        CuLibraryInstruction::Msg10 => pinocchio_ops::msg::msg10_chars()?,
+        CuLibraryInstruction::Msg10 => pinocchio_crates::msg::msg10_chars()?,
         // ... existing cases ...
         CuLibraryInstruction::CheckedAddU64 => {
             let res = checked_math::checked_add::add_u64();
@@ -271,7 +271,7 @@ let instructions = vec![
   - Function names should describe the operation being tested
   - No need for category prefixes - the directory determines the category
 - **File names**: Match the operation being tested (e.g., `checked_add.rs`, `msg.rs`, `vec_push.rs`)
-- **Directory names**: Use descriptive names for operation categories (e.g., `pinocchio_ops`, `solana_ops`, `checked_math`)
+- **Directory names**: Use descriptive names for operation categories (e.g., `pinocchio_crates`, `solana_crates`, `checked_math`)
 
 ### Category Organization
 
@@ -289,10 +289,10 @@ src/
 │   ├── checked_add.rs  →   "### Checked Add"
 │   ├── checked_sub.rs  →   "### Checked Sub"
 │   └── checked_mul.rs  →   "### Checked Mul"
-├── pinocchio_ops/      → "## Pinocchio Ops"
+├── pinocchio_crates/      → "## Pinocchio Ops"
 │   ├── msg.rs          →   "### Msg"
 │   └── sysvar_clock.rs →   "### Sysvar Clock"
-└── solana_ops/         → "## Solana Ops"
+└── solana_crates/         → "## Solana Ops"
     └── msg.rs          →   "### Msg"
 ```
 
