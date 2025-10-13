@@ -6,21 +6,64 @@ Benchmark results for Solana runtime operations.
 
 **[1. Baseline](#1-baseline)**
 
+  - [1.1 Lib](#11-lib)
+
 **[2. Collections](#2-collections)**
+
+  - [2.1 Array](#21-array)
+  - [2.2 Arrayvec](#22-arrayvec)
+  - [2.3 Heapless](#23-heapless)
+  - [2.4 Smallvec](#24-smallvec)
+  - [2.5 Tinyvec](#25-tinyvec)
+  - [2.6 Vec](#26-vec)
 
 **[3. Conversions](#3-conversions)**
 
+  - [3.1 Cast U16](#31-cast-u16)
+  - [3.2 Cast U32](#32-cast-u32)
+  - [3.3 Cast U64](#33-cast-u64)
+  - [3.4 Cast U8](#34-cast-u8)
+  - [3.5 From Usize](#35-from-usize)
+  - [3.6 Slice To Array](#36-slice-to-array)
+  - [3.7 To Usize](#37-to-usize)
+
 **[4. Math](#4-math)**
+
+  - [4.1 Checked Math](#41-checked-math)
+  - [4.2 Saturating Math](#42-saturating-math)
+  - [4.3 Std Math](#43-std-math)
 
 **[5. Option](#5-option)**
 
+  - [5.1 Option Checked Add](#51-option-checked-add)
+  - [5.2 Option If Let](#52-option-if-let)
+  - [5.3 Option Pubkey Ref](#53-option-pubkey-ref)
+  - [5.4 Option Slice Get](#54-option-slice-get)
+
 **[6. Partial Eq](#6-partial-eq)**
+
+  - [6.1 Partial Eq Arrays](#61-partial-eq-arrays)
+  - [6.2 Partial Eq Neq](#62-partial-eq-neq)
+  - [6.3 Partial Eq Primitives](#63-partial-eq-primitives)
 
 **[7. Pinocchio Crates](#7-pinocchio-crates)**
 
+  - [7.1 Account Info](#71-account-info)
+  - [7.2 Account Meta](#72-account-meta)
+  - [7.3 Msg](#73-msg)
+  - [7.4 Sysvar Clock](#74-sysvar-clock)
+  - [7.5 Sysvar Rent](#75-sysvar-rent)
+
 **[8. Serialization](#8-serialization)**
 
+  - [8.1 Compressed Account Info](#81-compressed-account-info)
+
 **[9. Solana Crates](#9-solana-crates)**
+
+  - [9.1 Msg](#91-msg)
+  - [9.2 Msg Program Id](#92-msg-program-id)
+  - [9.3 Pubkey New From Array](#93-pubkey-new-from-array)
+  - [9.4 Pubkey To Bytes](#94-pubkey-to-bytes)
 
 
 ## Definitions
@@ -509,3 +552,4 @@ Benchmark results for Solana runtime operations.
   | Function                                                                                                                                                                                                                | CU Consumed | CU Adjusted |
   |-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
   | [pubkey_to_bytes](https://github.com/Lightprotocol/cu-library/blob/main/src/solana_crates/pubkey_to_bytes.rs#L6)                                                                     | 14          | 8           |
+

@@ -653,6 +653,28 @@ fn write_categorized_readme(
             section_number, section_number
         )
         .unwrap();
+
+        // Add subsections for baseline
+        if let Some(files_map) = results_by_category.get("baseline") {
+            let mut file_number = 1;
+            for file_stem in files_map.keys() {
+                let file_display_name = format_file_display_name(file_stem);
+                let anchor = format!("{}{}-{}",
+                    section_number,
+                    file_number,
+                    file_display_name.to_lowercase().replace(' ', "-")
+                );
+                writeln!(
+                    readme,
+                    "  - [{}.{} {}](#{})",
+                    section_number, file_number, file_display_name, anchor
+                )
+                .unwrap();
+                file_number += 1;
+            }
+        }
+        writeln!(readme).unwrap();
+
         baseline_number = section_number;
         section_number += 1;
     }
@@ -669,6 +691,28 @@ fn write_categorized_readme(
                 section_number, display_name, anchor
             )
             .unwrap();
+
+            // Add subsections for this category
+            if let Some(files_map) = results_by_category.get(category) {
+                let mut file_number = 1;
+                for file_stem in files_map.keys() {
+                    let file_display_name = format_file_display_name(file_stem);
+                    let anchor = format!("{}{}-{}",
+                        section_number,
+                        file_number,
+                        file_display_name.to_lowercase().replace(' ', "-")
+                    );
+                    writeln!(
+                        readme,
+                        "  - [{}.{} {}](#{})",
+                        section_number, file_number, file_display_name, anchor
+                    )
+                    .unwrap();
+                    file_number += 1;
+                }
+            }
+            writeln!(readme).unwrap();
+
             category_numbers.insert(category.clone(), section_number);
             section_number += 1;
         }
