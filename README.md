@@ -43,7 +43,7 @@ Benchmark results for Solana runtime operations.
 
   | Function                                                                                                                                                                                                                | CU Consumed | CU Adjusted |
   |-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
-  | [baseline_empty_function](https://github.com/Lightprotocol/cu-library/blob/main/src/lib.rs#L106)                                                                                     | 6           | N/A         |
+  | [baseline_empty_function](https://github.com/Lightprotocol/cu-library/blob/main/src/lib.rs#L21)                                                                                      | 6           | N/A         |
 
 ## 2. Account Info
 

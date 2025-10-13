@@ -47,7 +47,8 @@ fn bench_cu_operations() {
 
     // Collect benchmark results by category and file
     // Structure: folder -> file -> [(func_name, cu_value, file_location)]
-    let mut results_by_category: BTreeMap<String, BTreeMap<String, Vec<(String, String, String)>>> = BTreeMap::new();
+    let mut results_by_category: BTreeMap<String, BTreeMap<String, Vec<(String, String, String)>>> =
+        BTreeMap::new();
 
     let instructions = vec![
         CuLibraryInstruction::Baseline,
@@ -359,11 +360,12 @@ fn bench_cu_operations() {
         // Skip instructions that we don't want to test
         if matches!(
             instruction_type,
-            CuLibraryInstruction::AccountInfoClose | CuLibraryInstruction::AccountInfoCloseUnchecked
+            CuLibraryInstruction::AccountInfoClose
+                | CuLibraryInstruction::AccountInfoCloseUnchecked
         ) {
             continue;
         }
-        
+
         let instruction = if matches!(
             instruction_type,
             CuLibraryInstruction::CpiAccountMetaArray10
@@ -580,12 +582,12 @@ fn parse_benchmark_log(logs: &[String]) -> Option<(String, String, String)> {
                         let parts: Vec<&str> = func_part.split_whitespace().collect();
                         if !parts.is_empty() {
                             let func_name = parts[0].to_string();
-                            
+
                             // Look for the file location line (next line)
                             let mut file_location = String::new();
                             if i + 1 < lines.len() {
                                 if let Some(location_line) = lines.get(i + 1) {
-                                    // The location line contains "src/..." 
+                                    // The location line contains "src/..."
                                     let location_trimmed = location_line.trim();
                                     if location_trimmed.starts_with("src/") {
                                         file_location = location_trimmed.to_string();
@@ -624,7 +626,9 @@ fn parse_benchmark_log(logs: &[String]) -> Option<(String, String, String)> {
     None
 }
 
-fn write_categorized_readme(mut results_by_category: BTreeMap<String, BTreeMap<String, Vec<(String, String, String)>>>) {
+fn write_categorized_readme(
+    mut results_by_category: BTreeMap<String, BTreeMap<String, Vec<(String, String, String)>>>,
+) {
     let mut readme = OpenOptions::new()
         .create(true)
         .write(true)
@@ -643,7 +647,12 @@ fn write_categorized_readme(mut results_by_category: BTreeMap<String, BTreeMap<S
     let mut section_number = 1;
     let mut baseline_number = 0;
     if results_by_category.contains_key("baseline") {
-        writeln!(readme, "**[{}. Baseline](#{}-baseline)**\n", section_number, section_number).unwrap();
+        writeln!(
+            readme,
+            "**[{}. Baseline](#{}-baseline)**\n",
+            section_number, section_number
+        )
+        .unwrap();
         baseline_number = section_number;
         section_number += 1;
     }
@@ -654,14 +663,19 @@ fn write_categorized_readme(mut results_by_category: BTreeMap<String, BTreeMap<S
         if category != "baseline" {
             let display_name = format_display_name(category);
             let anchor = format!("{}-{}", section_number, category.replace('_', "-"));
-            writeln!(readme, "**[{}. {}](#{})**\n", section_number, display_name, anchor).unwrap();
+            writeln!(
+                readme,
+                "**[{}. {}](#{})**\n",
+                section_number, display_name, anchor
+            )
+            .unwrap();
             category_numbers.insert(category.clone(), section_number);
             section_number += 1;
         }
     }
-    
+
     writeln!(readme).unwrap(); // Empty line after TOC
-    
+
     // Write definitions
     writeln!(readme, "## Definitions\n").unwrap();
     writeln!(
@@ -699,7 +713,13 @@ fn write_categorized_readme(mut results_by_category: BTreeMap<String, BTreeMap<S
         let mut file_number = 1;
         for (file_stem, results) in baseline_files {
             let file_display_name = format_file_display_name(&file_stem);
-            let indented_header = add_indentation(&format!("### {}.{} {}", baseline_number, file_number, file_display_name), 1);
+            let indented_header = add_indentation(
+                &format!(
+                    "### {}.{} {}",
+                    baseline_number, file_number, file_display_name
+                ),
+                1,
+            );
             writeln!(readme, "{}\n", indented_header).unwrap();
 
             // Write table header with indentation (same width as other tables)
@@ -717,8 +737,10 @@ fn write_categorized_readme(mut results_by_category: BTreeMap<String, BTreeMap<S
                     if parts.len() >= 2 {
                         let file_path = parts[0];
                         let line_num = parts[1].trim().parse::<usize>().unwrap_or(0) + 1;
-                        format!("[{}](https://github.com/Lightprotocol/cu-library/blob/main/{}#L{})",
-                                func_name, file_path, line_num)
+                        format!(
+                            "[{}](https://github.com/Lightprotocol/cu-library/blob/main/{}#L{})",
+                            func_name, file_path, line_num
+                        )
                     } else {
                         func_name.clone()
                     }
@@ -726,7 +748,13 @@ fn write_categorized_readme(mut results_by_category: BTreeMap<String, BTreeMap<S
                     func_name.clone()
                 };
                 // Baseline has no adjustment, show N/A
-                let table_row = add_indentation(&format!("| {:<180} | {:<11} | {:<11} |", github_link, cu_value, "N/A"), 1);
+                let table_row = add_indentation(
+                    &format!(
+                        "| {:<180} | {:<11} | {:<11} |",
+                        github_link, cu_value, "N/A"
+                    ),
+                    1,
+                );
                 writeln!(readme, "{}", table_row).unwrap();
             }
 
@@ -746,7 +774,10 @@ fn write_categorized_readme(mut results_by_category: BTreeMap<String, BTreeMap<S
         let mut file_number = 1;
         for (file_stem, results) in files_map {
             let file_display_name = format_file_display_name(&file_stem);
-            let indented_header = add_indentation(&format!("### {}.{} {}", number, file_number, file_display_name), 1);
+            let indented_header = add_indentation(
+                &format!("### {}.{} {}", number, file_number, file_display_name),
+                1,
+            );
             writeln!(readme, "{}\n", indented_header).unwrap();
 
             // Write table header with indentation
@@ -764,8 +795,10 @@ fn write_categorized_readme(mut results_by_category: BTreeMap<String, BTreeMap<S
                     if parts.len() >= 2 {
                         let file_path = parts[0];
                         let line_num = parts[1].trim().parse::<usize>().unwrap_or(0) + 1;
-                        format!("[{}](https://github.com/Lightprotocol/cu-library/blob/main/{}#L{})",
-                                func_name, file_path, line_num)
+                        format!(
+                            "[{}](https://github.com/Lightprotocol/cu-library/blob/main/{}#L{})",
+                            func_name, file_path, line_num
+                        )
                     } else {
                         func_name.clone()
                     }
@@ -781,7 +814,13 @@ fn write_categorized_readme(mut results_by_category: BTreeMap<String, BTreeMap<S
                     "0".to_string()
                 };
 
-                let table_row = add_indentation(&format!("| {:<180} | {:<11} | {:<11} |", github_link, cu_value, cu_adjusted), 1);
+                let table_row = add_indentation(
+                    &format!(
+                        "| {:<180} | {:<11} | {:<11} |",
+                        github_link, cu_value, cu_adjusted
+                    ),
+                    1,
+                );
                 writeln!(readme, "{}", table_row).unwrap();
             }
 
