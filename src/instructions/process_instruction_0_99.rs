@@ -1,7 +1,7 @@
 use pinocchio::{account_info::AccountInfo, program_error::ProgramError, pubkey::Pubkey};
 
 use crate::{baseline_empty_function, instructions::discriminator::CuLibraryInstruction};
-use crate::{checked_math, collections, pinocchio_ops, saturating_math, solana_ops, std_math};
+use crate::{collections, math, pinocchio_ops, solana_ops};
 
 use crate::collections::array::array_assign::{
     assign_10_pubkey, assign_10_u64, assign_10_u8, assign_pubkey, assign_u64, assign_u8,
@@ -10,10 +10,10 @@ use crate::collections::array::array_new::new;
 
 use crate::collections::array::array_with_capacity::{with_capacity_10, with_capacity_100};
 
-use crate::std_math::add_assign::{
+use crate::math::std_math::add_assign::{
     add_assign_u128, add_assign_u16, add_assign_u32, add_assign_u64, add_assign_u8,
 };
-use crate::std_math::sub_assign::{
+use crate::math::std_math::sub_assign::{
     sub_assign_u128, sub_assign_u16, sub_assign_u32, sub_assign_u64, sub_assign_u8,
 };
 #[inline(never)]
@@ -158,223 +158,223 @@ pub fn process_instruction_0_99(
             solana_msg::msg!("array: {:?}", res);
         }
         CuLibraryInstruction::CheckedAddU8 => {
-            let res = checked_math::checked_add::add_u8();
+            let res = math::checked_math::checked_add::add_u8();
             solana_msg::msg!("result: {:?}", res);
         }
         CuLibraryInstruction::CheckedAddU16 => {
-            let res = checked_math::checked_add::add_u16();
+            let res = math::checked_math::checked_add::add_u16();
             solana_msg::msg!("result: {:?}", res);
         }
         CuLibraryInstruction::CheckedAddU32 => {
-            let res = checked_math::checked_add::add_u32();
+            let res = math::checked_math::checked_add::add_u32();
             solana_msg::msg!("result: {:?}", res);
         }
         CuLibraryInstruction::CheckedAddU64 => {
-            let res = checked_math::checked_add::add_u64();
+            let res = math::checked_math::checked_add::add_u64();
             solana_msg::msg!("result: {:?}", res);
         }
         CuLibraryInstruction::CheckedAddU128 => {
-            let res = checked_math::checked_add::add_u128();
+            let res = math::checked_math::checked_add::add_u128();
             solana_msg::msg!("result: {:?}", res);
         }
         CuLibraryInstruction::CheckedSubU8 => {
-            let res = checked_math::checked_sub::sub_u8();
+            let res = math::checked_math::checked_sub::sub_u8();
             solana_msg::msg!("result: {:?}", res);
         }
         CuLibraryInstruction::CheckedSubU16 => {
-            let res = checked_math::checked_sub::sub_u16();
+            let res = math::checked_math::checked_sub::sub_u16();
             solana_msg::msg!("result: {:?}", res);
         }
         CuLibraryInstruction::CheckedSubU32 => {
-            let res = checked_math::checked_sub::sub_u32();
+            let res = math::checked_math::checked_sub::sub_u32();
             solana_msg::msg!("result: {:?}", res);
         }
         CuLibraryInstruction::CheckedSubU64 => {
-            let res = checked_math::checked_sub::sub_u64();
+            let res = math::checked_math::checked_sub::sub_u64();
             solana_msg::msg!("result: {:?}", res);
         }
         CuLibraryInstruction::CheckedSubU128 => {
-            let res = checked_math::checked_sub::sub_u128();
+            let res = math::checked_math::checked_sub::sub_u128();
             solana_msg::msg!("result: {:?}", res);
         }
         CuLibraryInstruction::CheckedMulU8 => {
-            let res = checked_math::checked_mul::mul_u8();
+            let res = math::checked_math::checked_mul::mul_u8();
             solana_msg::msg!("result: {:?}", res);
         }
         CuLibraryInstruction::CheckedMulU16 => {
-            let res = checked_math::checked_mul::mul_u16();
+            let res = math::checked_math::checked_mul::mul_u16();
             solana_msg::msg!("result: {:?}", res);
         }
         CuLibraryInstruction::CheckedMulU32 => {
-            let res = checked_math::checked_mul::mul_u32();
+            let res = math::checked_math::checked_mul::mul_u32();
             solana_msg::msg!("result: {:?}", res);
         }
         CuLibraryInstruction::CheckedMulU64 => {
-            let res = checked_math::checked_mul::mul_u64();
+            let res = math::checked_math::checked_mul::mul_u64();
             solana_msg::msg!("result: {:?}", res);
         }
         CuLibraryInstruction::CheckedMulU128 => {
-            let res = checked_math::checked_mul::mul_u128();
+            let res = math::checked_math::checked_mul::mul_u128();
             solana_msg::msg!("result: {:?}", res);
         }
         CuLibraryInstruction::CheckedDivU8 => {
-            let res = checked_math::checked_div::div_u8();
+            let res = math::checked_math::checked_div::div_u8();
             solana_msg::msg!("result: {:?}", res);
         }
         CuLibraryInstruction::CheckedDivU16 => {
-            let res = checked_math::checked_div::div_u16();
+            let res = math::checked_math::checked_div::div_u16();
             solana_msg::msg!("result: {:?}", res);
         }
         CuLibraryInstruction::CheckedDivU32 => {
-            let res = checked_math::checked_div::div_u32();
+            let res = math::checked_math::checked_div::div_u32();
             solana_msg::msg!("result: {:?}", res);
         }
         CuLibraryInstruction::CheckedDivU64 => {
-            let res = checked_math::checked_div::div_u64();
+            let res = math::checked_math::checked_div::div_u64();
             solana_msg::msg!("result: {:?}", res);
         }
         CuLibraryInstruction::CheckedDivU128 => {
-            let res = checked_math::checked_div::div_u128();
+            let res = math::checked_math::checked_div::div_u128();
             solana_msg::msg!("result: {:?}", res);
         }
         CuLibraryInstruction::SaturatingAddU8 => {
-            let res = saturating_math::saturating_add::add_u8();
+            let res = math::saturating_math::saturating_add::add_u8();
             solana_msg::msg!("result: {:?}", res);
         }
         CuLibraryInstruction::SaturatingAddU16 => {
-            let res = saturating_math::saturating_add::add_u16();
+            let res = math::saturating_math::saturating_add::add_u16();
             solana_msg::msg!("result: {:?}", res);
         }
         CuLibraryInstruction::SaturatingAddU32 => {
-            let res = saturating_math::saturating_add::add_u32();
+            let res = math::saturating_math::saturating_add::add_u32();
             solana_msg::msg!("result: {:?}", res);
         }
         CuLibraryInstruction::SaturatingAddU64 => {
-            let res = saturating_math::saturating_add::add_u64();
+            let res = math::saturating_math::saturating_add::add_u64();
             solana_msg::msg!("result: {:?}", res);
         }
         CuLibraryInstruction::SaturatingAddU128 => {
-            let res = saturating_math::saturating_add::add_u128();
+            let res = math::saturating_math::saturating_add::add_u128();
             solana_msg::msg!("result: {:?}", res);
         }
         CuLibraryInstruction::SaturatingSubU8 => {
-            let res = saturating_math::saturating_sub::sub_u8();
+            let res = math::saturating_math::saturating_sub::sub_u8();
             solana_msg::msg!("result: {:?}", res);
         }
         CuLibraryInstruction::SaturatingSubU16 => {
-            let res = saturating_math::saturating_sub::sub_u16();
+            let res = math::saturating_math::saturating_sub::sub_u16();
             solana_msg::msg!("result: {:?}", res);
         }
         CuLibraryInstruction::SaturatingSubU32 => {
-            let res = saturating_math::saturating_sub::sub_u32();
+            let res = math::saturating_math::saturating_sub::sub_u32();
             solana_msg::msg!("result: {:?}", res);
         }
         CuLibraryInstruction::SaturatingSubU64 => {
-            let res = saturating_math::saturating_sub::sub_u64();
+            let res = math::saturating_math::saturating_sub::sub_u64();
             solana_msg::msg!("result: {:?}", res);
         }
         CuLibraryInstruction::SaturatingSubU128 => {
-            let res = saturating_math::saturating_sub::sub_u128();
+            let res = math::saturating_math::saturating_sub::sub_u128();
             solana_msg::msg!("result: {:?}", res);
         }
         CuLibraryInstruction::SaturatingMulU8 => {
-            let res = saturating_math::saturating_mul::mul_u8();
+            let res = math::saturating_math::saturating_mul::mul_u8();
             solana_msg::msg!("result: {:?}", res);
         }
         CuLibraryInstruction::SaturatingMulU16 => {
-            let res = saturating_math::saturating_mul::mul_u16();
+            let res = math::saturating_math::saturating_mul::mul_u16();
             solana_msg::msg!("result: {:?}", res);
         }
         CuLibraryInstruction::SaturatingMulU32 => {
-            let res = saturating_math::saturating_mul::mul_u32();
+            let res = math::saturating_math::saturating_mul::mul_u32();
             solana_msg::msg!("result: {:?}", res);
         }
         CuLibraryInstruction::SaturatingMulU64 => {
-            let res = saturating_math::saturating_mul::mul_u64();
+            let res = math::saturating_math::saturating_mul::mul_u64();
             solana_msg::msg!("result: {:?}", res);
         }
         CuLibraryInstruction::SaturatingMulU128 => {
-            let res = saturating_math::saturating_mul::mul_u128();
+            let res = math::saturating_math::saturating_mul::mul_u128();
             solana_msg::msg!("result: {:?}", res);
         }
         CuLibraryInstruction::StdAddU8 => {
-            let res = std_math::std_add::add_u8();
+            let res = math::std_math::std_add::add_u8();
             solana_msg::msg!("result: {:?}", res);
         }
         CuLibraryInstruction::StdAddU16 => {
-            let res = std_math::std_add::add_u16();
+            let res = math::std_math::std_add::add_u16();
             solana_msg::msg!("result: {:?}", res);
         }
         CuLibraryInstruction::StdAddU32 => {
-            let res = std_math::std_add::add_u32();
+            let res = math::std_math::std_add::add_u32();
             solana_msg::msg!("result: {:?}", res);
         }
         CuLibraryInstruction::StdAddU64 => {
-            let res = std_math::std_add::add_u64();
+            let res = math::std_math::std_add::add_u64();
             solana_msg::msg!("result: {:?}", res);
         }
         CuLibraryInstruction::StdAddU128 => {
-            let res = std_math::std_add::add_u128();
+            let res = math::std_math::std_add::add_u128();
             solana_msg::msg!("result: {:?}", res);
         }
         CuLibraryInstruction::StdSubU8 => {
-            let res = std_math::std_sub::sub_u8();
+            let res = math::std_math::std_sub::sub_u8();
             solana_msg::msg!("result: {:?}", res);
         }
         CuLibraryInstruction::StdSubU16 => {
-            let res = std_math::std_sub::sub_u16();
+            let res = math::std_math::std_sub::sub_u16();
             solana_msg::msg!("result: {:?}", res);
         }
         CuLibraryInstruction::StdSubU32 => {
-            let res = std_math::std_sub::sub_u32();
+            let res = math::std_math::std_sub::sub_u32();
             solana_msg::msg!("result: {:?}", res);
         }
         CuLibraryInstruction::StdSubU64 => {
-            let res = std_math::std_sub::sub_u64();
+            let res = math::std_math::std_sub::sub_u64();
             solana_msg::msg!("result: {:?}", res);
         }
         CuLibraryInstruction::StdSubU128 => {
-            let res = std_math::std_sub::sub_u128();
+            let res = math::std_math::std_sub::sub_u128();
             solana_msg::msg!("result: {:?}", res);
         }
         CuLibraryInstruction::StdMulU8 => {
-            let res = std_math::std_mul::mul_u8();
+            let res = math::std_math::std_mul::mul_u8();
             solana_msg::msg!("result: {:?}", res);
         }
         CuLibraryInstruction::StdMulU16 => {
-            let res = std_math::std_mul::mul_u16();
+            let res = math::std_math::std_mul::mul_u16();
             solana_msg::msg!("result: {:?}", res);
         }
         CuLibraryInstruction::StdMulU32 => {
-            let res = std_math::std_mul::mul_u32();
+            let res = math::std_math::std_mul::mul_u32();
             solana_msg::msg!("result: {:?}", res);
         }
         CuLibraryInstruction::StdMulU64 => {
-            let res = std_math::std_mul::mul_u64();
+            let res = math::std_math::std_mul::mul_u64();
             solana_msg::msg!("result: {:?}", res);
         }
         CuLibraryInstruction::StdMulU128 => {
-            let res = std_math::std_mul::mul_u128();
+            let res = math::std_math::std_mul::mul_u128();
             solana_msg::msg!("result: {:?}", res);
         }
         CuLibraryInstruction::StdDivU8 => {
-            let res = std_math::std_div::div_u8();
+            let res = math::std_math::std_div::div_u8();
             solana_msg::msg!("result: {:?}", res);
         }
         CuLibraryInstruction::StdDivU16 => {
-            let res = std_math::std_div::div_u16();
+            let res = math::std_math::std_div::div_u16();
             solana_msg::msg!("result: {:?}", res);
         }
         CuLibraryInstruction::StdDivU32 => {
-            let res = std_math::std_div::div_u32();
+            let res = math::std_math::std_div::div_u32();
             solana_msg::msg!("result: {:?}", res);
         }
         CuLibraryInstruction::StdDivU64 => {
-            let res = std_math::std_div::div_u64();
+            let res = math::std_math::std_div::div_u64();
             solana_msg::msg!("result: {:?}", res);
         }
         CuLibraryInstruction::StdDivU128 => {
-            let res = std_math::std_div::div_u128();
+            let res = math::std_math::std_div::div_u128();
             solana_msg::msg!("result: {:?}", res);
         }
         CuLibraryInstruction::AddAssignU8 => {

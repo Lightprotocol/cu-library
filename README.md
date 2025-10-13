@@ -8,13 +8,13 @@ Benchmark results for Solana runtime operations.
 
 **[2. Account Info](#2-account-info)**
 
-**[3. Checked Math](#3-checked-math)**
+**[3. Collections](#3-collections)**
 
-**[4. Collections](#4-collections)**
+**[4. Conversions](#4-conversions)**
 
-**[5. Conversions](#5-conversions)**
+**[5. Cpi](#5-cpi)**
 
-**[6. Cpi](#6-cpi)**
+**[6. Math](#6-math)**
 
 **[7. Option](#7-option)**
 
@@ -22,13 +22,9 @@ Benchmark results for Solana runtime operations.
 
 **[9. Pinocchio Ops](#9-pinocchio-ops)**
 
-**[10. Saturating Math](#10-saturating-math)**
+**[10. Serialization](#10-serialization)**
 
-**[11. Serialization](#11-serialization)**
-
-**[12. Solana Ops](#12-solana-ops)**
-
-**[13. Std Math](#13-std-math)**
+**[11. Solana Ops](#11-solana-ops)**
 
 
 ## Definitions
@@ -43,7 +39,7 @@ Benchmark results for Solana runtime operations.
 
   | Function                                                                                                                                                                                                                | CU Consumed | CU Adjusted |
   |-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
-  | [baseline_empty_function](https://github.com/Lightprotocol/cu-library/blob/main/src/lib.rs#L21)                                                                                      | 6           | N/A         |
+  | [baseline_empty_function](https://github.com/Lightprotocol/cu-library/blob/main/src/lib.rs#L19)                                                                                      | 6           | N/A         |
 
 ## 2. Account Info
 
@@ -106,51 +102,9 @@ Benchmark results for Solana runtime operations.
   |-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
   | [realloc](https://github.com/Lightprotocol/cu-library/blob/main/src/account_info/account_realloc.rs#L5)                                                                              | 16          | 10          |
 
-## 3. Checked Math
+## 3. Collections
 
-  ### 3.1 Checked Add
-
-  | Function                                                                                                                                                                                                                | CU Consumed | CU Adjusted |
-  |-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
-  | [add_u8](https://github.com/Lightprotocol/cu-library/blob/main/src/checked_math/checked_add.rs#L4)                                                                                   | 7           | 1           |
-  | [add_u16](https://github.com/Lightprotocol/cu-library/blob/main/src/checked_math/checked_add.rs#L11)                                                                                 | 7           | 1           |
-  | [add_u32](https://github.com/Lightprotocol/cu-library/blob/main/src/checked_math/checked_add.rs#L18)                                                                                 | 8           | 2           |
-  | [add_u64](https://github.com/Lightprotocol/cu-library/blob/main/src/checked_math/checked_add.rs#L25)                                                                                 | 8           | 2           |
-  | [add_u128](https://github.com/Lightprotocol/cu-library/blob/main/src/checked_math/checked_add.rs#L32)                                                                                | 10          | 4           |
-
-  ### 3.2 Checked Div
-
-  | Function                                                                                                                                                                                                                | CU Consumed | CU Adjusted |
-  |-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
-  | [div_u8](https://github.com/Lightprotocol/cu-library/blob/main/src/checked_math/checked_div.rs#L4)                                                                                   | 7           | 1           |
-  | [div_u16](https://github.com/Lightprotocol/cu-library/blob/main/src/checked_math/checked_div.rs#L11)                                                                                 | 7           | 1           |
-  | [div_u32](https://github.com/Lightprotocol/cu-library/blob/main/src/checked_math/checked_div.rs#L18)                                                                                 | 8           | 2           |
-  | [div_u64](https://github.com/Lightprotocol/cu-library/blob/main/src/checked_math/checked_div.rs#L25)                                                                                 | 8           | 2           |
-  | [div_u128](https://github.com/Lightprotocol/cu-library/blob/main/src/checked_math/checked_div.rs#L32)                                                                                | 10          | 4           |
-
-  ### 3.3 Checked Mul
-
-  | Function                                                                                                                                                                                                                | CU Consumed | CU Adjusted |
-  |-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
-  | [mul_u8](https://github.com/Lightprotocol/cu-library/blob/main/src/checked_math/checked_mul.rs#L4)                                                                                   | 7           | 1           |
-  | [mul_u16](https://github.com/Lightprotocol/cu-library/blob/main/src/checked_math/checked_mul.rs#L11)                                                                                 | 7           | 1           |
-  | [mul_u32](https://github.com/Lightprotocol/cu-library/blob/main/src/checked_math/checked_mul.rs#L18)                                                                                 | 8           | 2           |
-  | [mul_u64](https://github.com/Lightprotocol/cu-library/blob/main/src/checked_math/checked_mul.rs#L25)                                                                                 | 8           | 2           |
-  | [mul_u128](https://github.com/Lightprotocol/cu-library/blob/main/src/checked_math/checked_mul.rs#L32)                                                                                | 10          | 4           |
-
-  ### 3.4 Checked Sub
-
-  | Function                                                                                                                                                                                                                | CU Consumed | CU Adjusted |
-  |-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
-  | [sub_u8](https://github.com/Lightprotocol/cu-library/blob/main/src/checked_math/checked_sub.rs#L4)                                                                                   | 7           | 1           |
-  | [sub_u16](https://github.com/Lightprotocol/cu-library/blob/main/src/checked_math/checked_sub.rs#L11)                                                                                 | 7           | 1           |
-  | [sub_u32](https://github.com/Lightprotocol/cu-library/blob/main/src/checked_math/checked_sub.rs#L18)                                                                                 | 8           | 2           |
-  | [sub_u64](https://github.com/Lightprotocol/cu-library/blob/main/src/checked_math/checked_sub.rs#L25)                                                                                 | 8           | 2           |
-  | [sub_u128](https://github.com/Lightprotocol/cu-library/blob/main/src/checked_math/checked_sub.rs#L32)                                                                                | 10          | 4           |
-
-## 4. Collections
-
-  ### 4.1 Array
+  ### 3.1 Array
 
   | Function                                                                                                                                                                                                                | CU Consumed | CU Adjusted |
   |-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
@@ -172,7 +126,7 @@ Benchmark results for Solana runtime operations.
   | [array_u64_10_get_ok_or](https://github.com/Lightprotocol/cu-library/blob/main/src/collections/array/array_u64_10.rs#L14)                                                            | 6           | 0           |
   | [array_u64_10_if_let_get](https://github.com/Lightprotocol/cu-library/blob/main/src/collections/array/array_u64_10.rs#L19)                                                           | 9           | 3           |
 
-  ### 4.2 Arrayvec
+  ### 3.2 Arrayvec
 
   | Function                                                                                                                                                                                                                | CU Consumed | CU Adjusted |
   |-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
@@ -195,7 +149,7 @@ Benchmark results for Solana runtime operations.
   | [update_get_mut](https://github.com/Lightprotocol/cu-library/blob/main/src/collections/arrayvec/access.rs#L82)                                                                       | 14          | 8           |
   | [update_iter_mut_find](https://github.com/Lightprotocol/cu-library/blob/main/src/collections/arrayvec/access.rs#L93)                                                                 | 24          | 18          |
 
-  ### 4.3 Heapless
+  ### 3.3 Heapless
 
   | Function                                                                                                                                                                                                                | CU Consumed | CU Adjusted |
   |-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
@@ -218,7 +172,7 @@ Benchmark results for Solana runtime operations.
   | [update_get_mut](https://github.com/Lightprotocol/cu-library/blob/main/src/collections/heapless/access.rs#L82)                                                                       | 14          | 8           |
   | [update_iter_mut_find](https://github.com/Lightprotocol/cu-library/blob/main/src/collections/heapless/access.rs#L93)                                                                 | 23          | 17          |
 
-  ### 4.4 Smallvec
+  ### 3.4 Smallvec
 
   | Function                                                                                                                                                                                                                | CU Consumed | CU Adjusted |
   |-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
@@ -241,7 +195,7 @@ Benchmark results for Solana runtime operations.
   | [update_get_mut](https://github.com/Lightprotocol/cu-library/blob/main/src/collections/smallvec/access.rs#L88)                                                                       | 14          | 8           |
   | [update_iter_mut_find](https://github.com/Lightprotocol/cu-library/blob/main/src/collections/smallvec/access.rs#L99)                                                                 | 26          | 20          |
 
-  ### 4.5 Tinyvec
+  ### 3.5 Tinyvec
 
   | Function                                                                                                                                                                                                                | CU Consumed | CU Adjusted |
   |-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
@@ -264,7 +218,7 @@ Benchmark results for Solana runtime operations.
   | [update_get_mut](https://github.com/Lightprotocol/cu-library/blob/main/src/collections/tinyvec/access.rs#L82)                                                                        | 14          | 8           |
   | [update_iter_mut_find](https://github.com/Lightprotocol/cu-library/blob/main/src/collections/tinyvec/access.rs#L93)                                                                  | 24          | 18          |
 
-  ### 4.6 Vec
+  ### 3.6 Vec
 
   | Function                                                                                                                                                                                                                | CU Consumed | CU Adjusted |
   |-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
@@ -292,9 +246,9 @@ Benchmark results for Solana runtime operations.
   | [vec_u64_10_get_ok_or](https://github.com/Lightprotocol/cu-library/blob/main/src/collections/vec/vec_u64_10.rs#L14)                                                                  | 8           | 2           |
   | [vec_u64_10_if_let_get](https://github.com/Lightprotocol/cu-library/blob/main/src/collections/vec/vec_u64_10.rs#L19)                                                                 | 9           | 3           |
 
-## 5. Conversions
+## 4. Conversions
 
-  ### 5.1 Cast U16
+  ### 4.1 Cast U16
 
   | Function                                                                                                                                                                                                                | CU Consumed | CU Adjusted |
   |-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
@@ -303,7 +257,7 @@ Benchmark results for Solana runtime operations.
   | [u16_as_u64](https://github.com/Lightprotocol/cu-library/blob/main/src/conversions/cast_u16.rs#L15)                                                                                  | 7           | 1           |
   | [u16_as_usize](https://github.com/Lightprotocol/cu-library/blob/main/src/conversions/cast_u16.rs#L20)                                                                                | 7           | 1           |
 
-  ### 5.2 Cast U32
+  ### 4.2 Cast U32
 
   | Function                                                                                                                                                                                                                | CU Consumed | CU Adjusted |
   |-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
@@ -312,7 +266,7 @@ Benchmark results for Solana runtime operations.
   | [u32_as_u64](https://github.com/Lightprotocol/cu-library/blob/main/src/conversions/cast_u32.rs#L15)                                                                                  | 7           | 1           |
   | [u32_as_usize](https://github.com/Lightprotocol/cu-library/blob/main/src/conversions/cast_u32.rs#L20)                                                                                | 7           | 1           |
 
-  ### 5.3 Cast U64
+  ### 4.3 Cast U64
 
   | Function                                                                                                                                                                                                                | CU Consumed | CU Adjusted |
   |-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
@@ -321,7 +275,7 @@ Benchmark results for Solana runtime operations.
   | [u64_as_u32](https://github.com/Lightprotocol/cu-library/blob/main/src/conversions/cast_u64.rs#L15)                                                                                  | 7           | 1           |
   | [u64_as_usize](https://github.com/Lightprotocol/cu-library/blob/main/src/conversions/cast_u64.rs#L20)                                                                                | 7           | 1           |
 
-  ### 5.4 Cast U8
+  ### 4.4 Cast U8
 
   | Function                                                                                                                                                                                                                | CU Consumed | CU Adjusted |
   |-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
@@ -330,21 +284,21 @@ Benchmark results for Solana runtime operations.
   | [u8_as_u64](https://github.com/Lightprotocol/cu-library/blob/main/src/conversions/cast_u8.rs#L15)                                                                                    | 7           | 1           |
   | [u8_as_usize](https://github.com/Lightprotocol/cu-library/blob/main/src/conversions/cast_u8.rs#L20)                                                                                  | 7           | 1           |
 
-  ### 5.5 From Usize
+  ### 4.5 From Usize
 
   | Function                                                                                                                                                                                                                | CU Consumed | CU Adjusted |
   |-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
   | [try_into_usize_to_u64_unwrap](https://github.com/Lightprotocol/cu-library/blob/main/src/conversions/from_usize.rs#L6)                                                               | 7           | 1           |
   | [try_into_usize_to_u64_map_err](https://github.com/Lightprotocol/cu-library/blob/main/src/conversions/from_usize.rs#L11)                                                             | 6           | 0           |
 
-  ### 5.6 Slice To Array
+  ### 4.6 Slice To Array
 
   | Function                                                                                                                                                                                                                | CU Consumed | CU Adjusted |
   |-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
   | [try_into_slice_to_array_32_unwrap](https://github.com/Lightprotocol/cu-library/blob/main/src/conversions/slice_to_array.rs#L7)                                                      | 14          | 8           |
   | [try_into_slice_to_array_32_map_err](https://github.com/Lightprotocol/cu-library/blob/main/src/conversions/slice_to_array.rs#L12)                                                    | 6           | 0           |
 
-  ### 5.7 To Usize
+  ### 4.7 To Usize
 
   | Function                                                                                                                                                                                                                | CU Consumed | CU Adjusted |
   |-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
@@ -357,9 +311,9 @@ Benchmark results for Solana runtime operations.
   | [try_into_u8_to_usize_unwrap](https://github.com/Lightprotocol/cu-library/blob/main/src/conversions/to_usize.rs#L39)                                                                 | 7           | 1           |
   | [try_into_u8_to_usize_map_err](https://github.com/Lightprotocol/cu-library/blob/main/src/conversions/to_usize.rs#L44)                                                                | 6           | 0           |
 
-## 6. Cpi
+## 5. Cpi
 
-  ### 6.1 Cpi Array Loop
+  ### 5.1 Cpi Array Loop
 
   | Function                                                                                                                                                                                                                | CU Consumed | CU Adjusted |
   |-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
@@ -368,7 +322,7 @@ Benchmark results for Solana runtime operations.
   | [account_info_array_10_clone_loop](https://github.com/Lightprotocol/cu-library/blob/main/src/cpi/cpi_array_loop.rs#L41)                                                              | 7           | 1           |
   | [account_info_array_10_move_loop](https://github.com/Lightprotocol/cu-library/blob/main/src/cpi/cpi_array_loop.rs#L54)                                                               | 7           | 1           |
 
-  ### 6.2 Cpi Arrays
+  ### 5.2 Cpi Arrays
 
   | Function                                                                                                                                                                                                                | CU Consumed | CU Adjusted |
   |-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
@@ -377,7 +331,7 @@ Benchmark results for Solana runtime operations.
   | [account_info_array_10_clone](https://github.com/Lightprotocol/cu-library/blob/main/src/cpi/cpi_arrays.rs#L77)                                                                       | 6           | 0           |
   | [account_info_array_10_move](https://github.com/Lightprotocol/cu-library/blob/main/src/cpi/cpi_arrays.rs#L93)                                                                        | 6           | 0           |
 
-  ### 6.3 Cpi Arrayvec
+  ### 5.3 Cpi Arrayvec
 
   | Function                                                                                                                                                                                                                | CU Consumed | CU Adjusted |
   |-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
@@ -385,6 +339,88 @@ Benchmark results for Solana runtime operations.
   | [arrayvec_push_account_info_10_ref](https://github.com/Lightprotocol/cu-library/blob/main/src/cpi/cpi_arrayvec.rs#L19)                                                               | 6           | 0           |
   | [arrayvec_push_account_info_10_clone](https://github.com/Lightprotocol/cu-library/blob/main/src/cpi/cpi_arrayvec.rs#L30)                                                             | 7           | 1           |
   | [arrayvec_push_account_info_10_move](https://github.com/Lightprotocol/cu-library/blob/main/src/cpi/cpi_arrayvec.rs#L41)                                                              | 7           | 1           |
+
+## 6. Math
+
+  ### 6.1 Checked Math
+
+  | Function                                                                                                                                                                                                                | CU Consumed | CU Adjusted |
+  |-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
+  | [add_u8](https://github.com/Lightprotocol/cu-library/blob/main/src/math/checked_math/checked_add.rs#L4)                                                                              | 7           | 1           |
+  | [add_u16](https://github.com/Lightprotocol/cu-library/blob/main/src/math/checked_math/checked_add.rs#L11)                                                                            | 7           | 1           |
+  | [add_u32](https://github.com/Lightprotocol/cu-library/blob/main/src/math/checked_math/checked_add.rs#L18)                                                                            | 8           | 2           |
+  | [add_u64](https://github.com/Lightprotocol/cu-library/blob/main/src/math/checked_math/checked_add.rs#L25)                                                                            | 8           | 2           |
+  | [add_u128](https://github.com/Lightprotocol/cu-library/blob/main/src/math/checked_math/checked_add.rs#L32)                                                                           | 10          | 4           |
+  | [sub_u8](https://github.com/Lightprotocol/cu-library/blob/main/src/math/checked_math/checked_sub.rs#L4)                                                                              | 7           | 1           |
+  | [sub_u16](https://github.com/Lightprotocol/cu-library/blob/main/src/math/checked_math/checked_sub.rs#L11)                                                                            | 7           | 1           |
+  | [sub_u32](https://github.com/Lightprotocol/cu-library/blob/main/src/math/checked_math/checked_sub.rs#L18)                                                                            | 8           | 2           |
+  | [sub_u64](https://github.com/Lightprotocol/cu-library/blob/main/src/math/checked_math/checked_sub.rs#L25)                                                                            | 8           | 2           |
+  | [sub_u128](https://github.com/Lightprotocol/cu-library/blob/main/src/math/checked_math/checked_sub.rs#L32)                                                                           | 10          | 4           |
+  | [mul_u8](https://github.com/Lightprotocol/cu-library/blob/main/src/math/checked_math/checked_mul.rs#L4)                                                                              | 7           | 1           |
+  | [mul_u16](https://github.com/Lightprotocol/cu-library/blob/main/src/math/checked_math/checked_mul.rs#L11)                                                                            | 7           | 1           |
+  | [mul_u32](https://github.com/Lightprotocol/cu-library/blob/main/src/math/checked_math/checked_mul.rs#L18)                                                                            | 8           | 2           |
+  | [mul_u64](https://github.com/Lightprotocol/cu-library/blob/main/src/math/checked_math/checked_mul.rs#L25)                                                                            | 8           | 2           |
+  | [mul_u128](https://github.com/Lightprotocol/cu-library/blob/main/src/math/checked_math/checked_mul.rs#L32)                                                                           | 10          | 4           |
+  | [div_u8](https://github.com/Lightprotocol/cu-library/blob/main/src/math/checked_math/checked_div.rs#L4)                                                                              | 7           | 1           |
+  | [div_u16](https://github.com/Lightprotocol/cu-library/blob/main/src/math/checked_math/checked_div.rs#L11)                                                                            | 7           | 1           |
+  | [div_u32](https://github.com/Lightprotocol/cu-library/blob/main/src/math/checked_math/checked_div.rs#L18)                                                                            | 8           | 2           |
+  | [div_u64](https://github.com/Lightprotocol/cu-library/blob/main/src/math/checked_math/checked_div.rs#L25)                                                                            | 8           | 2           |
+  | [div_u128](https://github.com/Lightprotocol/cu-library/blob/main/src/math/checked_math/checked_div.rs#L32)                                                                           | 10          | 4           |
+
+  ### 6.2 Saturating Math
+
+  | Function                                                                                                                                                                                                                | CU Consumed | CU Adjusted |
+  |-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
+  | [add_u8](https://github.com/Lightprotocol/cu-library/blob/main/src/math/saturating_math/saturating_add.rs#L4)                                                                        | 7           | 1           |
+  | [add_u16](https://github.com/Lightprotocol/cu-library/blob/main/src/math/saturating_math/saturating_add.rs#L11)                                                                      | 7           | 1           |
+  | [add_u32](https://github.com/Lightprotocol/cu-library/blob/main/src/math/saturating_math/saturating_add.rs#L18)                                                                      | 7           | 1           |
+  | [add_u64](https://github.com/Lightprotocol/cu-library/blob/main/src/math/saturating_math/saturating_add.rs#L25)                                                                      | 7           | 1           |
+  | [add_u128](https://github.com/Lightprotocol/cu-library/blob/main/src/math/saturating_math/saturating_add.rs#L32)                                                                     | 8           | 2           |
+  | [sub_u8](https://github.com/Lightprotocol/cu-library/blob/main/src/math/saturating_math/saturating_sub.rs#L4)                                                                        | 7           | 1           |
+  | [sub_u16](https://github.com/Lightprotocol/cu-library/blob/main/src/math/saturating_math/saturating_sub.rs#L11)                                                                      | 7           | 1           |
+  | [sub_u32](https://github.com/Lightprotocol/cu-library/blob/main/src/math/saturating_math/saturating_sub.rs#L18)                                                                      | 7           | 1           |
+  | [sub_u64](https://github.com/Lightprotocol/cu-library/blob/main/src/math/saturating_math/saturating_sub.rs#L25)                                                                      | 7           | 1           |
+  | [sub_u128](https://github.com/Lightprotocol/cu-library/blob/main/src/math/saturating_math/saturating_sub.rs#L32)                                                                     | 8           | 2           |
+  | [mul_u8](https://github.com/Lightprotocol/cu-library/blob/main/src/math/saturating_math/saturating_mul.rs#L4)                                                                        | 7           | 1           |
+  | [mul_u16](https://github.com/Lightprotocol/cu-library/blob/main/src/math/saturating_math/saturating_mul.rs#L11)                                                                      | 7           | 1           |
+  | [mul_u32](https://github.com/Lightprotocol/cu-library/blob/main/src/math/saturating_math/saturating_mul.rs#L18)                                                                      | 7           | 1           |
+  | [mul_u64](https://github.com/Lightprotocol/cu-library/blob/main/src/math/saturating_math/saturating_mul.rs#L25)                                                                      | 7           | 1           |
+  | [mul_u128](https://github.com/Lightprotocol/cu-library/blob/main/src/math/saturating_math/saturating_mul.rs#L32)                                                                     | 8           | 2           |
+
+  ### 6.3 Std Math
+
+  | Function                                                                                                                                                                                                                | CU Consumed | CU Adjusted |
+  |-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
+  | [add_u8](https://github.com/Lightprotocol/cu-library/blob/main/src/math/std_math/std_add.rs#L4)                                                                                      | 6           | 0           |
+  | [add_u16](https://github.com/Lightprotocol/cu-library/blob/main/src/math/std_math/std_add.rs#L11)                                                                                    | 6           | 0           |
+  | [add_u32](https://github.com/Lightprotocol/cu-library/blob/main/src/math/std_math/std_add.rs#L18)                                                                                    | 6           | 0           |
+  | [add_u64](https://github.com/Lightprotocol/cu-library/blob/main/src/math/std_math/std_add.rs#L25)                                                                                    | 6           | 0           |
+  | [add_u128](https://github.com/Lightprotocol/cu-library/blob/main/src/math/std_math/std_add.rs#L32)                                                                                   | 6           | 0           |
+  | [sub_u8](https://github.com/Lightprotocol/cu-library/blob/main/src/math/std_math/std_sub.rs#L4)                                                                                      | 6           | 0           |
+  | [sub_u16](https://github.com/Lightprotocol/cu-library/blob/main/src/math/std_math/std_sub.rs#L11)                                                                                    | 6           | 0           |
+  | [sub_u32](https://github.com/Lightprotocol/cu-library/blob/main/src/math/std_math/std_sub.rs#L18)                                                                                    | 6           | 0           |
+  | [sub_u64](https://github.com/Lightprotocol/cu-library/blob/main/src/math/std_math/std_sub.rs#L25)                                                                                    | 6           | 0           |
+  | [sub_u128](https://github.com/Lightprotocol/cu-library/blob/main/src/math/std_math/std_sub.rs#L32)                                                                                   | 6           | 0           |
+  | [mul_u8](https://github.com/Lightprotocol/cu-library/blob/main/src/math/std_math/std_mul.rs#L4)                                                                                      | 6           | 0           |
+  | [mul_u16](https://github.com/Lightprotocol/cu-library/blob/main/src/math/std_math/std_mul.rs#L11)                                                                                    | 6           | 0           |
+  | [mul_u32](https://github.com/Lightprotocol/cu-library/blob/main/src/math/std_math/std_mul.rs#L18)                                                                                    | 6           | 0           |
+  | [mul_u64](https://github.com/Lightprotocol/cu-library/blob/main/src/math/std_math/std_mul.rs#L25)                                                                                    | 6           | 0           |
+  | [mul_u128](https://github.com/Lightprotocol/cu-library/blob/main/src/math/std_math/std_mul.rs#L32)                                                                                   | 6           | 0           |
+  | [div_u8](https://github.com/Lightprotocol/cu-library/blob/main/src/math/std_math/std_div.rs#L4)                                                                                      | 6           | 0           |
+  | [div_u16](https://github.com/Lightprotocol/cu-library/blob/main/src/math/std_math/std_div.rs#L11)                                                                                    | 6           | 0           |
+  | [div_u32](https://github.com/Lightprotocol/cu-library/blob/main/src/math/std_math/std_div.rs#L18)                                                                                    | 6           | 0           |
+  | [div_u64](https://github.com/Lightprotocol/cu-library/blob/main/src/math/std_math/std_div.rs#L25)                                                                                    | 6           | 0           |
+  | [div_u128](https://github.com/Lightprotocol/cu-library/blob/main/src/math/std_math/std_div.rs#L32)                                                                                   | 6           | 0           |
+  | [add_assign_u8](https://github.com/Lightprotocol/cu-library/blob/main/src/math/std_math/add_assign.rs#L4)                                                                            | 7           | 1           |
+  | [add_assign_u16](https://github.com/Lightprotocol/cu-library/blob/main/src/math/std_math/add_assign.rs#L12)                                                                          | 7           | 1           |
+  | [add_assign_u32](https://github.com/Lightprotocol/cu-library/blob/main/src/math/std_math/add_assign.rs#L20)                                                                          | 7           | 1           |
+  | [add_assign_u64](https://github.com/Lightprotocol/cu-library/blob/main/src/math/std_math/add_assign.rs#L28)                                                                          | 7           | 1           |
+  | [add_assign_u128](https://github.com/Lightprotocol/cu-library/blob/main/src/math/std_math/add_assign.rs#L36)                                                                         | 9           | 3           |
+  | [sub_assign_u8](https://github.com/Lightprotocol/cu-library/blob/main/src/math/std_math/sub_assign.rs#L4)                                                                            | 7           | 1           |
+  | [sub_assign_u16](https://github.com/Lightprotocol/cu-library/blob/main/src/math/std_math/sub_assign.rs#L12)                                                                          | 7           | 1           |
+  | [sub_assign_u32](https://github.com/Lightprotocol/cu-library/blob/main/src/math/std_math/sub_assign.rs#L20)                                                                          | 7           | 1           |
+  | [sub_assign_u64](https://github.com/Lightprotocol/cu-library/blob/main/src/math/std_math/sub_assign.rs#L28)                                                                          | 7           | 1           |
+  | [sub_assign_u128](https://github.com/Lightprotocol/cu-library/blob/main/src/math/std_math/sub_assign.rs#L36)                                                                         | 9           | 3           |
 
 ## 7. Option
 
@@ -482,41 +518,9 @@ Benchmark results for Solana runtime operations.
   |-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
   | [sysvar_rent_exemption_165](https://github.com/Lightprotocol/cu-library/blob/main/src/pinocchio_ops/sysvar_rent.rs#L5)                                                               | 151         | 145         |
 
-## 10. Saturating Math
+## 10. Serialization
 
-  ### 10.1 Saturating Add
-
-  | Function                                                                                                                                                                                                                | CU Consumed | CU Adjusted |
-  |-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
-  | [add_u8](https://github.com/Lightprotocol/cu-library/blob/main/src/saturating_math/saturating_add.rs#L4)                                                                             | 7           | 1           |
-  | [add_u16](https://github.com/Lightprotocol/cu-library/blob/main/src/saturating_math/saturating_add.rs#L11)                                                                           | 7           | 1           |
-  | [add_u32](https://github.com/Lightprotocol/cu-library/blob/main/src/saturating_math/saturating_add.rs#L18)                                                                           | 7           | 1           |
-  | [add_u64](https://github.com/Lightprotocol/cu-library/blob/main/src/saturating_math/saturating_add.rs#L25)                                                                           | 7           | 1           |
-  | [add_u128](https://github.com/Lightprotocol/cu-library/blob/main/src/saturating_math/saturating_add.rs#L32)                                                                          | 8           | 2           |
-
-  ### 10.2 Saturating Mul
-
-  | Function                                                                                                                                                                                                                | CU Consumed | CU Adjusted |
-  |-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
-  | [mul_u8](https://github.com/Lightprotocol/cu-library/blob/main/src/saturating_math/saturating_mul.rs#L4)                                                                             | 7           | 1           |
-  | [mul_u16](https://github.com/Lightprotocol/cu-library/blob/main/src/saturating_math/saturating_mul.rs#L11)                                                                           | 7           | 1           |
-  | [mul_u32](https://github.com/Lightprotocol/cu-library/blob/main/src/saturating_math/saturating_mul.rs#L18)                                                                           | 7           | 1           |
-  | [mul_u64](https://github.com/Lightprotocol/cu-library/blob/main/src/saturating_math/saturating_mul.rs#L25)                                                                           | 7           | 1           |
-  | [mul_u128](https://github.com/Lightprotocol/cu-library/blob/main/src/saturating_math/saturating_mul.rs#L32)                                                                          | 8           | 2           |
-
-  ### 10.3 Saturating Sub
-
-  | Function                                                                                                                                                                                                                | CU Consumed | CU Adjusted |
-  |-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
-  | [sub_u8](https://github.com/Lightprotocol/cu-library/blob/main/src/saturating_math/saturating_sub.rs#L4)                                                                             | 7           | 1           |
-  | [sub_u16](https://github.com/Lightprotocol/cu-library/blob/main/src/saturating_math/saturating_sub.rs#L11)                                                                           | 7           | 1           |
-  | [sub_u32](https://github.com/Lightprotocol/cu-library/blob/main/src/saturating_math/saturating_sub.rs#L18)                                                                           | 7           | 1           |
-  | [sub_u64](https://github.com/Lightprotocol/cu-library/blob/main/src/saturating_math/saturating_sub.rs#L25)                                                                           | 7           | 1           |
-  | [sub_u128](https://github.com/Lightprotocol/cu-library/blob/main/src/saturating_math/saturating_sub.rs#L32)                                                                          | 8           | 2           |
-
-## 11. Serialization
-
-  ### 11.1 Compressed Account Info
+  ### 10.1 Compressed Account Info
 
   | Function                                                                                                                                                                                                                | CU Consumed | CU Adjusted |
   |-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
@@ -528,91 +532,29 @@ Benchmark results for Solana runtime operations.
   | [rkyv_zero_copy_deserialize](https://github.com/Lightprotocol/cu-library/blob/main/src/serialization/compressed_account_info.rs#L230)                                                | 178         | 172         |
   | [wincode_shortvec_deserialize](https://github.com/Lightprotocol/cu-library/blob/main/src/serialization/compressed_account_info.rs#L285)                                              | 612         | 606         |
 
-## 12. Solana Ops
+## 11. Solana Ops
 
-  ### 12.1 Msg
+  ### 11.1 Msg
 
   | Function                                                                                                                                                                                                                | CU Consumed | CU Adjusted |
   |-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
   | [msg10_chars](https://github.com/Lightprotocol/cu-library/blob/main/src/solana_ops/msg.rs#L5)                                                                                        | 110         | 104         |
 
-  ### 12.2 Msg Program Id
+  ### 11.2 Msg Program Id
 
   | Function                                                                                                                                                                                                                | CU Consumed | CU Adjusted |
   |-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
   | [msg_program_id](https://github.com/Lightprotocol/cu-library/blob/main/src/solana_ops/msg_program_id.rs#L5)                                                                          | 6953        | 6947        |
 
-  ### 12.3 Pubkey New From Array
+  ### 11.3 Pubkey New From Array
 
   | Function                                                                                                                                                                                                                | CU Consumed | CU Adjusted |
   |-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
   | [pubkey_new_from_array](https://github.com/Lightprotocol/cu-library/blob/main/src/solana_ops/pubkey_new_from_array.rs#L5)                                                            | 14          | 8           |
 
-  ### 12.4 Pubkey To Bytes
+  ### 11.4 Pubkey To Bytes
 
   | Function                                                                                                                                                                                                                | CU Consumed | CU Adjusted |
   |-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
   | [pubkey_to_bytes](https://github.com/Lightprotocol/cu-library/blob/main/src/solana_ops/pubkey_to_bytes.rs#L6)                                                                        | 14          | 8           |
-
-## 13. Std Math
-
-  ### 13.1 Add Assign
-
-  | Function                                                                                                                                                                                                                | CU Consumed | CU Adjusted |
-  |-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
-  | [add_assign_u8](https://github.com/Lightprotocol/cu-library/blob/main/src/std_math/add_assign.rs#L4)                                                                                 | 7           | 1           |
-  | [add_assign_u16](https://github.com/Lightprotocol/cu-library/blob/main/src/std_math/add_assign.rs#L12)                                                                               | 7           | 1           |
-  | [add_assign_u32](https://github.com/Lightprotocol/cu-library/blob/main/src/std_math/add_assign.rs#L20)                                                                               | 7           | 1           |
-  | [add_assign_u64](https://github.com/Lightprotocol/cu-library/blob/main/src/std_math/add_assign.rs#L28)                                                                               | 7           | 1           |
-  | [add_assign_u128](https://github.com/Lightprotocol/cu-library/blob/main/src/std_math/add_assign.rs#L36)                                                                              | 9           | 3           |
-
-  ### 13.2 Std Add
-
-  | Function                                                                                                                                                                                                                | CU Consumed | CU Adjusted |
-  |-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
-  | [add_u8](https://github.com/Lightprotocol/cu-library/blob/main/src/std_math/std_add.rs#L4)                                                                                           | 6           | 0           |
-  | [add_u16](https://github.com/Lightprotocol/cu-library/blob/main/src/std_math/std_add.rs#L11)                                                                                         | 6           | 0           |
-  | [add_u32](https://github.com/Lightprotocol/cu-library/blob/main/src/std_math/std_add.rs#L18)                                                                                         | 6           | 0           |
-  | [add_u64](https://github.com/Lightprotocol/cu-library/blob/main/src/std_math/std_add.rs#L25)                                                                                         | 6           | 0           |
-  | [add_u128](https://github.com/Lightprotocol/cu-library/blob/main/src/std_math/std_add.rs#L32)                                                                                        | 6           | 0           |
-
-  ### 13.3 Std Div
-
-  | Function                                                                                                                                                                                                                | CU Consumed | CU Adjusted |
-  |-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
-  | [div_u8](https://github.com/Lightprotocol/cu-library/blob/main/src/std_math/std_div.rs#L4)                                                                                           | 6           | 0           |
-  | [div_u16](https://github.com/Lightprotocol/cu-library/blob/main/src/std_math/std_div.rs#L11)                                                                                         | 6           | 0           |
-  | [div_u32](https://github.com/Lightprotocol/cu-library/blob/main/src/std_math/std_div.rs#L18)                                                                                         | 6           | 0           |
-  | [div_u64](https://github.com/Lightprotocol/cu-library/blob/main/src/std_math/std_div.rs#L25)                                                                                         | 6           | 0           |
-  | [div_u128](https://github.com/Lightprotocol/cu-library/blob/main/src/std_math/std_div.rs#L32)                                                                                        | 6           | 0           |
-
-  ### 13.4 Std Mul
-
-  | Function                                                                                                                                                                                                                | CU Consumed | CU Adjusted |
-  |-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
-  | [mul_u8](https://github.com/Lightprotocol/cu-library/blob/main/src/std_math/std_mul.rs#L4)                                                                                           | 6           | 0           |
-  | [mul_u16](https://github.com/Lightprotocol/cu-library/blob/main/src/std_math/std_mul.rs#L11)                                                                                         | 6           | 0           |
-  | [mul_u32](https://github.com/Lightprotocol/cu-library/blob/main/src/std_math/std_mul.rs#L18)                                                                                         | 6           | 0           |
-  | [mul_u64](https://github.com/Lightprotocol/cu-library/blob/main/src/std_math/std_mul.rs#L25)                                                                                         | 6           | 0           |
-  | [mul_u128](https://github.com/Lightprotocol/cu-library/blob/main/src/std_math/std_mul.rs#L32)                                                                                        | 6           | 0           |
-
-  ### 13.5 Std Sub
-
-  | Function                                                                                                                                                                                                                | CU Consumed | CU Adjusted |
-  |-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
-  | [sub_u8](https://github.com/Lightprotocol/cu-library/blob/main/src/std_math/std_sub.rs#L4)                                                                                           | 6           | 0           |
-  | [sub_u16](https://github.com/Lightprotocol/cu-library/blob/main/src/std_math/std_sub.rs#L11)                                                                                         | 6           | 0           |
-  | [sub_u32](https://github.com/Lightprotocol/cu-library/blob/main/src/std_math/std_sub.rs#L18)                                                                                         | 6           | 0           |
-  | [sub_u64](https://github.com/Lightprotocol/cu-library/blob/main/src/std_math/std_sub.rs#L25)                                                                                         | 6           | 0           |
-  | [sub_u128](https://github.com/Lightprotocol/cu-library/blob/main/src/std_math/std_sub.rs#L32)                                                                                        | 6           | 0           |
-
-  ### 13.6 Sub Assign
-
-  | Function                                                                                                                                                                                                                | CU Consumed | CU Adjusted |
-  |-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
-  | [sub_assign_u8](https://github.com/Lightprotocol/cu-library/blob/main/src/std_math/sub_assign.rs#L4)                                                                                 | 7           | 1           |
-  | [sub_assign_u16](https://github.com/Lightprotocol/cu-library/blob/main/src/std_math/sub_assign.rs#L12)                                                                               | 7           | 1           |
-  | [sub_assign_u32](https://github.com/Lightprotocol/cu-library/blob/main/src/std_math/sub_assign.rs#L20)                                                                               | 7           | 1           |
-  | [sub_assign_u64](https://github.com/Lightprotocol/cu-library/blob/main/src/std_math/sub_assign.rs#L28)                                                                               | 7           | 1           |
-  | [sub_assign_u128](https://github.com/Lightprotocol/cu-library/blob/main/src/std_math/sub_assign.rs#L36)                                                                              | 9           | 3           |
 
