@@ -15,7 +15,8 @@ Benchmark results for Solana runtime operations.
   - [2.3 Heapless](#23-heapless)
   - [2.4 Smallvec](#24-smallvec)
   - [2.5 Tinyvec](#25-tinyvec)
-  - [2.6 Vec](#26-vec)
+  - [2.6 Tinyvec Heap](#26-tinyvec-heap)
+  - [2.7 Vec](#27-vec)
 
 **[3. Conversions](#3-conversions)**
 
@@ -196,7 +197,19 @@ Benchmark results for Solana runtime operations.
   | [update_get_mut](https://github.com/Lightprotocol/cu-library/blob/main/src/collections/tinyvec/access.rs#L82)                                                                        | 14          | 8           |
   | [update_iter_mut_find](https://github.com/Lightprotocol/cu-library/blob/main/src/collections/tinyvec/access.rs#L93)                                                                  | 24          | 18          |
 
-  ### 2.6 Vec
+  ### 2.6 Tinyvec Heap
+
+  | Function                                                                                                                                                                                                                | CU Consumed | CU Adjusted |
+  |-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
+  | [u8_new](https://github.com/Lightprotocol/cu-library/blob/main/src/collections/tinyvec_heap/vec_new.rs#L5)                                                                           | 6           | 0           |
+  | [push_u8](https://github.com/Lightprotocol/cu-library/blob/main/src/collections/tinyvec_heap/vec_push.rs#L19)                                                                        | 8           | 2           |
+  | [push_u64](https://github.com/Lightprotocol/cu-library/blob/main/src/collections/tinyvec_heap/vec_push.rs#L24)                                                                       | 8           | 2           |
+  | [push_pubkey](https://github.com/Lightprotocol/cu-library/blob/main/src/collections/tinyvec_heap/vec_push.rs#L29)                                                                    | 15          | 9           |
+  | [push_10_u8](https://github.com/Lightprotocol/cu-library/blob/main/src/collections/tinyvec_heap/vec_push.rs#L34)                                                                     | 161         | 155         |
+  | [push_10_u64](https://github.com/Lightprotocol/cu-library/blob/main/src/collections/tinyvec_heap/vec_push.rs#L41)                                                                    | 163         | 157         |
+  | [push_10_pubkey](https://github.com/Lightprotocol/cu-library/blob/main/src/collections/tinyvec_heap/vec_push.rs#L48)                                                                 | 256         | 250         |
+
+  ### 2.7 Vec
 
   | Function                                                                                                                                                                                                                | CU Consumed | CU Adjusted |
   |-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|

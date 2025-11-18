@@ -266,6 +266,14 @@ pub enum CuLibraryInstruction {
     TinyvecUpdateIndex = 261,
     TinyvecUpdateGetMut = 262,
     TinyvecUpdateIterMutFind = 263,
+    // Tinyvec heap benchmarks (TinyVec with alloc feature)
+    TinyvecHeapU8New = 300,
+    TinyvecHeapPushU8 = 301,
+    TinyvecHeapPushU64 = 302,
+    TinyvecHeapPushPubkey = 303,
+    TinyvecHeapPush10U8 = 304,
+    TinyvecHeapPush10U64 = 305,
+    TinyvecHeapPush10Pubkey = 306,
     // Heapless benchmarks
     HeaplessU8New = 264,
     HeaplessU8WithCapacity10 = 265,
@@ -617,6 +625,13 @@ impl TryFrom<&[u8]> for CuLibraryInstruction {
             297 => Ok(CuLibraryInstruction::SmallvecUpdateIndex),
             298 => Ok(CuLibraryInstruction::SmallvecUpdateGetMut),
             299 => Ok(CuLibraryInstruction::SmallvecUpdateIterMutFind),
+            300 => Ok(CuLibraryInstruction::TinyvecHeapU8New),
+            301 => Ok(CuLibraryInstruction::TinyvecHeapPushU8),
+            302 => Ok(CuLibraryInstruction::TinyvecHeapPushU64),
+            303 => Ok(CuLibraryInstruction::TinyvecHeapPushPubkey),
+            304 => Ok(CuLibraryInstruction::TinyvecHeapPush10U8),
+            305 => Ok(CuLibraryInstruction::TinyvecHeapPush10U64),
+            306 => Ok(CuLibraryInstruction::TinyvecHeapPush10Pubkey),
             _ => Err(ProgramError::InvalidInstructionData),
         }
     }

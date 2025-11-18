@@ -21,6 +21,7 @@ use pinocchio::{default_panic_handler, program_entrypoint};
 
 use crate::instructions::{
     process_instruction_0_99, process_instruction_100_199, process_instruction_200_299,
+    process_instruction_300_399,
 };
 
 #[cfg(not(feature = "no-entrypoint"))]
@@ -41,7 +42,9 @@ pub fn process_instruction(
         return process_instruction_0_99(instruction, program_id, accounts, instruction_data);
     } else if discriminator < 200 {
         return process_instruction_100_199(instruction, program_id, accounts, instruction_data);
-    } else {
+    } else if discriminator < 300 {
         return process_instruction_200_299(instruction, program_id, accounts, instruction_data);
+    } else {
+        return process_instruction_300_399(instruction, program_id, accounts, instruction_data);
     }
 }

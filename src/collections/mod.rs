@@ -3,4 +3,5 @@ pub mod arrayvec;
 pub mod heapless;
 pub mod smallvec;
 pub mod tinyvec;
+pub mod tinyvec_heap;
 pub mod vec;

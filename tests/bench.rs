@@ -96,6 +96,14 @@ fn bench_cu_operations() {
         CuLibraryInstruction::TinyvecUpdateIndex,
         CuLibraryInstruction::TinyvecUpdateGetMut,
         CuLibraryInstruction::TinyvecUpdateIterMutFind,
+        // Tinyvec heap benchmarks (TinyVec with alloc feature)
+        CuLibraryInstruction::TinyvecHeapU8New,
+        CuLibraryInstruction::TinyvecHeapPushU8,
+        CuLibraryInstruction::TinyvecHeapPushU64,
+        CuLibraryInstruction::TinyvecHeapPushPubkey,
+        CuLibraryInstruction::TinyvecHeapPush10U8,
+        CuLibraryInstruction::TinyvecHeapPush10U64,
+        CuLibraryInstruction::TinyvecHeapPush10Pubkey,
         // Heapless benchmarks
         CuLibraryInstruction::HeaplessU8New,
         CuLibraryInstruction::HeaplessU8WithCapacity10,
