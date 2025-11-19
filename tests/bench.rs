@@ -362,6 +362,18 @@ fn bench_cu_operations() {
         CuLibraryInstruction::SerializationCompressedAccountInfoBorsh1Deserialize,
         CuLibraryInstruction::SerializationCompressedAccountInfoRkyvZeroCopyDeserialize,
         CuLibraryInstruction::SerializationCompressedAccountInfoWincodeShortVecDeserialize,
+        // Seed reference collection benchmarks
+        CuLibraryInstruction::CollectVec1Seed,
+        CuLibraryInstruction::CollectVec3Seeds,
+        CuLibraryInstruction::CollectVec16Seeds,
+        CuLibraryInstruction::CollectArrayVec1Seed,
+        CuLibraryInstruction::CollectArrayVec3Seeds,
+        CuLibraryInstruction::CollectArrayVec16Seeds,
+        CuLibraryInstruction::CollectArrayVec3Seeds16Capacity,
+        CuLibraryInstruction::Array3Seeds,
+        CuLibraryInstruction::Array3SeedsMaybeUninit,
+        CuLibraryInstruction::Array3SeedsMaybeUninitNoTransmute,
+        CuLibraryInstruction::Array3SeedsPtr,
     ];
 
     for instruction_type in instructions.into_iter() {
@@ -667,7 +679,8 @@ fn write_categorized_readme(
             let mut file_number = 1;
             for file_stem in files_map.keys() {
                 let file_display_name = format_file_display_name(file_stem);
-                let anchor = format!("{}{}-{}",
+                let anchor = format!(
+                    "{}{}-{}",
                     section_number,
                     file_number,
                     file_display_name.to_lowercase().replace(' ', "-")
@@ -705,7 +718,8 @@ fn write_categorized_readme(
                 let mut file_number = 1;
                 for file_stem in files_map.keys() {
                     let file_display_name = format_file_display_name(file_stem);
-                    let anchor = format!("{}{}-{}",
+                    let anchor = format!(
+                        "{}{}-{}",
                         section_number,
                         file_number,
                         file_display_name.to_lowercase().replace(' ', "-")

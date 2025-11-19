@@ -65,6 +65,7 @@ Benchmark results for Solana runtime operations.
   - [9.2 Msg Program Id](#92-msg-program-id)
   - [9.3 Pubkey New From Array](#93-pubkey-new-from-array)
   - [9.4 Pubkey To Bytes](#94-pubkey-to-bytes)
+  - [9.5 Seed References](#95-seed-references)
 
 
 ## Definitions
@@ -566,3 +567,18 @@ Benchmark results for Solana runtime operations.
   |-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
   | [pubkey_to_bytes](https://github.com/Lightprotocol/cu-library/blob/main/src/solana_crates/pubkey_to_bytes.rs#L6)                                                                     | 14          | 8           |
 
+  ### 9.5 Seed References
+
+  | Function                                                                                                                                                                                                                | CU Consumed | CU Adjusted |
+  |-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
+  | [collect_vec_1_seed](https://github.com/Lightprotocol/cu-library/blob/main/src/solana_crates/seed_references.rs#L26)                                                                 | 18          | 12          |
+  | [collect_vec_3_seeds](https://github.com/Lightprotocol/cu-library/blob/main/src/solana_crates/seed_references.rs#L32)                                                                | 57          | 51          |
+  | [collect_vec_16_seeds](https://github.com/Lightprotocol/cu-library/blob/main/src/solana_crates/seed_references.rs#L38)                                                               | 161         | 155         |
+  | [collect_arrayvec_1_seed](https://github.com/Lightprotocol/cu-library/blob/main/src/solana_crates/seed_references.rs#L46)                                                            | 9           | 3           |
+  | [collect_arrayvec_3_seeds](https://github.com/Lightprotocol/cu-library/blob/main/src/solana_crates/seed_references.rs#L52)                                                           | 34          | 28          |
+  | [collect_arrayvec_16_seeds](https://github.com/Lightprotocol/cu-library/blob/main/src/solana_crates/seed_references.rs#L64)                                                          | 543         | 537         |
+  | [collect_arrayvec_3_seeds_16_capacity](https://github.com/Lightprotocol/cu-library/blob/main/src/solana_crates/seed_references.rs#L58)                                               | 255         | 249         |
+  | [array_3_seeds](https://github.com/Lightprotocol/cu-library/blob/main/src/solana_crates/seed_references.rs#L70)                                                                      | 23          | 17          |
+  | [array_3_seeds_maybeuninit](https://github.com/Lightprotocol/cu-library/blob/main/src/solana_crates/seed_references.rs#L79)                                                          | 20          | 14          |
+  | [array_3_seeds_maybeuninit_no_transmute](https://github.com/Lightprotocol/cu-library/blob/main/src/solana_crates/seed_references.rs#L94)                                             | 18          | 12          |
+  | [array_3_seeds_ptr](https://github.com/Lightprotocol/cu-library/blob/main/src/solana_crates/seed_references.rs#L109)                                                                 | 19          | 13          |
