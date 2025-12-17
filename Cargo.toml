@@ -18,8 +18,8 @@ tinyvec = { version = "1.10.0", features = ["alloc"] }
 heapless = { version = "0.8", default-features = false }
 smallvec = "1.15.1"
 light-program-profiler = {git = "https://github.com/Lightprotocol/light-program-profiler" ,features = ["profile-program", "inline"] }
-wincode = { version = "0.2.1", features = ["solana-short-vec"] }
-wincode-derive = "0.2"
+wincode = { version = "0.2.3", features = ["solana-short-vec"] }
+wincode-derive = "0.2.2"
 solana-short-vec = "2.2"
 serde = { version = "1.0", features = ["derive"] }
 borsh = "0.10.4"
