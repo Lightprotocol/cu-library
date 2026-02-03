@@ -5,7 +5,7 @@ use pinocchio::program_error::ProgramError;
 use rkyv::{Archive, Deserialize as RkyvDeserialize, Serialize as RkyvSerialize};
 use serde::{Deserialize, Serialize};
 use wincode::containers::{self, Pod};
-use wincode::len::ShortU16Len;
+use wincode::len::{BincodeLen, ShortU16};
 use wincode_derive::{SchemaRead, SchemaWrite};
 use zerocopy::{Immutable, KnownLayout};
 
@@ -108,7 +108,7 @@ pub struct OutAccountInfo {
     #[wincode(with = "Pod<_>")]
     pub lamports: u64,
     /// Account data.
-    #[wincode(with = "containers::Vec<Pod<_>>")]
+    #[wincode(with = "containers::Vec<Pod<_>, BincodeLen>")]
     pub data: Vec<u8>,
 }
 
@@ -246,7 +246,7 @@ pub struct OutAccountInfoShortVec {
     output_merkle_tree_index: u8,
     #[wincode(with = "Pod<_>")]
     lamports: u64,
-    #[wincode(with = "containers::Vec<Pod<_>, ShortU16Len>")]
+    #[wincode(with = "containers::Vec<Pod<_>, ShortU16>")]
     data: Vec<u8>,
 }
 
