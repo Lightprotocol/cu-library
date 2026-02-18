@@ -475,7 +475,7 @@ Benchmark results for Solana runtime operations.
   | [data_len](https://github.com/Lightprotocol/cu-library/blob/main/src/pinocchio_crates/account_info/account_data.rs#L5)                                                               | 9           | 3           |
   | [lamports](https://github.com/Lightprotocol/cu-library/blob/main/src/pinocchio_crates/account_info/account_data.rs#L10)                                                              | 9           | 3           |
   | [data_is_empty](https://github.com/Lightprotocol/cu-library/blob/main/src/pinocchio_crates/account_info/account_checks.rs#L20)                                                       | 12          | 6           |
-  | [is_owned_by](https://github.com/Lightprotocol/cu-library/blob/main/src/pinocchio_crates/account_info/account_ownership.rs#L5)                                                       | 30          | 24          |
+  | [is_owned_by](https://github.com/Lightprotocol/cu-library/blob/main/src/pinocchio_crates/account_info/account_ownership.rs#L5)                                                       | 21          | 15          |
   | [assign](https://github.com/Lightprotocol/cu-library/blob/main/src/pinocchio_crates/account_info/account_ownership.rs#L10)                                                           | 15          | 9           |
   | [is_borrowed](https://github.com/Lightprotocol/cu-library/blob/main/src/pinocchio_crates/account_info/account_borrows.rs#L5)                                                         | 12          | 6           |
   | [borrow_lamports_unchecked](https://github.com/Lightprotocol/cu-library/blob/main/src/pinocchio_crates/account_info/account_borrows.rs#L10)                                          | 9           | 3           |
@@ -535,11 +535,11 @@ Benchmark results for Solana runtime operations.
   |-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
   | [borsh_deserialize](https://github.com/Lightprotocol/cu-library/blob/main/src/serialization/compressed_account_info.rs#L200)                                                         | 428         | 422         |
   | [zero_copy_deserialize](https://github.com/Lightprotocol/cu-library/blob/main/src/serialization/compressed_account_info.rs#L206)                                                     | 130         | 124         |
-  | [wincode_deserialize](https://github.com/Lightprotocol/cu-library/blob/main/src/serialization/compressed_account_info.rs#L215)                                                       | 335         | 329         |
+  | [wincode_deserialize](https://github.com/Lightprotocol/cu-library/blob/main/src/serialization/compressed_account_info.rs#L215)                                                       | 279         | 273         |
   | [bincode_deserialize](https://github.com/Lightprotocol/cu-library/blob/main/src/serialization/compressed_account_info.rs#L220)                                                       | 3231        | 3225        |
   | [borsh1_deserialize](https://github.com/Lightprotocol/cu-library/blob/main/src/serialization/compressed_account_info.rs#L225)                                                        | 428         | 422         |
   | [rkyv_zero_copy_deserialize](https://github.com/Lightprotocol/cu-library/blob/main/src/serialization/compressed_account_info.rs#L230)                                                | 178         | 172         |
-  | [wincode_shortvec_deserialize](https://github.com/Lightprotocol/cu-library/blob/main/src/serialization/compressed_account_info.rs#L285)                                              | 341         | 335         |
+  | [wincode_shortvec_deserialize](https://github.com/Lightprotocol/cu-library/blob/main/src/serialization/compressed_account_info.rs#L285)                                              | 290         | 284         |
 
 ## 9. Solana Crates
 
