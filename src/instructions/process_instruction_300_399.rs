@@ -2,6 +2,7 @@ use pinocchio::{account_info::AccountInfo, program_error::ProgramError, pubkey::
 
 use crate::instructions::discriminator::CuLibraryInstruction;
 use crate::collections;
+use crate::serialization;
 use crate::solana_crates;
 
 #[inline(never)]
@@ -107,6 +108,21 @@ pub fn process_instruction_300_399(
             let seeds = solana_crates::seed_references::create_3_seeds();
             let res = solana_crates::seed_references::array_3_seeds_ptr(&seeds);
             solana_msg::msg!("seed_refs: {:?}", res.as_ref());
+        }
+        CuLibraryInstruction::SerializationBytemuckTryPodReadUnaligned => {
+            let data = serialization::bytemuck_deser::serialize_pod();
+            let res = serialization::bytemuck_deser::try_pod_read_unaligned(data.as_slice())?;
+            solana_msg::msg!("bytemuck: {:?}", res.lamports);
+        }
+        CuLibraryInstruction::SerializationBytemuckPodReadUnaligned => {
+            let data = serialization::bytemuck_deser::serialize_pod();
+            let res = serialization::bytemuck_deser::pod_read_unaligned(data.as_slice());
+            solana_msg::msg!("bytemuck: {:?}", res.lamports);
+        }
+        CuLibraryInstruction::SerializationBytemuckTryFromBytes => {
+            let data = serialization::bytemuck_deser::serialize_pod();
+            let res = serialization::bytemuck_deser::try_from_bytes(data.as_slice())?;
+            solana_msg::msg!("bytemuck: {:?}", res.lamports);
         }
         _ => return Err(ProgramError::InvalidInstructionData),
     }

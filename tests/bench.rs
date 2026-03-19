@@ -355,6 +355,9 @@ fn bench_cu_operations() {
         CuLibraryInstruction::VecU64_10GetOkOr,
         CuLibraryInstruction::VecU64_10IfLetGet,
         // Serialization benchmarks
+        CuLibraryInstruction::SerializationBytemuckTryPodReadUnaligned,
+        CuLibraryInstruction::SerializationBytemuckPodReadUnaligned,
+        CuLibraryInstruction::SerializationBytemuckTryFromBytes,
         CuLibraryInstruction::SerializationCompressedAccountInfoBorshDeserialize,
         CuLibraryInstruction::SerializationCompressedAccountInfoZeroCopyDeserialize,
         CuLibraryInstruction::SerializationCompressedAccountInfoWincodeDeserialize,

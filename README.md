@@ -57,7 +57,8 @@ Benchmark results for Solana runtime operations.
 
 **[8. Serialization](#8-serialization)**
 
-  - [8.1 Compressed Account Info](#81-compressed-account-info)
+  - [8.1 Bytemuck Deser](#81-bytemuck-deser)
+  - [8.2 Compressed Account Info](#82-compressed-account-info)
 
 **[9. Solana Crates](#9-solana-crates)**
 
@@ -124,10 +125,10 @@ Benchmark results for Solana runtime operations.
   | [find_pubkey_1_iters](https://github.com/Lightprotocol/cu-library/blob/main/src/collections/arrayvec/access.rs#L47)                                                                  | 18          | 12          |
   | [find_pubkey_10_iters](https://github.com/Lightprotocol/cu-library/blob/main/src/collections/arrayvec/access.rs#L57)                                                                 | 38          | 32          |
   | [position_pubkey_1_iters](https://github.com/Lightprotocol/cu-library/blob/main/src/collections/arrayvec/access.rs#L67)                                                              | 42          | 36          |
-  | [position_pubkey_10_iters](https://github.com/Lightprotocol/cu-library/blob/main/src/collections/arrayvec/access.rs#L72)                                                             | 96          | 90          |
+  | [position_pubkey_10_iters](https://github.com/Lightprotocol/cu-library/blob/main/src/collections/arrayvec/access.rs#L72)                                                             | 87          | 81          |
   | [update_index](https://github.com/Lightprotocol/cu-library/blob/main/src/collections/arrayvec/access.rs#L77)                                                                         | 14          | 8           |
-  | [update_get_mut](https://github.com/Lightprotocol/cu-library/blob/main/src/collections/arrayvec/access.rs#L82)                                                                       | 14          | 8           |
-  | [update_iter_mut_find](https://github.com/Lightprotocol/cu-library/blob/main/src/collections/arrayvec/access.rs#L93)                                                                 | 24          | 18          |
+  | [update_get_mut](https://github.com/Lightprotocol/cu-library/blob/main/src/collections/arrayvec/access.rs#L82)                                                                       | 15          | 9           |
+  | [update_iter_mut_find](https://github.com/Lightprotocol/cu-library/blob/main/src/collections/arrayvec/access.rs#L93)                                                                 | 25          | 19          |
 
   ### 2.3 Heapless
 
@@ -136,21 +137,21 @@ Benchmark results for Solana runtime operations.
   | [u8_new](https://github.com/Lightprotocol/cu-library/blob/main/src/collections/heapless/vec_new.rs#L5)                                                                               | 6           | 0           |
   | [u8_with_capacity_10](https://github.com/Lightprotocol/cu-library/blob/main/src/collections/heapless/vec_with_capacity.rs#L5)                                                        | 6           | 0           |
   | [u8_with_capacity_100](https://github.com/Lightprotocol/cu-library/blob/main/src/collections/heapless/vec_with_capacity.rs#L10)                                                      | 6           | 0           |
-  | [push_u8](https://github.com/Lightprotocol/cu-library/blob/main/src/collections/heapless/vec_push.rs#L19)                                                                            | 10          | 4           |
-  | [push_u64](https://github.com/Lightprotocol/cu-library/blob/main/src/collections/heapless/vec_push.rs#L24)                                                                           | 10          | 4           |
+  | [push_u8](https://github.com/Lightprotocol/cu-library/blob/main/src/collections/heapless/vec_push.rs#L19)                                                                            | 8           | 2           |
+  | [push_u64](https://github.com/Lightprotocol/cu-library/blob/main/src/collections/heapless/vec_push.rs#L24)                                                                           | 8           | 2           |
   | [push_pubkey](https://github.com/Lightprotocol/cu-library/blob/main/src/collections/heapless/vec_push.rs#L29)                                                                        | 15          | 9           |
-  | [push_10_u8](https://github.com/Lightprotocol/cu-library/blob/main/src/collections/heapless/vec_push.rs#L34)                                                                         | 84          | 78          |
-  | [push_10_u64](https://github.com/Lightprotocol/cu-library/blob/main/src/collections/heapless/vec_push.rs#L41)                                                                        | 101         | 95          |
+  | [push_10_u8](https://github.com/Lightprotocol/cu-library/blob/main/src/collections/heapless/vec_push.rs#L34)                                                                         | 10          | 4           |
+  | [push_10_u64](https://github.com/Lightprotocol/cu-library/blob/main/src/collections/heapless/vec_push.rs#L41)                                                                        | 17          | 11          |
   | [push_10_pubkey](https://github.com/Lightprotocol/cu-library/blob/main/src/collections/heapless/vec_push.rs#L48)                                                                     | 88          | 82          |
   | [get_first_pubkey](https://github.com/Lightprotocol/cu-library/blob/main/src/collections/heapless/access.rs#L37)                                                                     | 6           | 0           |
   | [get_10th_pubkey](https://github.com/Lightprotocol/cu-library/blob/main/src/collections/heapless/access.rs#L42)                                                                      | 6           | 0           |
   | [find_pubkey_1_iters](https://github.com/Lightprotocol/cu-library/blob/main/src/collections/heapless/access.rs#L47)                                                                  | 18          | 12          |
   | [find_pubkey_10_iters](https://github.com/Lightprotocol/cu-library/blob/main/src/collections/heapless/access.rs#L57)                                                                 | 38          | 32          |
   | [position_pubkey_1_iters](https://github.com/Lightprotocol/cu-library/blob/main/src/collections/heapless/access.rs#L67)                                                              | 42          | 36          |
-  | [position_pubkey_10_iters](https://github.com/Lightprotocol/cu-library/blob/main/src/collections/heapless/access.rs#L72)                                                             | 96          | 90          |
-  | [update_index](https://github.com/Lightprotocol/cu-library/blob/main/src/collections/heapless/access.rs#L77)                                                                         | 14          | 8           |
-  | [update_get_mut](https://github.com/Lightprotocol/cu-library/blob/main/src/collections/heapless/access.rs#L82)                                                                       | 14          | 8           |
-  | [update_iter_mut_find](https://github.com/Lightprotocol/cu-library/blob/main/src/collections/heapless/access.rs#L93)                                                                 | 23          | 17          |
+  | [position_pubkey_10_iters](https://github.com/Lightprotocol/cu-library/blob/main/src/collections/heapless/access.rs#L72)                                                             | 87          | 81          |
+  | [update_index](https://github.com/Lightprotocol/cu-library/blob/main/src/collections/heapless/access.rs#L77)                                                                         | 15          | 9           |
+  | [update_get_mut](https://github.com/Lightprotocol/cu-library/blob/main/src/collections/heapless/access.rs#L82)                                                                       | 15          | 9           |
+  | [update_iter_mut_find](https://github.com/Lightprotocol/cu-library/blob/main/src/collections/heapless/access.rs#L93)                                                                 | 24          | 18          |
 
   ### 2.4 Smallvec
 
@@ -167,13 +168,13 @@ Benchmark results for Solana runtime operations.
   | [push_10_pubkey](https://github.com/Lightprotocol/cu-library/blob/main/src/collections/smallvec/vec_push.rs#L48)                                                                     | 87          | 81          |
   | [get_first_pubkey](https://github.com/Lightprotocol/cu-library/blob/main/src/collections/smallvec/access.rs#L37)                                                                     | 6           | 0           |
   | [get_10th_pubkey](https://github.com/Lightprotocol/cu-library/blob/main/src/collections/smallvec/access.rs#L42)                                                                      | 6           | 0           |
-  | [find_pubkey_1_iters](https://github.com/Lightprotocol/cu-library/blob/main/src/collections/smallvec/access.rs#L47)                                                                  | 20          | 14          |
+  | [find_pubkey_1_iters](https://github.com/Lightprotocol/cu-library/blob/main/src/collections/smallvec/access.rs#L47)                                                                  | 21          | 15          |
   | [find_pubkey_10_iters](https://github.com/Lightprotocol/cu-library/blob/main/src/collections/smallvec/access.rs#L57)                                                                 | 38          | 32          |
   | [position_pubkey_1_iters](https://github.com/Lightprotocol/cu-library/blob/main/src/collections/smallvec/access.rs#L67)                                                              | 44          | 38          |
-  | [position_pubkey_10_iters](https://github.com/Lightprotocol/cu-library/blob/main/src/collections/smallvec/access.rs#L75)                                                             | 96          | 90          |
+  | [position_pubkey_10_iters](https://github.com/Lightprotocol/cu-library/blob/main/src/collections/smallvec/access.rs#L75)                                                             | 87          | 81          |
   | [update_index](https://github.com/Lightprotocol/cu-library/blob/main/src/collections/smallvec/access.rs#L83)                                                                         | 14          | 8           |
   | [update_get_mut](https://github.com/Lightprotocol/cu-library/blob/main/src/collections/smallvec/access.rs#L88)                                                                       | 14          | 8           |
-  | [update_iter_mut_find](https://github.com/Lightprotocol/cu-library/blob/main/src/collections/smallvec/access.rs#L99)                                                                 | 26          | 20          |
+  | [update_iter_mut_find](https://github.com/Lightprotocol/cu-library/blob/main/src/collections/smallvec/access.rs#L99)                                                                 | 27          | 21          |
 
   ### 2.5 Tinyvec
 
@@ -193,10 +194,10 @@ Benchmark results for Solana runtime operations.
   | [find_pubkey_1_iters](https://github.com/Lightprotocol/cu-library/blob/main/src/collections/tinyvec/access.rs#L47)                                                                   | 18          | 12          |
   | [find_pubkey_10_iters](https://github.com/Lightprotocol/cu-library/blob/main/src/collections/tinyvec/access.rs#L57)                                                                  | 38          | 32          |
   | [position_pubkey_1_iters](https://github.com/Lightprotocol/cu-library/blob/main/src/collections/tinyvec/access.rs#L67)                                                               | 42          | 36          |
-  | [position_pubkey_10_iters](https://github.com/Lightprotocol/cu-library/blob/main/src/collections/tinyvec/access.rs#L72)                                                              | 96          | 90          |
+  | [position_pubkey_10_iters](https://github.com/Lightprotocol/cu-library/blob/main/src/collections/tinyvec/access.rs#L72)                                                              | 87          | 81          |
   | [update_index](https://github.com/Lightprotocol/cu-library/blob/main/src/collections/tinyvec/access.rs#L77)                                                                          | 14          | 8           |
   | [update_get_mut](https://github.com/Lightprotocol/cu-library/blob/main/src/collections/tinyvec/access.rs#L82)                                                                        | 14          | 8           |
-  | [update_iter_mut_find](https://github.com/Lightprotocol/cu-library/blob/main/src/collections/tinyvec/access.rs#L93)                                                                  | 24          | 18          |
+  | [update_iter_mut_find](https://github.com/Lightprotocol/cu-library/blob/main/src/collections/tinyvec/access.rs#L93)                                                                  | 25          | 19          |
 
   ### 2.6 Tinyvec Heap
 
@@ -206,8 +207,8 @@ Benchmark results for Solana runtime operations.
   | [push_u8](https://github.com/Lightprotocol/cu-library/blob/main/src/collections/tinyvec_heap/vec_push.rs#L19)                                                                        | 8           | 2           |
   | [push_u64](https://github.com/Lightprotocol/cu-library/blob/main/src/collections/tinyvec_heap/vec_push.rs#L24)                                                                       | 8           | 2           |
   | [push_pubkey](https://github.com/Lightprotocol/cu-library/blob/main/src/collections/tinyvec_heap/vec_push.rs#L29)                                                                    | 15          | 9           |
-  | [push_10_u8](https://github.com/Lightprotocol/cu-library/blob/main/src/collections/tinyvec_heap/vec_push.rs#L34)                                                                     | 161         | 155         |
-  | [push_10_u64](https://github.com/Lightprotocol/cu-library/blob/main/src/collections/tinyvec_heap/vec_push.rs#L41)                                                                    | 163         | 157         |
+  | [push_10_u8](https://github.com/Lightprotocol/cu-library/blob/main/src/collections/tinyvec_heap/vec_push.rs#L34)                                                                     | 159         | 153         |
+  | [push_10_u64](https://github.com/Lightprotocol/cu-library/blob/main/src/collections/tinyvec_heap/vec_push.rs#L41)                                                                    | 151         | 145         |
   | [push_10_pubkey](https://github.com/Lightprotocol/cu-library/blob/main/src/collections/tinyvec_heap/vec_push.rs#L48)                                                                 | 256         | 250         |
 
   ### 2.7 Vec
@@ -220,15 +221,15 @@ Benchmark results for Solana runtime operations.
   | [push_u8](https://github.com/Lightprotocol/cu-library/blob/main/src/collections/vec/vec_push.rs#L5)                                                                                  | 73          | 67          |
   | [push_u64](https://github.com/Lightprotocol/cu-library/blob/main/src/collections/vec/vec_push.rs#L12)                                                                                | 78          | 72          |
   | [push_pubkey](https://github.com/Lightprotocol/cu-library/blob/main/src/collections/vec/vec_push.rs#L19)                                                                             | 84          | 78          |
-  | [push_10_u8](https://github.com/Lightprotocol/cu-library/blob/main/src/collections/vec/vec_push.rs#L26)                                                                              | 202         | 196         |
-  | [push_10_u64](https://github.com/Lightprotocol/cu-library/blob/main/src/collections/vec/vec_push.rs#L35)                                                                             | 313         | 307         |
-  | [push_10_pubkey](https://github.com/Lightprotocol/cu-library/blob/main/src/collections/vec/vec_push.rs#L44)                                                                          | 382         | 376         |
+  | [push_10_u8](https://github.com/Lightprotocol/cu-library/blob/main/src/collections/vec/vec_push.rs#L26)                                                                              | 200         | 194         |
+  | [push_10_u64](https://github.com/Lightprotocol/cu-library/blob/main/src/collections/vec/vec_push.rs#L35)                                                                             | 308         | 302         |
+  | [push_10_pubkey](https://github.com/Lightprotocol/cu-library/blob/main/src/collections/vec/vec_push.rs#L44)                                                                          | 376         | 370         |
   | [push_u8_with_capacity](https://github.com/Lightprotocol/cu-library/blob/main/src/collections/vec/vec_push.rs#L53)                                                                   | 120         | 114         |
   | [push_u64_with_capacity](https://github.com/Lightprotocol/cu-library/blob/main/src/collections/vec/vec_push.rs#L60)                                                                  | 120         | 114         |
   | [push_pubkey_with_capacity](https://github.com/Lightprotocol/cu-library/blob/main/src/collections/vec/vec_push.rs#L67)                                                               | 127         | 121         |
-  | [push_10_u8_with_capacity](https://github.com/Lightprotocol/cu-library/blob/main/src/collections/vec/vec_push.rs#L74)                                                                | 153         | 147         |
-  | [push_10_u64_with_capacity](https://github.com/Lightprotocol/cu-library/blob/main/src/collections/vec/vec_push.rs#L83)                                                               | 149         | 143         |
-  | [push_10_pubkey_with_capacity](https://github.com/Lightprotocol/cu-library/blob/main/src/collections/vec/vec_push.rs#L92)                                                            | 218         | 212         |
+  | [push_10_u8_with_capacity](https://github.com/Lightprotocol/cu-library/blob/main/src/collections/vec/vec_push.rs#L74)                                                                | 154         | 148         |
+  | [push_10_u64_with_capacity](https://github.com/Lightprotocol/cu-library/blob/main/src/collections/vec/vec_push.rs#L83)                                                               | 150         | 144         |
+  | [push_10_pubkey_with_capacity](https://github.com/Lightprotocol/cu-library/blob/main/src/collections/vec/vec_push.rs#L92)                                                            | 219         | 213         |
   | [vec_u8_32_index](https://github.com/Lightprotocol/cu-library/blob/main/src/collections/vec/vec_u8_32.rs#L4)                                                                         | 9           | 3           |
   | [vec_u8_32_get](https://github.com/Lightprotocol/cu-library/blob/main/src/collections/vec/vec_u8_32.rs#L9)                                                                           | 8           | 2           |
   | [vec_u8_32_get_ok_or](https://github.com/Lightprotocol/cu-library/blob/main/src/collections/vec/vec_u8_32.rs#L14)                                                                    | 8           | 2           |
@@ -394,8 +395,8 @@ Benchmark results for Solana runtime operations.
   | [checked_add_u8_unwrap](https://github.com/Lightprotocol/cu-library/blob/main/src/option/option_checked_add.rs#L7)                                                                   | 7           | 1           |
   | [checked_add_u8_ok_or](https://github.com/Lightprotocol/cu-library/blob/main/src/option/option_checked_add.rs#L13)                                                                   | 6           | 0           |
   | [checked_add_u8_ok_or_else](https://github.com/Lightprotocol/cu-library/blob/main/src/option/option_checked_add.rs#L19)                                                              | 6           | 0           |
-  | [checked_add_u8_unwrap_or_default](https://github.com/Lightprotocol/cu-library/blob/main/src/option/option_checked_add.rs#L25)                                                       | 8           | 2           |
-  | [checked_add_u8_unwrap_or](https://github.com/Lightprotocol/cu-library/blob/main/src/option/option_checked_add.rs#L31)                                                               | 8           | 2           |
+  | [checked_add_u8_unwrap_or_default](https://github.com/Lightprotocol/cu-library/blob/main/src/option/option_checked_add.rs#L25)                                                       | 7           | 1           |
+  | [checked_add_u8_unwrap_or](https://github.com/Lightprotocol/cu-library/blob/main/src/option/option_checked_add.rs#L31)                                                               | 7           | 1           |
 
   ### 5.2 Option If Let
 
@@ -444,9 +445,9 @@ Benchmark results for Solana runtime operations.
   | [u32_neq](https://github.com/Lightprotocol/cu-library/blob/main/src/partial_eq/partial_eq_neq.rs#L15)                                                                                | 10          | 4           |
   | [u64_neq](https://github.com/Lightprotocol/cu-library/blob/main/src/partial_eq/partial_eq_neq.rs#L20)                                                                                | 10          | 4           |
   | [u128_neq](https://github.com/Lightprotocol/cu-library/blob/main/src/partial_eq/partial_eq_neq.rs#L25)                                                                               | 13          | 7           |
-  | [array_u8_32_neq_ref](https://github.com/Lightprotocol/cu-library/blob/main/src/partial_eq/partial_eq_neq.rs#L32)                                                                    | 35          | 29          |
-  | [array_u8_32_neq](https://github.com/Lightprotocol/cu-library/blob/main/src/partial_eq/partial_eq_neq.rs#L38)                                                                        | 31          | 25          |
-  | [array_u8_32_neq_deref](https://github.com/Lightprotocol/cu-library/blob/main/src/partial_eq/partial_eq_neq.rs#L44)                                                                  | 35          | 29          |
+  | [array_u8_32_neq_ref](https://github.com/Lightprotocol/cu-library/blob/main/src/partial_eq/partial_eq_neq.rs#L32)                                                                    | 23          | 17          |
+  | [array_u8_32_neq](https://github.com/Lightprotocol/cu-library/blob/main/src/partial_eq/partial_eq_neq.rs#L38)                                                                        | 20          | 14          |
+  | [array_u8_32_neq_deref](https://github.com/Lightprotocol/cu-library/blob/main/src/partial_eq/partial_eq_neq.rs#L44)                                                                  | 23          | 17          |
   | [array_u16_32_neq](https://github.com/Lightprotocol/cu-library/blob/main/src/partial_eq/partial_eq_neq.rs#L49)                                                                       | 33          | 27          |
   | [array_u32_32_neq](https://github.com/Lightprotocol/cu-library/blob/main/src/partial_eq/partial_eq_neq.rs#L54)                                                                       | 34          | 28          |
   | [array_u64_32_neq](https://github.com/Lightprotocol/cu-library/blob/main/src/partial_eq/partial_eq_neq.rs#L59)                                                                       | 34          | 28          |
@@ -482,12 +483,12 @@ Benchmark results for Solana runtime operations.
   | [borrow_mut_lamports_unchecked](https://github.com/Lightprotocol/cu-library/blob/main/src/pinocchio_crates/account_info/account_borrows.rs#L15)                                      | 9           | 3           |
   | [borrow_data_unchecked](https://github.com/Lightprotocol/cu-library/blob/main/src/pinocchio_crates/account_info/account_borrows.rs#L21)                                              | 8           | 2           |
   | [borrow_mut_data_unchecked](https://github.com/Lightprotocol/cu-library/blob/main/src/pinocchio_crates/account_info/account_borrows.rs#L26)                                          | 8           | 2           |
-  | [try_borrow_lamports](https://github.com/Lightprotocol/cu-library/blob/main/src/pinocchio_crates/account_info/account_borrows.rs#L32)                                                | 16          | 10          |
-  | [try_borrow_mut_lamports](https://github.com/Lightprotocol/cu-library/blob/main/src/pinocchio_crates/account_info/account_borrows.rs#L38)                                            | 11          | 5           |
+  | [try_borrow_lamports](https://github.com/Lightprotocol/cu-library/blob/main/src/pinocchio_crates/account_info/account_borrows.rs#L32)                                                | 15          | 9           |
+  | [try_borrow_mut_lamports](https://github.com/Lightprotocol/cu-library/blob/main/src/pinocchio_crates/account_info/account_borrows.rs#L38)                                            | 10          | 4           |
   | [can_borrow_lamports](https://github.com/Lightprotocol/cu-library/blob/main/src/pinocchio_crates/account_info/account_borrows.rs#L44)                                                | 8           | 2           |
   | [can_borrow_mut_lamports](https://github.com/Lightprotocol/cu-library/blob/main/src/pinocchio_crates/account_info/account_borrows.rs#L49)                                            | 8           | 2           |
-  | [try_borrow_data](https://github.com/Lightprotocol/cu-library/blob/main/src/pinocchio_crates/account_info/account_borrows.rs#L54)                                                    | 15          | 9           |
-  | [try_borrow_mut_data](https://github.com/Lightprotocol/cu-library/blob/main/src/pinocchio_crates/account_info/account_borrows.rs#L60)                                                | 12          | 6           |
+  | [try_borrow_data](https://github.com/Lightprotocol/cu-library/blob/main/src/pinocchio_crates/account_info/account_borrows.rs#L54)                                                    | 14          | 8           |
+  | [try_borrow_mut_data](https://github.com/Lightprotocol/cu-library/blob/main/src/pinocchio_crates/account_info/account_borrows.rs#L60)                                                | 11          | 5           |
   | [can_borrow_data](https://github.com/Lightprotocol/cu-library/blob/main/src/pinocchio_crates/account_info/account_borrows.rs#L66)                                                    | 8           | 2           |
   | [can_borrow_mut_data](https://github.com/Lightprotocol/cu-library/blob/main/src/pinocchio_crates/account_info/account_borrows.rs#L71)                                                | 8           | 2           |
   | [realloc](https://github.com/Lightprotocol/cu-library/blob/main/src/pinocchio_crates/account_info/account_realloc.rs#L5)                                                             | 16          | 10          |
@@ -519,27 +520,35 @@ Benchmark results for Solana runtime operations.
 
   | Function                                                                                                                                                                                                                | CU Consumed | CU Adjusted |
   |-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
-  | [clock_get_slot](https://github.com/Lightprotocol/cu-library/blob/main/src/pinocchio_crates/sysvar_clock.rs#L5)                                                                      | 171         | 165         |
+  | [clock_get_slot](https://github.com/Lightprotocol/cu-library/blob/main/src/pinocchio_crates/sysvar_clock.rs#L5)                                                                      | 169         | 163         |
 
   ### 7.5 Sysvar Rent
 
   | Function                                                                                                                                                                                                                | CU Consumed | CU Adjusted |
   |-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
-  | [sysvar_rent_exemption_165](https://github.com/Lightprotocol/cu-library/blob/main/src/pinocchio_crates/sysvar_rent.rs#L5)                                                            | 151         | 145         |
+  | [sysvar_rent_exemption_165](https://github.com/Lightprotocol/cu-library/blob/main/src/pinocchio_crates/sysvar_rent.rs#L5)                                                            | 150         | 144         |
 
 ## 8. Serialization
 
-  ### 8.1 Compressed Account Info
+  ### 8.1 Bytemuck Deser
 
   | Function                                                                                                                                                                                                                | CU Consumed | CU Adjusted |
   |-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
-  | [borsh_deserialize](https://github.com/Lightprotocol/cu-library/blob/main/src/serialization/compressed_account_info.rs#L200)                                                         | 428         | 422         |
-  | [zero_copy_deserialize](https://github.com/Lightprotocol/cu-library/blob/main/src/serialization/compressed_account_info.rs#L206)                                                     | 130         | 124         |
-  | [wincode_deserialize](https://github.com/Lightprotocol/cu-library/blob/main/src/serialization/compressed_account_info.rs#L215)                                                       | 279         | 273         |
-  | [bincode_deserialize](https://github.com/Lightprotocol/cu-library/blob/main/src/serialization/compressed_account_info.rs#L220)                                                       | 3231        | 3225        |
-  | [borsh1_deserialize](https://github.com/Lightprotocol/cu-library/blob/main/src/serialization/compressed_account_info.rs#L225)                                                        | 428         | 422         |
-  | [rkyv_zero_copy_deserialize](https://github.com/Lightprotocol/cu-library/blob/main/src/serialization/compressed_account_info.rs#L230)                                                | 178         | 172         |
-  | [wincode_shortvec_deserialize](https://github.com/Lightprotocol/cu-library/blob/main/src/serialization/compressed_account_info.rs#L285)                                              | 290         | 284         |
+  | [try_pod_read_unaligned](https://github.com/Lightprotocol/cu-library/blob/main/src/serialization/bytemuck_deser.rs#L30)                                                              | 26          | 20          |
+  | [pod_read_unaligned](https://github.com/Lightprotocol/cu-library/blob/main/src/serialization/bytemuck_deser.rs#L36)                                                                  | 25          | 19          |
+  | [try_from_bytes](https://github.com/Lightprotocol/cu-library/blob/main/src/serialization/bytemuck_deser.rs#L41)                                                                      | 6           | 0           |
+
+  ### 8.2 Compressed Account Info
+
+  | Function                                                                                                                                                                                                                | CU Consumed | CU Adjusted |
+  |-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
+  | [borsh_deserialize](https://github.com/Lightprotocol/cu-library/blob/main/src/serialization/compressed_account_info.rs#L200)                                                         | 396         | 390         |
+  | [zero_copy_deserialize](https://github.com/Lightprotocol/cu-library/blob/main/src/serialization/compressed_account_info.rs#L206)                                                     | 102         | 96          |
+  | [wincode_deserialize](https://github.com/Lightprotocol/cu-library/blob/main/src/serialization/compressed_account_info.rs#L215)                                                       | 258         | 252         |
+  | [bincode_deserialize](https://github.com/Lightprotocol/cu-library/blob/main/src/serialization/compressed_account_info.rs#L220)                                                       | 3239        | 3233        |
+  | [borsh1_deserialize](https://github.com/Lightprotocol/cu-library/blob/main/src/serialization/compressed_account_info.rs#L225)                                                        | 396         | 390         |
+  | [rkyv_zero_copy_deserialize](https://github.com/Lightprotocol/cu-library/blob/main/src/serialization/compressed_account_info.rs#L230)                                                | 172         | 166         |
+  | [wincode_shortvec_deserialize](https://github.com/Lightprotocol/cu-library/blob/main/src/serialization/compressed_account_info.rs#L285)                                              | 263         | 257         |
 
 ## 9. Solana Crates
 
@@ -553,7 +562,7 @@ Benchmark results for Solana runtime operations.
 
   | Function                                                                                                                                                                                                                | CU Consumed | CU Adjusted |
   |-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
-  | [msg_program_id](https://github.com/Lightprotocol/cu-library/blob/main/src/solana_crates/msg_program_id.rs#L5)                                                                       | 6953        | 6947        |
+  | [msg_program_id](https://github.com/Lightprotocol/cu-library/blob/main/src/solana_crates/msg_program_id.rs#L5)                                                                       | 6833        | 6827        |
 
   ### 9.3 Pubkey New From Array
 
@@ -575,9 +584,9 @@ Benchmark results for Solana runtime operations.
   | [collect_vec_3_seeds](https://github.com/Lightprotocol/cu-library/blob/main/src/solana_crates/seed_references.rs#L32)                                                                | 57          | 51          |
   | [collect_vec_16_seeds](https://github.com/Lightprotocol/cu-library/blob/main/src/solana_crates/seed_references.rs#L38)                                                               | 161         | 155         |
   | [collect_arrayvec_1_seed](https://github.com/Lightprotocol/cu-library/blob/main/src/solana_crates/seed_references.rs#L46)                                                            | 9           | 3           |
-  | [collect_arrayvec_3_seeds](https://github.com/Lightprotocol/cu-library/blob/main/src/solana_crates/seed_references.rs#L52)                                                           | 34          | 28          |
-  | [collect_arrayvec_16_seeds](https://github.com/Lightprotocol/cu-library/blob/main/src/solana_crates/seed_references.rs#L64)                                                          | 543         | 537         |
-  | [collect_arrayvec_3_seeds_16_capacity](https://github.com/Lightprotocol/cu-library/blob/main/src/solana_crates/seed_references.rs#L58)                                               | 255         | 249         |
+  | [collect_arrayvec_3_seeds](https://github.com/Lightprotocol/cu-library/blob/main/src/solana_crates/seed_references.rs#L52)                                                           | 27          | 21          |
+  | [collect_arrayvec_16_seeds](https://github.com/Lightprotocol/cu-library/blob/main/src/solana_crates/seed_references.rs#L64)                                                          | 156         | 150         |
+  | [collect_arrayvec_3_seeds_16_capacity](https://github.com/Lightprotocol/cu-library/blob/main/src/solana_crates/seed_references.rs#L58)                                               | 125         | 119         |
   | [array_3_seeds](https://github.com/Lightprotocol/cu-library/blob/main/src/solana_crates/seed_references.rs#L70)                                                                      | 23          | 17          |
   | [array_3_seeds_maybeuninit](https://github.com/Lightprotocol/cu-library/blob/main/src/solana_crates/seed_references.rs#L79)                                                          | 20          | 14          |
   | [array_3_seeds_maybeuninit_no_transmute](https://github.com/Lightprotocol/cu-library/blob/main/src/solana_crates/seed_references.rs#L94)                                             | 18          | 12          |

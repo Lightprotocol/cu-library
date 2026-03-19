@@ -286,6 +286,10 @@ pub enum CuLibraryInstruction {
     Array3SeedsMaybeUninit = 315,
     Array3SeedsMaybeUninitNoTransmute = 316,
     Array3SeedsPtr = 317,
+    // Bytemuck deserialization benchmarks
+    SerializationBytemuckTryPodReadUnaligned = 318,
+    SerializationBytemuckPodReadUnaligned = 319,
+    SerializationBytemuckTryFromBytes = 320,
     // Heapless benchmarks
     HeaplessU8New = 264,
     HeaplessU8WithCapacity10 = 265,
@@ -655,6 +659,9 @@ impl TryFrom<&[u8]> for CuLibraryInstruction {
             315 => Ok(CuLibraryInstruction::Array3SeedsMaybeUninit),
             316 => Ok(CuLibraryInstruction::Array3SeedsMaybeUninitNoTransmute),
             317 => Ok(CuLibraryInstruction::Array3SeedsPtr),
+            318 => Ok(CuLibraryInstruction::SerializationBytemuckTryPodReadUnaligned),
+            319 => Ok(CuLibraryInstruction::SerializationBytemuckPodReadUnaligned),
+            320 => Ok(CuLibraryInstruction::SerializationBytemuckTryFromBytes),
             _ => Err(ProgramError::InvalidInstructionData),
         }
     }
