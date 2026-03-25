@@ -441,14 +441,14 @@ Benchmark results for Solana runtime operations.
   | Function                                                                                                                                                                                                                | CU Consumed | CU Adjusted |
   |-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
   | [u8_neq](https://github.com/Lightprotocol/cu-library/blob/main/src/partial_eq/partial_eq_neq.rs#L5)                                                                                  | 9           | 3           |
-  | [u16_neq](https://github.com/Lightprotocol/cu-library/blob/main/src/partial_eq/partial_eq_neq.rs#L10)                                                                                | 9           | 3           |
+  | [u16_neq](https://github.com/Lightprotocol/cu-library/blob/main/src/partial_eq/partial_eq_neq.rs#L10)                                                                                | 10          | 4           |
   | [u32_neq](https://github.com/Lightprotocol/cu-library/blob/main/src/partial_eq/partial_eq_neq.rs#L15)                                                                                | 10          | 4           |
   | [u64_neq](https://github.com/Lightprotocol/cu-library/blob/main/src/partial_eq/partial_eq_neq.rs#L20)                                                                                | 10          | 4           |
   | [u128_neq](https://github.com/Lightprotocol/cu-library/blob/main/src/partial_eq/partial_eq_neq.rs#L25)                                                                               | 13          | 7           |
   | [array_u8_32_neq_ref](https://github.com/Lightprotocol/cu-library/blob/main/src/partial_eq/partial_eq_neq.rs#L32)                                                                    | 23          | 17          |
   | [array_u8_32_neq](https://github.com/Lightprotocol/cu-library/blob/main/src/partial_eq/partial_eq_neq.rs#L38)                                                                        | 20          | 14          |
   | [array_u8_32_neq_deref](https://github.com/Lightprotocol/cu-library/blob/main/src/partial_eq/partial_eq_neq.rs#L44)                                                                  | 23          | 17          |
-  | [array_u16_32_neq](https://github.com/Lightprotocol/cu-library/blob/main/src/partial_eq/partial_eq_neq.rs#L49)                                                                       | 33          | 27          |
+  | [array_u16_32_neq](https://github.com/Lightprotocol/cu-library/blob/main/src/partial_eq/partial_eq_neq.rs#L49)                                                                       | 34          | 28          |
   | [array_u32_32_neq](https://github.com/Lightprotocol/cu-library/blob/main/src/partial_eq/partial_eq_neq.rs#L54)                                                                       | 34          | 28          |
   | [array_u64_32_neq](https://github.com/Lightprotocol/cu-library/blob/main/src/partial_eq/partial_eq_neq.rs#L59)                                                                       | 34          | 28          |
 
@@ -562,7 +562,7 @@ Benchmark results for Solana runtime operations.
 
   | Function                                                                                                                                                                                                                | CU Consumed | CU Adjusted |
   |-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------|-------------|
-  | [msg_program_id](https://github.com/Lightprotocol/cu-library/blob/main/src/solana_crates/msg_program_id.rs#L5)                                                                       | 6833        | 6827        |
+  | [msg_program_id](https://github.com/Lightprotocol/cu-library/blob/main/src/solana_crates/msg_program_id.rs#L5)                                                                       | 7031        | 7025        |
 
   ### 9.3 Pubkey New From Array
 
