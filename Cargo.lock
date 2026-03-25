@@ -1475,6 +1475,7 @@ dependencies = [
 [[package]]
 name = "light-profiler-macro"
 version = "0.1.1"
+source = "git+https://github.com/Lightprotocol/light-program-profiler#ee685a029a01b046492992282a1d46018731e1e5"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -1484,6 +1485,7 @@ dependencies = [
 [[package]]
 name = "light-program-profiler"
 version = "0.1.1"
+source = "git+https://github.com/Lightprotocol/light-program-profiler#ee685a029a01b046492992282a1d46018731e1e5"
 dependencies = [
  "light-profiler-macro",
  "mollusk-svm",

@@ -17,7 +17,7 @@ arrayvec = { version = "0.7"}
 tinyvec = { version = "1.10.0", features = ["alloc"] }
 heapless = { version = "0.8", default-features = false }
 smallvec = "1.15.1"
-light-program-profiler = { path = "../light-program-profiler/light-program-profiler", features = ["profile-program", "inline"] }
+light-program-profiler = { git = "https://github.com/Lightprotocol/light-program-profiler", features = ["profile-program", "inline"] }
 wincode = { version = "0.4.9", features = ["solana-short-vec"] }
 wincode-derive = "0.4.3"
 solana-short-vec = "2.2"
@@ -30,9 +30,8 @@ blake3 = "=1.8.2"
 zerocopy = { version = "0.8.25", features = [  "derive"] }
 light-zero-copy = { version= "0.4", features = [ "mut", "std", "derive"] }
 bytemuck = { version = "1", features = ["derive"] }
-# git = "https://github.com/Lightprotocol/light-program-profiler",
 [dev-dependencies]
-light-program-profiler = { path = "../light-program-profiler/light-program-profiler", features = ["mollusk"] }
+light-program-profiler = { git = "https://github.com/Lightprotocol/light-program-profiler", features = ["mollusk"] }
 mollusk-svm = "0.3.0"
 solana-instruction = "2.2.1"
 solana-account = "2.2.1"
