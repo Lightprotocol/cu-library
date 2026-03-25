@@ -339,7 +339,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "115e54d64eb62cdebad391c19efc9dce4981c690c85a33a12199d99bb9546fee"
 dependencies = [
  "borsh-derive 0.10.4",
- "hashbrown 0.13.2",
+ "hashbrown 0.12.3",
 ]
 
 [[package]]
@@ -1475,7 +1475,7 @@ dependencies = [
 [[package]]
 name = "light-profiler-macro"
 version = "0.1.1"
-source = "git+https://github.com/Lightprotocol/light-program-profiler#ee685a029a01b046492992282a1d46018731e1e5"
+source = "git+https://github.com/Lightprotocol/light-program-profiler#8417ba74569703936e23b946811c84a098687bba"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -1485,7 +1485,7 @@ dependencies = [
 [[package]]
 name = "light-program-profiler"
 version = "0.1.1"
-source = "git+https://github.com/Lightprotocol/light-program-profiler#ee685a029a01b046492992282a1d46018731e1e5"
+source = "git+https://github.com/Lightprotocol/light-program-profiler#8417ba74569703936e23b946811c84a098687bba"
 dependencies = [
  "light-profiler-macro",
  "mollusk-svm",

@@ -1,9 +1,9 @@
-use std::collections::{BTreeMap, HashMap};
+use std::collections::HashMap;
 
 use cu_library::CuLibraryInstruction;
 use light_program_profiler::mollusk::{
     extract_category_and_file, register_profiling_syscalls, take_profiling_results,
-    write_categorized_readme, ReadmeConfig,
+    write_categorized_readme, BenchmarkEntry, BenchmarkResults, ReadmeConfig,
 };
 use mollusk_svm::Mollusk;
 use solana_account::Account;
@@ -34,10 +34,7 @@ fn bench_cu_operations() {
         rent_epoch: 0,
     };
 
-    // Collect benchmark results by category and file
-    // Structure: folder -> file -> [(func_name, cu_value, file_location)]
-    let mut results_by_category: BTreeMap<String, BTreeMap<String, Vec<(String, String, String)>>> =
-        BTreeMap::new();
+    let mut results_by_category: BenchmarkResults = BenchmarkResults::new();
 
     let instructions = vec![
         CuLibraryInstruction::Baseline,
@@ -478,14 +475,17 @@ fn bench_cu_operations() {
         if let Some((func_name, cu_consumed, file_location)) =
             take_profiling_results().into_iter().next()
         {
-            let cu_value = cu_consumed.to_string();
             let (category, filename) = extract_category_and_file(&file_location);
             results_by_category
                 .entry(category)
-                .or_insert_with(BTreeMap::new)
+                .or_default()
                 .entry(filename)
-                .or_insert_with(Vec::new)
-                .push((func_name, cu_value, file_location));
+                .or_default()
+                .push(BenchmarkEntry {
+                    func_name,
+                    cu_value: cu_consumed.to_string(),
+                    file_location,
+                });
         }
     }
 
