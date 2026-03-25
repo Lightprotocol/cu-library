@@ -4,7 +4,7 @@ use light_zero_copy::{traits::ZeroCopyAt, ZeroCopy};
 use pinocchio::program_error::ProgramError;
 use rkyv::{Archive, Deserialize as RkyvDeserialize, Serialize as RkyvSerialize};
 use serde::{Deserialize, Serialize};
-use wincode::containers::{self, Pod};
+use wincode::containers;
 use wincode::len::{BincodeLen, ShortU16};
 use wincode_derive::{SchemaRead, SchemaWrite};
 use zerocopy::{Immutable, KnownLayout};
@@ -60,19 +60,14 @@ pub struct PackedMerkleContext {
 #[archive(check_bytes)]
 #[repr(C)]
 pub struct InAccountInfo {
-    #[wincode(with = "Pod<_>")]
     pub discriminator: [u8; 8],
     /// Data hash
-    #[wincode(with = "Pod<_>")]
     pub data_hash: [u8; 32],
     /// Merkle tree context.
-    #[wincode(with = "Pod<_>")]
     pub merkle_context: PackedMerkleContext,
     /// Root index.
-    #[wincode(with = "Pod<_>")]
     pub root_index: u16,
     /// Lamports.
-    #[wincode(with = "Pod<_>")]
     pub lamports: u64,
 }
 
@@ -97,18 +92,14 @@ pub struct InAccountInfo {
 #[archive(check_bytes)]
 #[repr(C)]
 pub struct OutAccountInfo {
-    #[wincode(with = "Pod<_>")]
     pub discriminator: [u8; 8],
     /// Data hash
-    #[wincode(with = "Pod<_>")]
     pub data_hash: [u8; 32],
-    #[wincode(with = "Pod<_>")]
     pub output_merkle_tree_index: u8,
     /// Lamports.
-    #[wincode(with = "Pod<_>")]
     pub lamports: u64,
     /// Account data.
-    #[wincode(with = "containers::Vec<Pod<_>, BincodeLen>")]
+    #[wincode(with = "containers::Vec<_, BincodeLen>")]
     pub data: Vec<u8>,
 }
 
@@ -238,30 +229,21 @@ pub fn rkyv_zero_copy_deserialize(
 #[derive(SchemaRead, Clone, SchemaWrite)]
 #[wincode(from = "OutAccountInfo")]
 pub struct OutAccountInfoShortVec {
-    #[wincode(with = "Pod<_>")]
     discriminator: [u8; 8],
-    #[wincode(with = "Pod<_>")]
     data_hash: [u8; 32],
-    #[wincode(with = "Pod<_>")]
     output_merkle_tree_index: u8,
-    #[wincode(with = "Pod<_>")]
     lamports: u64,
-    #[wincode(with = "containers::Vec<Pod<_>, ShortU16>")]
+    #[wincode(with = "containers::Vec<_, ShortU16>")]
     data: Vec<u8>,
 }
 
 #[derive(SchemaRead, Clone, Copy, SchemaWrite)]
 #[wincode(from = "InAccountInfo")]
 pub struct InAccountInfoShortVec {
-    #[wincode(with = "Pod<_>")]
     discriminator: [u8; 8],
-    #[wincode(with = "Pod<_>")]
     data_hash: [u8; 32],
-    #[wincode(with = "Pod<_>")]
     merkle_context: PackedMerkleContext,
-    #[wincode(with = "Pod<_>")]
     root_index: u16,
-    #[wincode(with = "Pod<_>")]
     lamports: u64,
 }
 
